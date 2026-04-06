@@ -854,6 +854,337 @@ body {
   margin: 0.5rem 0;
   word-break: break-all;
 }
+
+/* ========== MOBILE HAMBURGER MENU ========== */
+.hamburger-btn {
+  display: none;
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  color: var(--text);
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+.mobile-nav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 800;
+  backdrop-filter: blur(4px);
+}
+.mobile-nav-overlay.open {
+  display: block;
+}
+.mobile-nav-drawer {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 280px;
+  height: 100%;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  z-index: 900;
+  transition: left 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.mobile-nav-drawer.open {
+  left: 0;
+}
+.mobile-nav-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid var(--border);
+}
+.mobile-nav-header h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1rem;
+}
+.mobile-nav-close {
+  background: none;
+  border: none;
+  color: var(--text2);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+.mobile-nav-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 1rem;
+}
+.mobile-nav-actions .btn {
+  width: 100%;
+  text-align: left;
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  border-radius: 10px;
+}
+.mobile-sidebar-toggle {
+  display: none;
+}
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 400;
+}
+.sidebar-backdrop.open {
+  display: block;
+}
+
+/* ========== RESPONSIVE BREAKPOINTS ========== */
+@media (max-width: 768px) {
+
+  /* Topbar */
+  .topbar {
+    padding: 0 1rem;
+    height: 56px;
+    position: sticky;
+    top: 0;
+    z-index: 300;
+  }
+  .brand h1 {
+    font-size: 0.95rem;
+  }
+  .brand-icon {
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+  }
+  .hamburger-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  /* Hide desktop top-action buttons */
+  .top-actions {
+    display: none;
+  }
+
+  /* App Layout - stack vertically */
+  .app {
+    height: auto;
+    min-height: 100vh;
+  }
+  .body-layout {
+    flex-direction: column;
+    overflow: visible;
+    height: auto;
+  }
+
+  /* Sidebar - drawer on mobile */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 280px;
+    height: 100%;
+    z-index: 500;
+    transition: left 0.3s ease;
+    overflow-y: auto;
+  }
+  .sidebar.mobile-open {
+    left: 0;
+  }
+  .mobile-sidebar-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.8rem 1rem;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text2);
+  }
+  .mobile-sidebar-toggle:hover {
+    background: var(--card2);
+  }
+
+  /* Detail panel - full width */
+  .detail-panel {
+    padding: 1rem;
+    min-height: 60vh;
+  }
+
+  /* Profile header wraps on mobile */
+  .profile-header {
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .profile-avatar {
+    width: 60px;
+    height: 60px;
+    font-size: 1.4rem;
+  }
+  .profile-info h2 {
+    font-size: 1.2rem;
+  }
+
+  /* Info grid - single column on small screens */
+  .info-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  /* Modals - full screen on mobile */
+  .modal {
+    align-items: flex-end;
+  }
+  .modal-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 92vh;
+    border-radius: 20px 20px 0 0;
+  }
+  .modal-body {
+    padding: 1rem;
+  }
+  .modal-footer {
+    padding: 0.8rem 1rem;
+  }
+
+  /* Form rows - single column */
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  /* Attendance summary bar - 2x2 */
+  .att-summary-bar {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Reports KPI - 2 col */
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Payroll summary */
+  .payroll-summary {
+    font-size: 0.82rem;
+  }
+
+  /* Leave balance grid */
+  .leave-balance-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* License grid */
+  .license-section > div[style*="grid-template-columns:1fr 1fr"] {
+    display: grid;
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  /* Attendance column mapping */
+  .att-col-map {
+    grid-template-columns: 1fr;
+  }
+
+  /* Report tabs - scrollable */
+  .report-tabs {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 4px;
+  }
+  .report-tab {
+    white-space: nowrap;
+  }
+
+  /* User table - scrollable */
+  .user-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  /* Lock card */
+  .lock-card {
+    padding: 2rem 1.5rem;
+    border-radius: 1.2rem;
+  }
+  .lock-key-form {
+    flex-direction: column;
+  }
+  .lock-key-form button {
+    width: 100%;
+  }
+
+  /* Auth card */
+  .auth-card {
+    padding: 2rem 1.5rem;
+    border-radius: 1.5rem;
+  }
+
+  /* Toast - bottom center */
+  .toast {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+  }
+
+  /* Trial warning popup */
+  .trial-warning-popup {
+    right: 10px;
+    left: 10px;
+    max-width: none;
+  }
+
+  /* Doc drop zone */
+  .doc-drop-zone {
+    padding: 1rem;
+  }
+
+  /* Tabs - scrollable */
+  .tabs {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+  .tab-btn {
+    white-space: nowrap;
+    font-size: 0.8rem;
+    padding: 8px 12px;
+  }
+
+  /* Attendance history filter */
+  .att-hist-filter {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .att-hist-filter select,
+  .att-hist-filter input {
+    width: 100%;
+  }
+
+  /* Search box in sidebar */
+  .search-box {
+    padding: 0.8rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+  .leave-balance-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .att-summary-bar {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 </style>
 </head>
 <body>
@@ -880,6 +1211,9 @@ body {
     </div>
     <div class="developer-hint">
     <p>MIRACLE DATA</p>
+    </div>
+    <div class="demo-hint">
+      Default: <strong>admin</strong> / <strong>admin123</strong> &nbsp;|&nbsp; <strong>hr</strong> / <strong>hr123</strong>
     </div>
     </div>
 </div>
@@ -922,9 +1256,38 @@ body {
       <button id="userMgmtBtn" class="btn btn-sm" style="display:none;">👥 Users</button>
       <button id="logoutBtn" class="btn btn-sm">⏻ Logout</button>
     </div>
+    <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleMobileNav()">☰</button>
   </div>
+
+  <!-- Mobile Nav Overlay + Drawer -->
+  <div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileNav()"></div>
+  <div class="mobile-nav-drawer" id="mobileNavDrawer">
+    <div class="mobile-nav-header">
+      <h3>🏢 Menu</h3>
+      <button class="mobile-nav-close" onclick="closeMobileNav()">✕</button>
+    </div>
+    <div class="mobile-nav-actions">
+      <span id="mobileUserRoleBadge" class="badge-status" style="background:#1E293B; padding:6px 14px; border-radius:8px; font-size:0.75rem; display:block; text-align:center; margin-bottom:4px;"></span>
+      <span id="mobileBadge" class="trial-badge trial-ok" style="display:none; justify-content:center; margin-bottom:4px;"></span>
+      <button id="mobileAttendanceBtn" class="btn btn-sm" style="display:none;" onclick="closeMobileNav(); document.getElementById('attendanceBtn').click()">📋 Attendance</button>
+      <button id="mobileAttHistBtn" class="btn btn-sm" style="display:none;" onclick="closeMobileNav(); document.getElementById('attHistBtn').click()">📅 Att. History</button>
+      <button id="mobileLeaveBtn" class="btn btn-sm" style="display:none;" onclick="closeMobileNav(); document.getElementById('leaveBtn').click()">🏖️ Leave</button>
+      <button id="mobileDocsBtn" class="btn btn-sm" style="display:none;" onclick="closeMobileNav(); document.getElementById('docsBtn').click()">📁 Documents</button>
+      <button id="mobileReportsBtn" class="btn btn-sm" style="display:none;" onclick="closeMobileNav(); document.getElementById('reportsBtn').click()">📊 Reports</button>
+      <button id="mobilePayrollBtn" class="btn btn-sm" style="display:none;" onclick="closeMobileNav(); document.getElementById('payrollBtn').click()">💰 Payroll</button>
+      <button id="mobileUserMgmtBtn" class="btn btn-sm" style="display:none;" onclick="closeMobileNav(); document.getElementById('userMgmtBtn').click()">👥 Users</button>
+      <button class="btn btn-sm" style="color:var(--danger); border-color:var(--danger);" onclick="closeMobileNav(); document.getElementById('logoutBtn').click()">⏻ Logout</button>
+    </div>
+  </div>
+
+  <!-- Sidebar backdrop for mobile -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeMobileSidebar()"></div>
+
   <div class="body-layout">
-    <div class="sidebar">
+    <div class="mobile-sidebar-toggle" onclick="toggleMobileSidebar()">
+      <span>👥</span> <span>Employee List</span> <span style="margin-left:auto;">›</span>
+    </div>
+    <div class="sidebar" id="mainSidebar">
       <div class="search-box"><input type="text" id="searchInput" placeholder="Search name, ID, dept..."></div>
       <div class="sidebar-actions">
         <button id="addEmployeeBtn" class="btn btn-primary btn-sm" style="flex:1;">+ New Employee</button>
@@ -3431,6 +3794,70 @@ function copyToClipboard(text) {
 // ========== END TRIAL SYSTEM ==========
 
 
+// ========== MOBILE NAV ==========
+function toggleMobileNav() {
+  document.getElementById('mobileNavDrawer').classList.toggle('open');
+  document.getElementById('mobileNavOverlay').classList.toggle('open');
+  syncMobileNav();
+}
+function closeMobileNav() {
+  document.getElementById('mobileNavDrawer').classList.remove('open');
+  document.getElementById('mobileNavOverlay').classList.remove('open');
+}
+function syncMobileNav() {
+  // Sync role badge
+  const roleBadge = document.getElementById('userRoleBadge');
+  const mobileRoleBadge = document.getElementById('mobileUserRoleBadge');
+  if (roleBadge && mobileRoleBadge) {
+    mobileRoleBadge.textContent = roleBadge.textContent;
+    mobileRoleBadge.style.background = roleBadge.style.background || '#1E293B';
+  }
+  // Sync trial badge
+  const trialBadge = document.getElementById('trialBadge');
+  const mobileBadge = document.getElementById('mobileBadge');
+  if (trialBadge && mobileBadge) {
+    mobileBadge.textContent = trialBadge.textContent;
+    mobileBadge.className = trialBadge.className.replace('trialBadge','mobileBadge');
+    mobileBadge.style.display = trialBadge.style.display;
+  }
+  // Sync button visibility
+  const btnPairs = [
+    ['attendanceBtn','mobileAttendanceBtn'],
+    ['attHistBtn','mobileAttHistBtn'],
+    ['leaveBtn','mobileLeaveBtn'],
+    ['docsBtn','mobileDocsBtn'],
+    ['reportsBtn','mobileReportsBtn'],
+    ['payrollBtn','mobilePayrollBtn'],
+    ['userMgmtBtn','mobileUserMgmtBtn'],
+  ];
+  btnPairs.forEach(([deskId, mobId]) => {
+    const desk = document.getElementById(deskId);
+    const mob = document.getElementById(mobId);
+    if (desk && mob) mob.style.display = desk.style.display;
+  });
+}
+
+function toggleMobileSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  const backdrop = document.getElementById('sidebarBackdrop');
+  sidebar.classList.toggle('mobile-open');
+  backdrop.classList.toggle('open');
+}
+function closeMobileSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  const backdrop = document.getElementById('sidebarBackdrop');
+  sidebar.classList.remove('mobile-open');
+  backdrop.classList.remove('open');
+}
+
+// Auto-close sidebar when an employee is selected on mobile
+document.addEventListener('click', function(e) {
+  const empCard = e.target.closest('.emp-card');
+  if (empCard && window.innerWidth <= 768) {
+    closeMobileSidebar();
+  }
+});
+
 document.addEventListener('DOMContentLoaded', async function() {
   // Load persisted data before wiring up UI
   await loadDB();
@@ -3493,264 +3920,5 @@ document.addEventListener('DOMContentLoaded', async function() {
   });
 });
 </script>
-
-<!-- ========== AI SUPPORT CHATBOT ========== -->
-<style>
-#chatbotToggle {
-  position: fixed; bottom: 28px; right: 28px;
-  width: 56px; height: 56px; border-radius: 50%;
-  background: linear-gradient(135deg, #3B82F6, #8B5CF6);
-  border: none; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.5rem;
-  box-shadow: 0 8px 24px rgba(59,130,246,0.45);
-  z-index: 2000; transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
-}
-#chatbotToggle:hover { transform: scale(1.1); }
-.chat-notif {
-  position: absolute; top: -2px; right: -2px;
-  width: 14px; height: 14px; background: #EF4444;
-  border-radius: 50%; border: 2px solid #0A0F1A; display: none;
-}
-#chatbotWindow {
-  position: fixed; bottom: 96px; right: 28px;
-  width: 370px; height: 520px;
-  background: #11161F; border: 1px solid #1E293B;
-  border-radius: 24px; display: flex; flex-direction: column;
-  z-index: 1999; box-shadow: 0 24px 64px rgba(0,0,0,0.6);
-  overflow: hidden;
-  transform: scale(0.85) translateY(20px); opacity: 0; pointer-events: none;
-  transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
-}
-#chatbotWindow.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: all; }
-.chat-header {
-  background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(139,92,246,0.15));
-  border-bottom: 1px solid #1E293B; padding: 14px 16px;
-  display: flex; align-items: center; gap: 12px; flex-shrink: 0;
-}
-.chat-hdr-avatar {
-  width: 38px; height: 38px; border-radius: 12px;
-  background: linear-gradient(135deg, #3B82F6, #8B5CF6);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.2rem; flex-shrink: 0;
-}
-.chat-hdr-info { flex: 1; }
-.chat-hdr-info strong { font-family: 'Syne',sans-serif; font-size: 0.9rem; display: block; color: #F1F5F9; }
-.chat-hdr-info span { font-size: 0.7rem; color: #10B981; }
-.chat-close-btn { background: none; border: none; color: #475569; cursor: pointer; font-size: 1rem; padding: 4px; }
-.chat-close-btn:hover { color: #F1F5F9; }
-.chat-quick-actions { padding: 10px 12px 0; display: flex; gap: 6px; flex-wrap: wrap; flex-shrink: 0; }
-.quick-btn {
-  background: #161D2A; border: 1px solid #1E293B; border-radius: 20px;
-  padding: 4px 10px; font-size: 0.68rem; color: #94A3B8; cursor: pointer; transition: all 0.15s; white-space: nowrap;
-}
-.quick-btn:hover { background: rgba(59,130,246,0.15); border-color: #3B82F6; color: #3B82F6; }
-.chat-messages {
-  flex: 1; overflow-y: auto; padding: 12px;
-  display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth;
-}
-.chat-messages::-webkit-scrollbar { width: 4px; }
-.chat-messages::-webkit-scrollbar-thumb { background: #1E293B; border-radius: 4px; }
-.chat-msg { display: flex; gap: 8px; align-items: flex-end; max-width: 92%; }
-.chat-msg.user { align-self: flex-end; flex-direction: row-reverse; }
-.chat-msg.bot  { align-self: flex-start; }
-.msg-bot-avatar {
-  width: 28px; height: 28px; border-radius: 8px;
-  background: linear-gradient(135deg, #3B82F6, #8B5CF6);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.8rem; flex-shrink: 0;
-}
-.msg-bubble { padding: 9px 13px; border-radius: 16px; font-size: 0.8rem; line-height: 1.5; max-width: 100%; word-break: break-word; }
-.chat-msg.user .msg-bubble { background: linear-gradient(135deg, #3B82F6, #8B5CF6); color: white; border-bottom-right-radius: 4px; }
-.chat-msg.bot  .msg-bubble { background: #161D2A; border: 1px solid #1E293B; color: #E2E8F0; border-bottom-left-radius: 4px; }
-.typing-dots { display: flex; gap: 4px; align-items: center; padding: 2px 0; }
-.typing-dots span { width: 7px; height: 7px; background: #475569; border-radius: 50%; animation: tdot 1.2s infinite; }
-.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
-.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
-@keyframes tdot { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px);background:#3B82F6} }
-.chat-input-row {
-  padding: 12px; border-top: 1px solid #1E293B;
-  display: flex; gap: 8px; align-items: flex-end; flex-shrink: 0;
-}
-#chatInput {
-  flex: 1; background: #161D2A; border: 1.5px solid #1E293B;
-  border-radius: 14px; padding: 9px 13px; color: #F1F5F9;
-  font-size: 0.82rem; font-family: 'DM Sans',sans-serif;
-  outline: none; resize: none; max-height: 100px; min-height: 40px;
-  line-height: 1.4; transition: border-color 0.2s;
-}
-#chatInput:focus { border-color: #3B82F6; }
-#chatInput::placeholder { color: #475569; }
-#chatSendBtn {
-  width: 40px; height: 40px; border-radius: 12px;
-  background: linear-gradient(135deg, #3B82F6, #8B5CF6);
-  border: none; cursor: pointer; display: flex; align-items: center;
-  justify-content: center; font-size: 1rem; flex-shrink: 0; transition: all 0.2s;
-}
-#chatSendBtn:hover { transform: scale(1.05); }
-#chatSendBtn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
-.chat-foot-note { text-align: center; font-size: 0.62rem; color: #2D3A4F; padding: 0 12px 8px; flex-shrink: 0; }
-</style>
-
-<button id="chatbotToggle" title="HR Assistant">
-  <span id="chatToggleIcon">💬</span>
-  <div class="chat-notif" id="chatNotif"></div>
-</button>
-
-<div id="chatbotWindow">
-  <div class="chat-header">
-    <div class="chat-hdr-avatar">🤖</div>
-    <div class="chat-hdr-info">
-      <strong>HR Assistant</strong>
-      <span>&#9679; Online &middot; AI Powered</span>
-    </div>
-    <button class="chat-close-btn" id="chatCloseBtn">&#10005;</button>
-  </div>
-  <div class="chat-quick-actions" id="quickActions">
-    <button class="quick-btn" onclick="quickAsk('How do I add a new employee?')">&#10133; Add Employee</button>
-    <button class="quick-btn" onclick="quickAsk('How to process payroll?')">&#128176; Payroll</button>
-    <button class="quick-btn" onclick="quickAsk('How to approve leave requests?')">&#127958; Leave</button>
-    <button class="quick-btn" onclick="quickAsk('How to upload attendance?')">&#128203; Attendance</button>
-    <button class="quick-btn" onclick="quickAsk('How to generate reports?')">&#128202; Reports</button>
-  </div>
-  <div class="chat-messages" id="chatMessages">
-    <div class="chat-msg bot">
-      <div class="msg-bot-avatar">&#129302;</div>
-      <div class="msg-bubble">
-        &#128075; Hello! I'm your <strong>HR Assistant</strong>.<br><br>
-        I can help you with employees, payroll, attendance, leave, reports, and anything about this HR system. How can I help you?
-      </div>
-    </div>
-  </div>
-  <div class="chat-input-row">
-    <textarea id="chatInput" placeholder="Ask anything about the HR system..." rows="1"></textarea>
-    <button id="chatSendBtn">&#10148;</button>
-  </div>
-  <div class="chat-foot-note">Powered by Claude AI &middot; Miracle Data Support</div>
-</div>
-
-<script>
-(function() {
-  var chatOpen = false;
-  var chatHistory = [];
-  var chatBusy = false;
-
-  var HR_CTX = "You are a helpful HR system support assistant for HR Nexus - a complete HR Management System built as a single HTML file.\n\nSystem features:\n- Employee Management: Add/edit/delete employees (personal info, employment, salary, bank details)\n- Payroll: Generate payslips, EPF/ETF calculations, allowances, deductions, PDF export\n- Attendance: Upload CSV/Excel files via drag & drop, calendar history view\n- Leave Management: Apply/approve/reject leave, track balances (Annual, Casual, Medical)\n- Documents: Upload and manage employee documents\n- Reports: Department analytics, payroll summaries, attendance charts\n- User Management: Roles - ADMIN, HR, VIEWER, DEPT_VIEWER\n- License/Trial: 30-day trial with license key activation\n\nDefault logins: admin/admin123 or hr/hr123\n\nAnswer in the same language the user uses. If Sinhala, reply in Sinhala. Be concise and practical. Use numbered steps for instructions.";
-
-  function toggleChat() {
-    chatOpen = !chatOpen;
-    document.getElementById('chatbotWindow').classList.toggle('open', chatOpen);
-    document.getElementById('chatToggleIcon').textContent = chatOpen ? '✕' : '💬';
-    if (chatOpen) {
-      document.getElementById('chatNotif').style.display = 'none';
-      setTimeout(function() { document.getElementById('chatInput').focus(); }, 300);
-    }
-  }
-
-  document.getElementById('chatbotToggle').addEventListener('click', toggleChat);
-  document.getElementById('chatCloseBtn').addEventListener('click', toggleChat);
-
-  window.quickAsk = function(q) {
-    document.getElementById('chatInput').value = q;
-    sendMsg();
-  };
-
-  function escHtml(t) {
-    return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
-
-  function fmtBot(t) {
-    t = t.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    t = t.replace(/^(\d+\.\s.+)$/gm, '<div style="margin:2px 0 2px 4px">&#8226; $1</div>');
-    t = t.replace(/\n/g, '<br>');
-    return t;
-  }
-
-  function addMsg(role, text) {
-    var msgs = document.getElementById('chatMessages');
-    var d = document.createElement('div');
-    d.className = 'chat-msg ' + role;
-    if (role === 'user') {
-      d.innerHTML = '<div class="msg-bubble">' + escHtml(text) + '</div>';
-    } else {
-      d.innerHTML = '<div class="msg-bot-avatar">&#129302;</div><div class="msg-bubble">' + fmtBot(text) + '</div>';
-    }
-    msgs.appendChild(d);
-    msgs.scrollTop = msgs.scrollHeight;
-  }
-
-  function showTyping() {
-    var msgs = document.getElementById('chatMessages');
-    var d = document.createElement('div');
-    d.className = 'chat-msg bot'; d.id = 'chatTyping';
-    d.innerHTML = '<div class="msg-bot-avatar">&#129302;</div><div class="msg-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
-    msgs.appendChild(d);
-    msgs.scrollTop = msgs.scrollHeight;
-  }
-
-  function hideTyping() {
-    var el = document.getElementById('chatTyping');
-    if (el) el.remove();
-  }
-
-  function sendMsg() {
-    if (chatBusy) return;
-    var input = document.getElementById('chatInput');
-    var text = input.value.trim();
-    if (!text) return;
-    input.value = ''; input.style.height = 'auto';
-    document.getElementById('quickActions').style.display = 'none';
-    addMsg('user', text);
-    chatHistory.push({ role: 'user', content: text });
-    chatBusy = true;
-    document.getElementById('chatSendBtn').disabled = true;
-    showTyping();
-
-    fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: HR_CTX,
-        messages: chatHistory
-      })
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      hideTyping();
-      var reply = (data && data.content && data.content[0] && data.content[0].text)
-        ? data.content[0].text
-        : 'Sorry, I could not get a response. Please try again.';
-      chatHistory.push({ role: 'assistant', content: reply });
-      if (chatHistory.length > 20) chatHistory = chatHistory.slice(-20);
-      addMsg('bot', reply);
-    })
-    .catch(function() {
-      hideTyping();
-      addMsg('bot', '&#9888;&#65039; Connection error. Please check your internet and try again.');
-    })
-    .finally(function() {
-      chatBusy = false;
-      document.getElementById('chatSendBtn').disabled = false;
-      document.getElementById('chatInput').focus();
-    });
-  }
-
-  document.getElementById('chatSendBtn').addEventListener('click', sendMsg);
-  document.getElementById('chatInput').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); }
-  });
-  document.getElementById('chatInput').addEventListener('input', function() {
-    this.style.height = 'auto';
-    this.style.height = Math.min(this.scrollHeight, 100) + 'px';
-  });
-
-  setTimeout(function() {
-    if (!chatOpen) document.getElementById('chatNotif').style.display = 'block';
-  }, 3000);
-})();
-</script>
-
 </body>
 </html>
