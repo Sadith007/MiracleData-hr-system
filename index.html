@@ -1,15 +1,15 @@
-                <!DOCTYPE html>
-                <html lang="en">
-                <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>HR Management System | Complete HR Solution</title>
-                <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-                
-                <style>
-                * {
-                  margin: 0;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HR Management System | Complete HR Solution</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<style>
+* {
+  margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
@@ -39,47 +39,6 @@ body {
   min-height: 100vh;
 }
 
- <!-- Firebase SDK -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
-
-  // Your Firebase config (paste yours here)
-  const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  // Save employee
-  async function saveEmployee(employeeData) {
-    try {
-      const docRef = await addDoc(collection(db, "employees"), employeeData);
-      console.log("Employee saved with ID:", docRef.id);
-    } catch (e) {
-      console.error("Error saving:", e);
-    }
-  }
-
-  // Load all employees
-  async function loadEmployees() {
-    const querySnapshot = await getDocs(collection(db, "employees"));
-    querySnapshot.forEach((doc) => {
-      console.log(doc.id, "=>", doc.data());
-    });
-  }
-
-  // Make functions globally available
-  window.saveEmployee = saveEmployee;
-  window.loadEmployees = loadEmployees;
-</script>   
-      
 /* ========== LOGIN & AUTH ========== */
 .auth-container {
   display: flex;
@@ -101,7 +60,7 @@ body {
 }
 .auth-logo {
   display: inline-flex;
-  align-items: center;        
+  align-items: center;
   justify-content: center;
   width: 52px;
   height: 52px;
@@ -895,337 +854,6 @@ body {
   margin: 0.5rem 0;
   word-break: break-all;
 }
-
-/* ========== MOBILE HAMBURGER MENU ========== */
-.hamburger-btn {
-  display: none;
-  background: var(--card2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 6px 10px;
-  cursor: pointer;
-  color: var(--text);
-  font-size: 1.1rem;
-  flex-shrink: 0;
-}
-.mobile-nav-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.7);
-  z-index: 800;
-  backdrop-filter: blur(4px);
-}
-.mobile-nav-overlay.open {
-  display: block;
-}
-.mobile-nav-drawer {
-  position: fixed;
-  top: 0;
-  left: -100%;
-  width: 280px;
-  height: 100%;
-  background: var(--surface);
-  border-right: 1px solid var(--border);
-  z-index: 900;
-  transition: left 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-}
-.mobile-nav-drawer.open {
-  left: 0;
-}
-.mobile-nav-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 1.2rem;
-  border-bottom: 1px solid var(--border);
-}
-.mobile-nav-header h3 {
-  font-family: 'Syne', sans-serif;
-  font-size: 1rem;
-}
-.mobile-nav-close {
-  background: none;
-  border: none;
-  color: var(--text2);
-  font-size: 1.2rem;
-  cursor: pointer;
-}
-.mobile-nav-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 1rem;
-}
-.mobile-nav-actions .btn {
-  width: 100%;
-  text-align: left;
-  padding: 10px 14px;
-  font-size: 0.85rem;
-  border-radius: 10px;
-}
-.mobile-sidebar-toggle {
-  display: none;
-}
-.sidebar-backdrop {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  z-index: 400;
-}
-.sidebar-backdrop.open {
-  display: block;
-}
-
-/* ========== RESPONSIVE BREAKPOINTS ========== */
-@media (max-width: 768px) {
-
-  /* Topbar */
-  .topbar {
-    padding: 0 1rem;
-    height: 56px;
-    position: sticky;
-    top: 0;
-    z-index: 300;
-  }
-  .brand h1 {
-    font-size: 0.95rem;
-  }
-  .brand-icon {
-    width: 30px;
-    height: 30px;
-    font-size: 1rem;
-  }
-  .hamburger-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  /* Hide desktop top-action buttons */
-  .top-actions {
-    display: none;
-  }
-
-  /* App Layout - stack vertically */
-  .app {
-    height: auto;
-    min-height: 100vh;
-  }
-  .body-layout {
-    flex-direction: column;
-    overflow: visible;
-    height: auto;
-  }
-
-  /* Sidebar - drawer on mobile */
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: -100%;
-    width: 280px;
-    height: 100%;
-    z-index: 500;
-    transition: left 0.3s ease;
-    overflow-y: auto;
-  }
-  .sidebar.mobile-open {
-    left: 0;
-  }
-  .mobile-sidebar-toggle {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 0.8rem 1rem;
-    background: var(--card);
-    border-bottom: 1px solid var(--border);
-    cursor: pointer;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--text2);
-  }
-  .mobile-sidebar-toggle:hover {
-    background: var(--card2);
-  }
-
-  /* Detail panel - full width */
-  .detail-panel {
-    padding: 1rem;
-    min-height: 60vh;
-  }
-
-  /* Profile header wraps on mobile */
-  .profile-header {
-    gap: 12px;
-    margin-bottom: 16px;
-  }
-  .profile-avatar {
-    width: 60px;
-    height: 60px;
-    font-size: 1.4rem;
-  }
-  .profile-info h2 {
-    font-size: 1.2rem;
-  }
-
-  /* Info grid - single column on small screens */
-  .info-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-
-  /* Modals - full screen on mobile */
-  .modal {
-    align-items: flex-end;
-  }
-  .modal-card {
-    width: 100% !important;
-    max-width: 100% !important;
-    max-height: 92vh;
-    border-radius: 20px 20px 0 0;
-  }
-  .modal-body {
-    padding: 1rem;
-  }
-  .modal-footer {
-    padding: 0.8rem 1rem;
-  }
-
-  /* Form rows - single column */
-  .form-row {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
-  /* Attendance summary bar - 2x2 */
-  .att-summary-bar {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  /* Reports KPI - 2 col */
-  .kpi-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  /* Payroll summary */
-  .payroll-summary {
-    font-size: 0.82rem;
-  }
-
-  /* Leave balance grid */
-  .leave-balance-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  /* License grid */
-  .license-section > div[style*="grid-template-columns:1fr 1fr"] {
-    display: grid;
-    grid-template-columns: 1fr 1fr !important;
-  }
-
-  /* Attendance column mapping */
-  .att-col-map {
-    grid-template-columns: 1fr;
-  }
-
-  /* Report tabs - scrollable */
-  .report-tabs {
-    overflow-x: auto;
-    flex-wrap: nowrap;
-    padding-bottom: 4px;
-  }
-  .report-tab {
-    white-space: nowrap;
-  }
-
-  /* User table - scrollable */
-  .user-table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
-
-  /* Lock card */
-  .lock-card {
-    padding: 2rem 1.5rem;
-    border-radius: 1.2rem;
-  }
-  .lock-key-form {
-    flex-direction: column;
-  }
-  .lock-key-form button {
-    width: 100%;
-  }
-
-  /* Auth card */
-  .auth-card {
-    padding: 2rem 1.5rem;
-    border-radius: 1.5rem;
-  }
-
-  /* Toast - bottom center */
-  .toast {
-    left: 1rem;
-    right: 1rem;
-    bottom: 1rem;
-  }
-
-  /* Trial warning popup */
-  .trial-warning-popup {
-    right: 10px;
-    left: 10px;
-    max-width: none;
-  }
-
-  /* Doc drop zone */
-  .doc-drop-zone {
-    padding: 1rem;
-  }
-
-  /* Tabs - scrollable */
-  .tabs {
-    overflow-x: auto;
-    flex-wrap: nowrap;
-  }
-  .tab-btn {
-    white-space: nowrap;
-    font-size: 0.8rem;
-    padding: 8px 12px;
-  }
-
-  /* Attendance history filter */
-  .att-hist-filter {
-    flex-direction: column;
-    gap: 8px;
-  }
-  .att-hist-filter select,
-  .att-hist-filter input {
-    width: 100%;
-  }
-
-  /* Search box in sidebar */
-  .search-box {
-    padding: 0.8rem;
-  }
-}
-
-@media (max-width: 400px) {
-  .info-grid {
-    grid-template-columns: 1fr;
-  }
-  .leave-balance-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .att-summary-bar {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .kpi-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
 </style>
 </head>
 <body>
@@ -1251,7 +879,10 @@ body {
       No account? <button id="showRegisterBtn">Request Access</button>
     </div>
     <div class="developer-hint">
-                                <p>MIRACLE DATA</p>
+    <p>MIRACLE DATA</p>
+    </div>
+    <div class="demo-hint">
+      Default: <strong>admin</strong> / <strong>admin123</strong> &nbsp;|&nbsp; <strong>hr</strong> / <strong>hr123</strong>
     </div>
     </div>
 </div>
@@ -1294,38 +925,9 @@ body {
       <button id="userMgmtBtn" class="btn btn-sm" style="display:none;">👥 Users</button>
       <button id="logoutBtn" class="btn btn-sm">⏻ Logout</button>
     </div>
-    <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleMobileNav()">☰</button>
   </div>
-
-  <!-- Mobile Nav Overlay + Drawer -->
-  <div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileNav()"></div>
-  <div class="mobile-nav-drawer" id="mobileNavDrawer">
-    <div class="mobile-nav-header">
-      <h3>🏢 Menu</h3>
-      <button class="mobile-nav-close" onclick="closeMobileNav()">✕</button>
-    </div>
-    <div class="mobile-nav-actions">
-      <span id="mobileUserRoleBadge" class="badge-status" style="background:#1E293B; padding:6px 14px; border-radius:8px; font-size:0.75rem; display:block; text-align:center; margin-bottom:4px;"></span>
-      <span id="mobileBadge" class="trial-badge trial-ok" style="display:none; justify-content:center; margin-bottom:4px;"></span>
-      <button id="mobileAttendanceBtn" class="btn btn-sm" style="display:none;" onclick="closeMobileNav(); document.getElementById('attendanceBtn').click()">📋 Attendance</button>
-      <button id="mobileAttHistBtn" class="btn btn-sm" style="display:none;" onclick="closeMobileNav(); document.getElementById('attHistBtn').click()">📅 Att. History</button>
-      <button id="mobileLeaveBtn" class="btn btn-sm" style="display:none;" onclick="closeMobileNav(); document.getElementById('leaveBtn').click()">🏖️ Leave</button>
-      <button id="mobileDocsBtn" class="btn btn-sm" style="display:none;" onclick="closeMobileNav(); document.getElementById('docsBtn').click()">📁 Documents</button>
-      <button id="mobileReportsBtn" class="btn btn-sm" style="display:none;" onclick="closeMobileNav(); document.getElementById('reportsBtn').click()">📊 Reports</button>
-      <button id="mobilePayrollBtn" class="btn btn-sm" style="display:none;" onclick="closeMobileNav(); document.getElementById('payrollBtn').click()">💰 Payroll</button>
-      <button id="mobileUserMgmtBtn" class="btn btn-sm" style="display:none;" onclick="closeMobileNav(); document.getElementById('userMgmtBtn').click()">👥 Users</button>
-      <button class="btn btn-sm" style="color:var(--danger); border-color:var(--danger);" onclick="closeMobileNav(); document.getElementById('logoutBtn').click()">⏻ Logout</button>
-    </div>
-  </div>
-
-  <!-- Sidebar backdrop for mobile -->
-  <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeMobileSidebar()"></div>
-
   <div class="body-layout">
-    <div class="mobile-sidebar-toggle" onclick="toggleMobileSidebar()">
-      <span>👥</span> <span>Employee List</span> <span style="margin-left:auto;">›</span>
-    </div>
-    <div class="sidebar" id="mainSidebar">
+    <div class="sidebar">
       <div class="search-box"><input type="text" id="searchInput" placeholder="Search name, ID, dept..."></div>
       <div class="sidebar-actions">
         <button id="addEmployeeBtn" class="btn btn-primary btn-sm" style="flex:1;">+ New Employee</button>
@@ -1719,9 +1321,12 @@ body {
 
 <script>
 // ========== SUPABASE SETUP ==========
+// ⚙️  PASTE YOUR VALUES FROM: Supabase → Project Settings → API
 const SUPABASE_URL = 'https://otbicxqorlgobfpzjijd.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_NMNU2h27EVMwdv4d5u5NcQ_Wkvb7eUf';
+const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY'; // ← Replace with your anon/public key
 
+// ─── Storage mode: 'supabase' when key is set, else 'local' (IndexedDB/localStorage) ───
+const USE_SUPABASE = SUPABASE_KEY && !SUPABASE_KEY.startsWith('YOUR_');
 
 // ========== DATABASE ==========
 const DEFAULT_EMPLOYEES = [{"id":1,"fullName":"John Smith","empId":"EMP001","email":"john@company.com","mobile":"0771234567","nic":"123456789V","dob":"1990-05-15","gender":"Male","maritalStatus":"Married","address":"Colombo","emergencyName":"Jane Smith","emergencyPhone":"0777654321","department":"IT","designation":"Senior Developer","doj":"2023-01-10","employmentType":"Permanent","status":"Active","location":"Colombo","salary":150000,"bankAccount":"123456789","bankName":"Commercial Bank","payMethod":"Bank Transfer","remarks":"Excellent performer"},{"id":2,"fullName":"Sarah Johnson","empId":"EMP002","email":"sarah@company.com","mobile":"0771234568","nic":"987654321V","dob":"1988-08-20","gender":"Female","maritalStatus":"Married","address":"Kandy","emergencyName":"Mike Johnson","emergencyPhone":"0777654322","department":"HR","designation":"HR Manager","doj":"2022-06-15","employmentType":"Permanent","status":"Active","location":"Kandy","salary":180000,"bankAccount":"987654321","bankName":"HSBC","payMethod":"Bank Transfer","remarks":"Great leader"}];
@@ -1736,16 +1341,58 @@ let DB = {
   documents: []
 };
 
+// ─── IndexedDB helper (local fallback) ───────────────────────────────────────
+const IDB_NAME = 'HRSystemDB', IDB_VER = 1, IDB_STORE = 'kv';
+let _idb = null;
+function openIDB() {
+  if (_idb) return Promise.resolve(_idb);
+  return new Promise((res, rej) => {
+    const req = indexedDB.open(IDB_NAME, IDB_VER);
+    req.onupgradeneeded = e => e.target.result.createObjectStore(IDB_STORE, { keyPath: 'k' });
+    req.onsuccess = e => { _idb = e.target.result; res(_idb); };
+    req.onerror = () => rej(req.error);
+  });
+}
+async function idbGet(key) {
+  try {
+    const db = await openIDB();
+    return new Promise((res, rej) => {
+      const tx = db.transaction(IDB_STORE, 'readonly');
+      const req = tx.objectStore(IDB_STORE).get(key);
+      req.onsuccess = () => res(req.result ? req.result.v : null);
+      req.onerror = () => rej(req.error);
+    });
+  } catch(e) {
+    // Fallback to localStorage
+    return localStorage.getItem('hr_' + key);
+  }
+}
+async function idbSet(key, value) {
+  try {
+    const db = await openIDB();
+    return new Promise((res, rej) => {
+      const tx = db.transaction(IDB_STORE, 'readwrite');
+      tx.objectStore(IDB_STORE).put({ k: key, v: value });
+      tx.oncomplete = res;
+      tx.onerror = () => rej(tx.error);
+    });
+  } catch(e) {
+    localStorage.setItem('hr_' + key, value);
+  }
+}
+
+// ─── Supabase helpers ─────────────────────────────────────────────────────────
 async function sbGet(key) {
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/hr_data?key=eq.${key}&select=value`, {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/hr_data?key=eq.${encodeURIComponent(key)}&select=value`, {
       headers: {
         'apikey': SUPABASE_KEY,
         'Authorization': `Bearer ${SUPABASE_KEY}`
       }
     });
+    if (!res.ok) { console.warn('sbGet HTTP error', res.status); return null; }
     const data = await res.json();
-    if (!data || data.length === 0) return null;
+    if (!Array.isArray(data) || data.length === 0) return null;
     return data[0].value;
   } catch(e) {
     console.error('sbGet error', e);
@@ -1755,7 +1402,7 @@ async function sbGet(key) {
 
 async function sbSet(key, value) {
   try {
-    await fetch(`${SUPABASE_URL}/rest/v1/hr_data`, {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/hr_data`, {
       method: 'POST',
       headers: {
         'apikey': SUPABASE_KEY,
@@ -1765,23 +1412,36 @@ async function sbSet(key, value) {
       },
       body: JSON.stringify({ key, value, updated_at: new Date().toISOString() })
     });
+    if (!res.ok) console.warn('sbSet HTTP error', res.status, await res.text());
   } catch(e) {
     console.error('sbSet error', e);
+  }
+}
+
+// ─── Unified get/set (uses Supabase if configured, else IndexedDB) ────────────
+async function dbGet(key) {
+  return USE_SUPABASE ? sbGet(key) : idbGet(key);
+}
+async function dbSet(key, value) {
+  if (USE_SUPABASE) {
+    await sbSet(key, value);
+  } else {
+    await idbSet(key, value);
   }
 }
 
 async function loadDB() {
   try {
     const [emp, users, pending, payrolls, trial, license, licenseKeys, leaves, documents] = await Promise.all([
-      sbGet('hr_employees'),
-      sbGet('hr_users'),
-      sbGet('hr_pending'),
-      sbGet('hr_payrolls'),
-      sbGet('hr_trial'),
-      sbGet('hr_license'),
-      sbGet('hr_license_keys'),
-      sbGet('hr_leaves'),
-      sbGet('hr_documents'),
+      dbGet('hr_employees'),
+      dbGet('hr_users'),
+      dbGet('hr_pending'),
+      dbGet('hr_payrolls'),
+      dbGet('hr_trial'),
+      dbGet('hr_license'),
+      dbGet('hr_license_keys'),
+      dbGet('hr_leaves'),
+      dbGet('hr_documents'),
     ]);
     DB.employees    = emp         ? JSON.parse(emp)         : DEFAULT_EMPLOYEES;
     DB.users        = users       ? JSON.parse(users)       : DEFAULT_USERS;
@@ -1792,32 +1452,33 @@ async function loadDB() {
     DB.licenseKeys  = licenseKeys ? JSON.parse(licenseKeys) : [];
     DB.leaves       = leaves      ? JSON.parse(leaves)      : [];
     DB.documents    = documents   ? JSON.parse(documents)   : [];
+    console.log(`✅ DB loaded via ${USE_SUPABASE ? 'Supabase' : 'IndexedDB (local)'}`, `${DB.employees.length} employees`);
   } catch(e) {
     console.error('loadDB error', e);
-    if (!DB.employees || !DB.employees.length) DB.employees = DEFAULT_EMPLOYEES;
-    if (!DB.users     || !DB.users.length)     DB.users     = DEFAULT_USERS;
-    if (!DB.pendingUsers) DB.pendingUsers = [];
-    if (!DB.payrolls)     DB.payrolls     = [];
-    if (!DB.leaves)       DB.leaves       = [];
-    if (!DB.documents)    DB.documents    = [];
-    DB.trial       = DB.trial       || null;
-    DB.license     = DB.license     || null;
-    DB.licenseKeys = DB.licenseKeys || [];
+    if (!DB.employees?.length) DB.employees = DEFAULT_EMPLOYEES;
+    if (!DB.users?.length)     DB.users     = DEFAULT_USERS;
+    DB.pendingUsers = DB.pendingUsers || [];
+    DB.payrolls     = DB.payrolls     || [];
+    DB.leaves       = DB.leaves       || [];
+    DB.documents    = DB.documents    || [];
+    DB.trial        = DB.trial        || null;
+    DB.license      = DB.license      || null;
+    DB.licenseKeys  = DB.licenseKeys  || [];
   }
 }
 
 async function saveDB() {
   try {
     await Promise.all([
-      sbSet('hr_employees',    JSON.stringify(DB.employees)),
-      sbSet('hr_users',        JSON.stringify(DB.users)),
-      sbSet('hr_pending',      JSON.stringify(DB.pendingUsers)),
-      sbSet('hr_payrolls',     JSON.stringify(DB.payrolls)),
-      sbSet('hr_trial',        JSON.stringify(DB.trial)),
-      sbSet('hr_license',      JSON.stringify(DB.license)),
-      sbSet('hr_license_keys', JSON.stringify(DB.licenseKeys || [])),
-      sbSet('hr_leaves',       JSON.stringify(DB.leaves || [])),
-      sbSet('hr_documents',    JSON.stringify((DB.documents||[]).map(d=>({...d,data:d.data?.substring(0,50000)||d.data})))),
+      dbSet('hr_employees',    JSON.stringify(DB.employees)),
+      dbSet('hr_users',        JSON.stringify(DB.users)),
+      dbSet('hr_pending',      JSON.stringify(DB.pendingUsers)),
+      dbSet('hr_payrolls',     JSON.stringify(DB.payrolls)),
+      dbSet('hr_trial',        JSON.stringify(DB.trial)),
+      dbSet('hr_license',      JSON.stringify(DB.license)),
+      dbSet('hr_license_keys', JSON.stringify(DB.licenseKeys || [])),
+      dbSet('hr_leaves',       JSON.stringify(DB.leaves || [])),
+      dbSet('hr_documents',    JSON.stringify((DB.documents||[]).map(d=>({...d,data:d.data?.substring(0,50000)||d.data})))),
     ]);
   } catch(e) {
     console.error('saveDB error', e);
@@ -3831,70 +3492,6 @@ function copyToClipboard(text) {
 
 // ========== END TRIAL SYSTEM ==========
 
-
-// ========== MOBILE NAV ==========
-function toggleMobileNav() {
-  document.getElementById('mobileNavDrawer').classList.toggle('open');
-  document.getElementById('mobileNavOverlay').classList.toggle('open');
-  syncMobileNav();
-}
-function closeMobileNav() {
-  document.getElementById('mobileNavDrawer').classList.remove('open');
-  document.getElementById('mobileNavOverlay').classList.remove('open');
-}
-function syncMobileNav() {
-  // Sync role badge
-  const roleBadge = document.getElementById('userRoleBadge');
-  const mobileRoleBadge = document.getElementById('mobileUserRoleBadge');
-  if (roleBadge && mobileRoleBadge) {
-    mobileRoleBadge.textContent = roleBadge.textContent;
-    mobileRoleBadge.style.background = roleBadge.style.background || '#1E293B';
-  }
-  // Sync trial badge
-  const trialBadge = document.getElementById('trialBadge');
-  const mobileBadge = document.getElementById('mobileBadge');
-  if (trialBadge && mobileBadge) {
-    mobileBadge.textContent = trialBadge.textContent;
-    mobileBadge.className = trialBadge.className.replace('trialBadge','mobileBadge');
-    mobileBadge.style.display = trialBadge.style.display;
-  }
-  // Sync button visibility
-  const btnPairs = [
-    ['attendanceBtn','mobileAttendanceBtn'],
-    ['attHistBtn','mobileAttHistBtn'],
-    ['leaveBtn','mobileLeaveBtn'],
-    ['docsBtn','mobileDocsBtn'],
-    ['reportsBtn','mobileReportsBtn'],
-    ['payrollBtn','mobilePayrollBtn'],
-    ['userMgmtBtn','mobileUserMgmtBtn'],
-  ];
-  btnPairs.forEach(([deskId, mobId]) => {
-    const desk = document.getElementById(deskId);
-    const mob = document.getElementById(mobId);
-    if (desk && mob) mob.style.display = desk.style.display;
-  });
-}
-
-function toggleMobileSidebar() {
-  const sidebar = document.getElementById('mainSidebar');
-  const backdrop = document.getElementById('sidebarBackdrop');
-  sidebar.classList.toggle('mobile-open');
-  backdrop.classList.toggle('open');
-}
-function closeMobileSidebar() {
-  const sidebar = document.getElementById('mainSidebar');
-  const backdrop = document.getElementById('sidebarBackdrop');
-  sidebar.classList.remove('mobile-open');
-  backdrop.classList.remove('open');
-}
-
-// Auto-close sidebar when an employee is selected on mobile
-document.addEventListener('click', function(e) {
-  const empCard = e.target.closest('.emp-card');
-  if (empCard && window.innerWidth <= 768) {
-    closeMobileSidebar();
-  }
-});
 
 document.addEventListener('DOMContentLoaded', async function() {
   // Load persisted data before wiring up UI
