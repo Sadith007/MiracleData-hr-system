@@ -39,6 +39,47 @@ body {
   min-height: 100vh;
 }
 
+ <!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+  // Your Firebase config (paste yours here)
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Save employee
+  async function saveEmployee(employeeData) {
+    try {
+      const docRef = await addDoc(collection(db, "employees"), employeeData);
+      console.log("Employee saved with ID:", docRef.id);
+    } catch (e) {
+      console.error("Error saving:", e);
+    }
+  }
+
+  // Load all employees
+  async function loadEmployees() {
+    const querySnapshot = await getDocs(collection(db, "employees"));
+    querySnapshot.forEach((doc) => {
+      console.log(doc.id, "=>", doc.data());
+    });
+  }
+
+  // Make functions globally available
+  window.saveEmployee = saveEmployee;
+  window.loadEmployees = loadEmployees;
+</script>   
+      
 /* ========== LOGIN & AUTH ========== */
 .auth-container {
   display: flex;
