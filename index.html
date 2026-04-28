@@ -1337,13 +1337,17 @@ const SUPABASE_KEY = 'sb_publishable_NMNU2h27EVMwdv4d5u5NcQ_Wkvb7eUf';
 const DEFAULT_EMPLOYEES = [{"id":1,"fullName":"John Smith","empId":"EMP001","email":"john@company.com","mobile":"0771234567","nic":"123456789V","dob":"1990-05-15","gender":"Male","maritalStatus":"Married","address":"Colombo","emergencyName":"Jane Smith","emergencyPhone":"0777654321","department":"IT","designation":"Senior Developer","doj":"2023-01-10","employmentType":"Permanent","status":"Active","location":"Colombo","salary":150000,"bankAccount":"123456789","bankName":"Commercial Bank","payMethod":"Bank Transfer","remarks":"Excellent performer"},{"id":2,"fullName":"Sarah Johnson","empId":"EMP002","email":"sarah@company.com","mobile":"0771234568","nic":"987654321V","dob":"1988-08-20","gender":"Female","maritalStatus":"Married","address":"Kandy","emergencyName":"Mike Johnson","emergencyPhone":"0777654322","department":"HR","designation":"HR Manager","doj":"2022-06-15","employmentType":"Permanent","status":"Active","location":"Kandy","salary":180000,"bankAccount":"987654321","bankName":"HSBC","payMethod":"Bank Transfer","remarks":"Great leader"}];
 const DEFAULT_USERS = [{"id":"u1","username":"admin","password":"admin123","role":"ADMIN","status":"active"},{"id":"u2","username":"hr","password":"hr123","role":"HR","status":"active"},{"id":"u3","username":"viewer","password":"view123","role":"VIEWER","status":"active"}];
 
+// Initialize with defaults immediately — Supabase syncs in background
 let DB = {
-  employees: [],
-  users: [],
+  employees: DEFAULT_EMPLOYEES,
+  users: DEFAULT_USERS,
   pendingUsers: [],
   payrolls: [],
   leaves: [],
-  documents: []
+  documents: [],
+  trial: null,
+  license: null,
+  licenseKeys: []
 };
 
 async function sbGet(key) {
@@ -1824,35 +1828,23 @@ function exportPayrollPDF(emp, payrollData, month) {
 }
 
 // ========== LOGIN FUNCTION ==========
-async function handleLogin() {
+function handleLogin() {
   const username = document.getElementById('loginUsername').value.trim();
   const password = document.getElementById('loginPassword').value;
   const errorDiv = document.getElementById('loginError');
   const btn = document.getElementById('loginBtn');
-  
+
   if (!username || !password) {
     errorDiv.textContent = 'Please enter both username and password';
     return;
   }
 
-  // Show loading
-  btn.textContent = 'Signing in...';
-  btn.disabled = true;
   errorDiv.textContent = '';
 
-  // Ensure DB is loaded
-  if (!DB.users || DB.users.length === 0) {
-    await loadDB();
-  }
-  
   const user = DB.users.find(u => u.username === username && u.password === password && u.status === 'active');
-  
-  btn.textContent = 'Sign In →';
-  btn.disabled = false;
 
   if (user) {
     currentUser = user;
-    errorDiv.textContent = '';
     document.getElementById('loginView').style.display = 'none';
     const app = document.getElementById('mainApp');
     app.style.display = 'flex';
@@ -1860,7 +1852,9 @@ async function handleLogin() {
     setupApp();
     renderEmployeeList();
     showToast('Welcome back, ' + username + '!', 'success');
-    await checkTrialStatus();
+    checkTrialStatus();
+    // Sync with Supabase in background after login
+    loadDB().then(() => { renderEmployeeList(); });
   } else {
     errorDiv.textContent = 'Invalid username or password';
   }
@@ -3456,8 +3450,7 @@ function copyToClipboard(text) {
 
 
 document.addEventListener('DOMContentLoaded', async function() {
-  // Load persisted data before wiring up UI
-  await loadDB();
+  // Wire up all UI listeners FIRST so the UI is always responsive
   document.getElementById('loginBtn').addEventListener('click', handleLogin);
   document.getElementById('loginUsername').addEventListener('keypress', e => { if (e.key === 'Enter') handleLogin(); });
   document.getElementById('loginPassword').addEventListener('keypress', e => { if (e.key === 'Enter') handleLogin(); });
@@ -3528,6 +3521,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     });
   });
 });
+</script>
 <!-- SUPABASE SQL SETUP INSTRUCTIONS (run in Supabase SQL Editor) -->
 <!--
 CREATE TABLE IF NOT EXISTS hr_data (
