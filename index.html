@@ -4,8 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HR Management System | Complete HR Solution</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 
 <style>
 * {
@@ -864,7 +863,7 @@ body {
 }
 </style>
 </head>
-<body>
+<body style="background:#0A0F1A; color:#F1F5F9;">
 
 <!-- LOGIN VIEW -->
 <div id="loginView" class="auth-container">
@@ -890,6 +889,7 @@ body {
     <p>MIRACLE DATA</p>
     </div>
     <div class="demo-hint">
+      Default: <strong>admin</strong> / <strong>admin123</strong> &nbsp;|&nbsp; <strong>hr</strong> / <strong>hr123</strong>
     </div>
     </div>
 </div>
@@ -3521,6 +3521,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   });
 });
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" crossorigin="anonymous"></script>
 <!-- SUPABASE SQL SETUP INSTRUCTIONS (run in Supabase SQL Editor) -->
 <!--
 CREATE TABLE IF NOT EXISTS hr_data (
