@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HR Management System | Complete HR Solution</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <style>
 * {
@@ -883,12 +885,12 @@ body {
     </div>
     <button class="auth-btn" id="loginBtn">Sign In →</button>
     <div class="link-text">
-      No account? <button id="showRegisterBtn">Request Access</button>
+      Don't Have an <button id="showRegisterBtn">Request Access</button>
     </div>
     <div class="developer-hint">
     </div>
     <div class="demo-hint">
-      Default: <strong>MIRACLE DATA</strong>
+      Powered By: <strong>MIRACLE DATA</strong>
     </div>
     </div>
 </div>
@@ -1325,10 +1327,22 @@ body {
   </div>
 </div>
 
+
 <script>
-// ========== SUPABASE SETUP ==========
-const SUPABASE_URL = 'https://otbicxqorlgobfpzjijd.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_NMNU2h27EVMwdv4d5u5NcQ_Wkvb7eUf';
+// ========== FIREBASE SETUP ==========
+const firebaseConfig = {
+  apiKey: "AIzaSyAQkEdKFOrP8zvZE8snmkJZZVbi9ZYcnG4",
+  authDomain: "hr-management-cloud.firebaseapp.com",
+  projectId: "hr-management-cloud",
+  storageBucket: "hr-management-cloud.firebasestorage.app",
+  messagingSenderId: "3117790153",
+  appId: "1:3117790153:web:0c268334e8378132316e18",
+  measurementId: "G-P19QXVSCCR"
+};
+
+firebase.initializeApp(firebaseConfig);
+const _db = firebase.firestore();
+const HR_COLLECTION = 'hr_data';
 
 
 // ========== DATABASE ==========
@@ -1350,35 +1364,23 @@ let DB = {
 
 async function sbGet(key) {
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/hr_data?key=eq.${key}&select=value`, {
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`
-      }
-    });
-    const data = await res.json();
-    if (!data || data.length === 0) return null;
-    return data[0].value;
+    const docSnap = await _db.collection(HR_COLLECTION).doc(key).get();
+    if (!docSnap.exists) return null;
+    return docSnap.data().value;
   } catch(e) {
-    console.error('sbGet error', e);
+    console.error('fbGet error', e);
     return null;
   }
 }
 
 async function sbSet(key, value) {
   try {
-    await fetch(`${SUPABASE_URL}/rest/v1/hr_data`, {
-      method: 'POST',
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'resolution=merge-duplicates'
-      },
-      body: JSON.stringify({ key, value, updated_at: new Date().toISOString() })
+    await _db.collection(HR_COLLECTION).doc(key).set({
+      value,
+      updated_at: new Date().toISOString()
     });
   } catch(e) {
-    console.error('sbSet error', e);
+    console.error('fbSet error', e);
   }
 }
 
@@ -3520,22 +3522,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   });
 });
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" crossorigin="anonymous"></script>
-<!-- SUPABASE SQL SETUP INSTRUCTIONS (run in Supabase SQL Editor) -->
-<!--
-CREATE TABLE IF NOT EXISTS hr_data (
-  key TEXT PRIMARY KEY,
-  value TEXT,
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
 
-ALTER TABLE hr_data ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "anon_all" ON hr_data FOR ALL TO anon USING (true) WITH CHECK (true);
-
--- Default admin credentials stored in the DB on first load:
--- admin / admin123 | hr / hr123 | viewer / view123
--- Change these after first login!
--->
 
 </body>
 </html>
