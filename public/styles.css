@@ -54,7 +54,7 @@ body {
   justify-content: center;
   width: 52px;
   height: 52px;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  background-color: var(--accent);
   border-radius: 1rem;
   font-size: 1.6rem;
   margin-bottom: 1.5rem;
@@ -103,7 +103,7 @@ body {
 }
 .auth-btn {
   width: 100%;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  background-color: var(--accent);
   border: none;
   border-radius: 12px;
   padding: 0.8rem;
@@ -190,7 +190,7 @@ body {
 .brand-icon {
   width: 36px;
   height: 36px;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  background-color: var(--accent);
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -269,6 +269,8 @@ body {
   border: 1px solid rgba(59,130,246,0.2);
 }
 .avatar {
+  background-size: cover;
+  background-position: center;
   width: 42px;
   height: 42px;
   border-radius: 12px;
@@ -278,7 +280,7 @@ body {
   font-weight: 700;
   font-size: 1rem;
   flex-shrink: 0;
-  background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+  background-color: #3B82F6;
   color: white;
 }
 .emp-info {
@@ -333,10 +335,14 @@ body {
   flex-wrap: wrap;
 }
 .profile-avatar {
+  background-size: cover;
+  background-position: center;
+  background-size: cover;
+  background-position: center;
   width: 80px;
   height: 80px;
   border-radius: 20px;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  background-color: var(--accent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -678,7 +684,7 @@ body {
   border-color: var(--accent);
 }
 .lock-key-form button {
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  background-color: var(--accent);
   border: none;
   border-radius: 10px;
   padding: 0.65rem 1.2rem;

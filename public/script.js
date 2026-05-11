@@ -159,6 +159,24 @@ document.addEventListener('keydown', function(e) {
 });
 
 // ========== PDF EXPORT FUNCTIONS ==========
+function handlePhotoSelect(input) {
+  if (input.files && input.files[0]) {
+    if (input.files[0].size > 500 * 1024) {
+      showToast("Image too large (max 500KB)", "error");
+      input.value = "";
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const preview = document.getElementById("empPhotoPreview");
+      preview.style.backgroundImage = `url(${e.target.result})`;
+      preview.textContent = "";
+      preview.dataset.photo = e.target.result;
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
 function exportProfilePDF(emp) {
   const pdfContent = `
     <!DOCTYPE html>
@@ -244,6 +262,7 @@ function exportProfilePDF(emp) {
     </head>
     <body>
       <div class="header">
+        ${emp.photo ? `<img src="${emp.photo}" style="width:100px; height:100px; border-radius:10px; margin-bottom:15px; object-fit:cover;">` : ""}
         <h1>Employee Profile</h1>
         <p>${emp.empId} · ${emp.department}</p>
       </div>
@@ -640,7 +659,7 @@ function renderEmployeeList() {
 
   container.innerHTML = filtered.map(emp => `
     <div class="emp-card ${selectedEmployeeId === emp.id ? 'active' : ''}" onclick="selectEmployee(${emp.id})">
-      <div class="avatar">${emp.fullName?.charAt(0) || '?'}</div>
+      <div class="avatar" style="${emp.photo ? `background-image: url(${emp.photo})` : '' }">${emp.photo ? '' : (emp.fullName?.charAt(0) || '?')}</div>
       <div class="emp-info">
         <div class="emp-name">${emp.fullName || 'Unnamed'}</div>
         <div class="emp-meta">${emp.empId || ''} · ${emp.department || '-'}</div>
@@ -670,7 +689,7 @@ function renderDetail(id) {
 
   container.innerHTML = `
     <div class="profile-header">
-      <div class="profile-avatar">${emp.fullName?.charAt(0) || 'E'}</div>
+      <div class="profile-avatar" style="${emp.photo ? `background-image: url(${emp.photo})` : '' }">${emp.photo ? '' : (emp.fullName?.charAt(0) || 'E')}</div>
       <div class="profile-info">
         <h2>${emp.fullName || '—'}</h2>
         <div class="profile-title">${emp.designation || 'Staff'} · ${emp.department || '-'}</div>
@@ -728,6 +747,16 @@ function editEmployee(id) {
   editingEmployeeId = id;
   document.getElementById('modalTitle').textContent = `Edit Employee - ${emp.fullName}`;
 
+  const preview = document.getElementById('empPhotoPreview');
+  if (emp.photo) {
+    preview.style.backgroundImage = `url(${emp.photo})`;
+    preview.textContent = '';
+    preview.dataset.photo = emp.photo;
+  } else {
+    preview.style.backgroundImage = '';
+    preview.textContent = (emp.fullName || '').charAt(0) || '?';
+    delete preview.dataset.photo;
+  }
   document.getElementById('empFullName').value = emp.fullName || '';
   document.getElementById('empEmail').value = emp.email || '';
   document.getElementById('empMobile').value = emp.mobile || '';
@@ -770,6 +799,7 @@ function deleteEmployeeConfirm(id) {
 
 function saveEmployee() {
   const empData = {
+    photo: document.getElementById('empPhotoPreview').dataset.photo || null,
     fullName: document.getElementById('empFullName').value,
     email: document.getElementById('empEmail').value,
     mobile: document.getElementById('empMobile').value,
@@ -2148,6 +2178,10 @@ document.addEventListener('DOMContentLoaded', async function() {
     document.getElementById('empMarital').value = 'Single';
     document.getElementById('empType').value = 'Permanent';
     document.getElementById('empStatus').value = 'Active';
+    const preview = document.getElementById('empPhotoPreview');
+    preview.style.backgroundImage = '';
+    preview.textContent = '+';
+    delete preview.dataset.photo;
     document.getElementById('empPayMethod').value = 'Bank Transfer';
     // Reset to first tab
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
