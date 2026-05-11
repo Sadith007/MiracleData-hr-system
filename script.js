@@ -1136,7 +1136,7 @@ function openReports() {
   if (window.Chart) { go(); return; }
   const s = document.createElement('script');
   s.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js';
-  s.onload = go; s.onerror = () => showToast("Could not load Charts library", "error"); document.head.appendChild(s);
+  s.onload = go; document.head.appendChild(s);
 }
 
 function switchReport(pane, btn) {
