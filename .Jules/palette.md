@@ -1,0 +1,3 @@
+## 2026-05-12 - [Label-Input Association & Semantic Search]
+**Learning:** In a large monolithic application with numerous modals and forms, failing to associate labels with inputs using the `for` attribute is a common accessibility gap. This not only hinders screen reader users but also reduces the clickable area for sighted users. Additionally, using `type="search"` for search fields provides a better mobile experience and semantic clarity.
+**Action:** Always ensure every form input, select, and textarea has a corresponding label with a matching `for` attribute. Use `type="search"` for all search functionalities.
