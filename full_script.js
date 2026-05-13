@@ -1,5 +1,6 @@
 
-<script>
+
+
 // ========== FIREBASE SETUP ==========
 const firebaseConfig = {
   apiKey: "AIzaSyAQkEdKFOrP8zvZE8snmkJZZVbi9ZYcnG4",

@@ -1,5 +1,6 @@
 
-<script>
+
+
 // ========== FIREBASE SETUP ==========
 const firebaseConfig = {
   apiKey: "AIzaSyAQkEdKFOrP8zvZE8snmkJZZVbi9ZYcnG4",
@@ -1646,6 +1647,7 @@ function deleteDoc(id) {
 let attendanceRawHeaders = [];
 let attendanceRawRows = [];
 let attendanceMapped = [];
+let idIdx, nmIdx, wdIdx, ldIdx, adIdx, otIdx, bIdx, alIdx, deIdx;
 
 function openAttendance() {
   resetAttendance();
@@ -1815,7 +1817,7 @@ function processAttendanceMapping() {
   const alCol  = getCol('directAllow');
   const deCol  = getCol('directDed');
   const ci = col => col ? attendanceRawHeaders.indexOf(col) : -1;
-  const idIdx=ci(idCol), nmIdx=ci(nmCol), wdIdx=ci(wdCol), ldIdx=ci(ldCol), adIdx=ci(adCol), otIdx=ci(otCol), bIdx=ci(bCol), alIdx=ci(alCol), deIdx=ci(deCol);
+  idIdx=ci(idCol); nmIdx=ci(nmCol); wdIdx=ci(wdCol); ldIdx=ci(ldCol); adIdx=ci(adCol); otIdx=ci(otCol); bIdx=ci(bCol); alIdx=ci(alCol); deIdx=ci(deCol);
 
   attendanceMapped = attendanceRawRows.map(row => {
     const empId = (row[idIdx]||'').toString().trim();
