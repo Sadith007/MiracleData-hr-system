@@ -908,10 +908,11 @@ body {
     <div class="input-group"><label>Confirm Password</label><input type="password" id="regPass2" placeholder="••••••••"></div>
     <div class="input-group"><label>Role Request</label>
       <select id="regRole">
-        <option>VIEWER</option><option>HR</option><option>DEPT_VIEWER</option>
+        <option>VIEWER</option><option>HR</option><option>DEPT_VIEWER</option><option>EMPLOYEE</option>
       </select>
     </div>
     <div class="input-group" id="deptFieldReg" style="display:none;"><label>Department</label><input type="text" id="regDept" placeholder="e.g., IT, HR, Sales"></div>
+    <div class="input-group" id="empIdFieldReg" style="display:none;"><label>Employee ID</label><input type="text" id="regEmpId" placeholder="e.g., EMP001"></div>
     <button class="auth-btn" id="registerSubmitBtn">Submit Request</button>
     <div class="link-text"><button id="backToLoginBtn">← Back to Sign In</button></div>
   </div>
@@ -1288,11 +1289,12 @@ body {
         <div class="form-field"><label>Password</label><input id="newPassword" type="password" placeholder="Password"></div>
         <div class="form-field"><label>Role</label>
           <select id="newRole">
-            <option>VIEWER</option><option>HR</option><option>ADMIN</option><option>DEPT_VIEWER</option>
+            <option>VIEWER</option><option>HR</option><option>ADMIN</option><option>DEPT_VIEWER</option><option>EMPLOYEE</option>
           </select>
         </div>
       </div>
       <div class="form-field" id="newDeptField" style="display:none;"><label>Department</label><input id="newDept" placeholder="Department"></div>
+      <div class="form-field" id="newEmpIdField" style="display:none;"><label>Employee ID</label><input id="newEmpId" placeholder="Employee ID"></div>
       <button id="addUserBtn" class="btn btn-primary" style="margin-top: 10px;">➕ Add User</button>
       <div id="userMsg" class="error-message" style="margin-top: 10px;"></div>
       
@@ -1386,7 +1388,7 @@ async function sbSet(key, value) {
 
 async function loadDB() {
   try {
-    const [emp, users, pending, payrolls, trial, license, licenseKeys, leaves, documents] = await Promise.all([
+    const [emp, users, pending, payrolls, trial, license, licenseKeys, leaves, documents, attendance] = await Promise.all([
       sbGet('hr_employees'),
       sbGet('hr_users'),
       sbGet('hr_pending'),
@@ -1396,6 +1398,7 @@ async function loadDB() {
       sbGet('hr_license_keys'),
       sbGet('hr_leaves'),
       sbGet('hr_documents'),
+      sbGet('hr_attendance'),
     ]);
     DB.employees    = emp         ? JSON.parse(emp)         : DEFAULT_EMPLOYEES;
     DB.users        = users       ? JSON.parse(users)       : DEFAULT_USERS;
@@ -1406,6 +1409,7 @@ async function loadDB() {
     DB.licenseKeys  = licenseKeys ? JSON.parse(licenseKeys) : [];
     DB.leaves       = leaves      ? JSON.parse(leaves)      : [];
     DB.documents    = documents   ? JSON.parse(documents)   : [];
+    DB.attendance   = attendance  ? JSON.parse(attendance)  : [];
   } catch(e) {
     console.error('loadDB error', e);
     if (!DB.employees || !DB.employees.length) DB.employees = DEFAULT_EMPLOYEES;
@@ -1414,6 +1418,7 @@ async function loadDB() {
     if (!DB.payrolls)     DB.payrolls     = [];
     if (!DB.leaves)       DB.leaves       = [];
     if (!DB.documents)    DB.documents    = [];
+    if (!DB.attendance)  DB.attendance    = [];
     DB.trial       = DB.trial       || null;
     DB.license     = DB.license     || null;
     DB.licenseKeys = DB.licenseKeys || [];
@@ -1432,6 +1437,7 @@ async function saveDB() {
       sbSet('hr_license_keys', JSON.stringify(DB.licenseKeys || [])),
       sbSet('hr_leaves',       JSON.stringify(DB.leaves || [])),
       sbSet('hr_documents',    JSON.stringify((DB.documents||[]).map(d=>({...d,data:d.data?.substring(0,50000)||d.data})))),
+      sbSet('hr_attendance',   JSON.stringify(DB.attendance || [])),
     ]);
   } catch(e) {
     console.error('saveDB error', e);
@@ -1867,6 +1873,7 @@ function handleRegister() {
   const password2 = document.getElementById('regPass2').value;
   const role = document.getElementById('regRole').value;
   const dept = document.getElementById('regDept').value.trim();
+  const empId = document.getElementById('regEmpId').value.trim();
   const msgDiv = document.getElementById('regMessage');
   
   if (!username || !password) {
@@ -1893,9 +1900,10 @@ function handleRegister() {
   DB.pendingUsers.push({ 
     id: Date.now(), 
     username, 
-    password_hash: password, 
+    password: password,
     role, 
     department: dept, 
+    empId: role === 'EMPLOYEE' ? empId : null,
     requested_at: new Date().toISOString() 
   });
   saveDB();
@@ -1938,6 +1946,7 @@ function setupApp() {
   const roleBadge = document.getElementById('userRoleBadge');
   roleBadge.textContent = `${currentUser.username.toUpperCase()} · ${currentUser.role}`;
   
+  const isEmployee = currentUser.role === 'EMPLOYEE';
   const canEdit = currentUser.role === 'ADMIN' || currentUser.role === 'HR';
   document.getElementById('addEmployeeBtn').style.display = canEdit ? 'flex' : 'none';
   document.getElementById('attendanceBtn').style.display = canEdit ? 'inline-flex' : 'none';
@@ -1950,11 +1959,39 @@ function setupApp() {
 }
 
 // ========== EMPLOYEE FUNCTIONS ==========
+function markDailyAttendance(empId) {
+  if (!DB.attendance) DB.attendance = [];
+  const today = new Date().toISOString().split('T')[0];
+  const emp = DB.employees.find(e => e.id === empId);
+  if (!emp) return;
+
+  const exists = DB.attendance.find(a => a.employeeId === empId && a.date === today);
+  if (exists) {
+    showToast(`${emp.fullName} is already marked as present today`, 'warning');
+    return;
+  }
+
+  DB.attendance.push({
+    id: Date.now(),
+    employeeId: empId,
+    empId: emp.empId,
+    date: today,
+    status: 'Present',
+    markedAt: new Date().toISOString(),
+    markedBy: currentUser?.username || 'system'
+  });
+
+  saveDB();
+  showToast(`${emp.fullName} marked as present for today`, 'success');
+}
+
 function renderEmployeeList() {
   const search = document.getElementById('searchInput')?.value.toLowerCase() || '';
   let emps = DB.employees;
   if (currentUser?.role === 'DEPT_VIEWER') {
     emps = DB.employees.filter(e => e.department === currentUser.department);
+  } else if (currentUser?.role === 'EMPLOYEE') {
+    emps = DB.employees.filter(e => e.empId === currentUser.empId);
   }
   const filtered = emps.filter(e => 
     (e.fullName?.toLowerCase().includes(search) || 
@@ -1996,6 +2033,7 @@ function renderDetail(id) {
     return;
   }
   
+  const isEmployee = currentUser?.role === 'EMPLOYEE';
   const canEdit = currentUser?.role === 'ADMIN' || currentUser?.role === 'HR';
   const empPayrolls = DB.payrolls.filter(p => p.employeeId == id).sort((a,b) => b.month.localeCompare(a.month));
   
@@ -2008,9 +2046,10 @@ function renderDetail(id) {
         <span class="badge-status" style="background:${emp.status === 'Active' ? '#10B98120' : '#EF444420'}; color:${emp.status === 'Active' ? '#10B981' : '#EF4444'}">${emp.status || 'Active'}</span>
       </div>
       <div style="margin-left:auto; display: flex; gap: 8px;">
-        <button class="btn btn-success btn-sm" onclick="exportProfilePDF(${JSON.stringify(emp).replace(/"/g, '&quot;')})">📄 Export PDF</button>
+        ${!isEmployee ? `<button class="btn btn-success btn-sm" onclick="exportProfilePDF(${JSON.stringify(emp).replace(/"/g, '&quot;')})">📄 Export PDF</button>` : ''}
         <button class="btn btn-sm" onclick="openDocsForEmp(${emp.id})" style="background:rgba(139,92,246,0.2);border-color:var(--accent2);color:var(--accent2);">📁 Docs</button>
         <button class="btn btn-sm" onclick="openLeaveForEmp(${emp.id})" style="background:rgba(245,158,11,0.15);border-color:var(--warning);color:var(--warning);">🏖️ Leave</button>
+        ${canEdit ? `<button class="btn btn-sm btn-success" onclick="markDailyAttendance(${emp.id})">✅ Present</button>` : ''}
         ${canEdit ? `<button class="btn btn-sm" onclick="editEmployee(${emp.id})">✏ Edit</button> <button class="btn btn-sm btn-danger" onclick="deleteEmployeeConfirm(${emp.id})">🗑 Delete</button>` : ''}
       </div>
     </div>
@@ -2374,6 +2413,7 @@ function addUser() {
   const password = document.getElementById('newPassword').value;
   const role = document.getElementById('newRole').value;
   const dept = document.getElementById('newDept').value.trim();
+  const empId = document.getElementById('newEmpId').value.trim();
   const msgDiv = document.getElementById('userMsg');
   
   if (!username || !password) {
@@ -2395,6 +2435,7 @@ function addUser() {
     password: password,
     role: role,
     department: role === 'DEPT_VIEWER' ? dept : null,
+    empId: role === 'EMPLOYEE' ? empId : null,
     status: 'active'
   });
   saveDB();
@@ -2436,9 +2477,10 @@ function approveUser(pendingId) {
     DB.users.push({
       id: 'u' + Date.now(),
       username: pending.username,
-      password: pending.password_hash,
+      password: pending.password,
       role: pending.role,
       department: pending.department,
+      empId: pending.empId || null,
       status: 'active'
     });
     DB.pendingUsers = DB.pendingUsers.filter(p => p.id !== pendingId);
@@ -2751,7 +2793,11 @@ function exportLeavePDF() {
 // ========== ATTENDANCE HISTORY ==========
 function openAttHistory() {
   const sel = document.getElementById('ahEmpSel');
-  sel.innerHTML = DB.employees.map(e=>`<option value="${e.id}">${e.fullName} (${e.empId})</option>`).join('');
+  let emps = DB.employees;
+  if (currentUser?.role === 'EMPLOYEE') {
+    emps = DB.employees.filter(e => e.empId === currentUser.empId);
+  }
+  sel.innerHTML = emps.map(e=>`<option value="${e.id}">${e.fullName} (${e.empId})</option>`).join('');
   document.getElementById('ahMonth').value = new Date().toISOString().slice(0,7);
   renderAttHistory();
   openModal('attHistModal');
@@ -2768,7 +2814,8 @@ function renderAttHistory() {
   const firstDay    = new Date(year,mon-1,1).getDay();
 
   // Summary bar
-  const present = payroll ? (payroll.workingDays || (26-(payroll.absentDays||0))) : '—';
+  const manualCount = DB.attendance?.filter(a => a.employeeId === empId && a.date.startsWith(month)).length || 0;
+  const present = payroll ? (payroll.workingDays || (26-(payroll.absentDays||0))) : (manualCount || '—');
   const absent  = payroll ? (payroll.absentDays||0) : '—';
   const leave   = payroll ? (payroll.leaveDays||0) : '—';
   const ot      = payroll ? (payroll.overtimeHrs||0) : '—';
@@ -2786,11 +2833,17 @@ function renderAttHistory() {
   for(let i=0;i<firstDay;i++) cal+=`<div class="att-cal-empty"></div>`;
   for(let d=1;d<=daysInMonth;d++) {
     const date  = new Date(year,mon-1,d);
+    const dateStr = date.toISOString().split('T')[0];
     const dow   = date.getDay();
     const isWkd = dow===0||dow===6;
     const today = new Date(); const isToday = date.toDateString()===today.toDateString();
     let cls = isWkd?'att-cal-weekend':'att-cal-present';
-    if(payroll && !isWkd) {
+
+    // Check manual attendance first
+    const manual = DB.attendance?.find(a => a.employeeId === empId && a.date === dateStr);
+    if (manual) {
+      cls = 'att-cal-present';
+    } else if(payroll && !isWkd) {
       // Rough heuristic: last N days are absent
       const totalWD = daysInMonth - Math.floor(daysInMonth*2/7);
       if(d > totalWD - (payroll.absentDays||0)) cls='att-cal-absent';
@@ -2924,6 +2977,7 @@ function deleteDoc(id) {
 let attendanceRawHeaders = [];
 let attendanceRawRows = [];
 let attendanceMapped = [];
+let idIdx, nmIdx, wdIdx, ldIdx, adIdx, otIdx, bIdx, alIdx, deIdx;
 
 function openAttendance() {
   resetAttendance();
@@ -3045,6 +3099,9 @@ function showColumnMapper() {
     { key: 'leaveDays',   label: 'Leave Days',            required: false },
     { key: 'absentDays',  label: 'Absent / Unpaid Leave', required: false },
     { key: 'overtimeHrs', label: 'Overtime Hours',        required: false },
+    { key: 'directBasic', label: 'Basic Salary (Override)', required: false },
+    { key: 'directAllow', label: 'Total Allowances',      required: false },
+    { key: 'directDed',   label: 'Total Deductions',     required: false },
   ];
 
   const autoMatch = (label) => {
@@ -3057,6 +3114,9 @@ function showColumnMapper() {
       if (l.includes('leave')) return h2.includes('leave') || h2.includes('casual') || h2.includes('annual');
       if (l.includes('absent') || l.includes('unpaid')) return h2.includes('absent') || h2.includes('unpaid') || h2.includes('nopay');
       if (l.includes('overtime')) return h2.includes('ot') || h2.includes('overtime') || h2.includes('over');
+      if (l.includes('basic')) return h2.includes('basic') || h2.includes('salary');
+      if (l.includes('allowance')) return h2.includes('allow') || h2.includes('totalallow');
+      if (l.includes('deduction')) return h2.includes('deduct') || h2.includes('totalded');
       return false;
     });
   };
@@ -3083,8 +3143,11 @@ function processAttendanceMapping() {
   const ldCol  = getCol('leaveDays');
   const adCol  = getCol('absentDays');
   const otCol  = getCol('overtimeHrs');
+  const bCol   = getCol('directBasic');
+  const alCol  = getCol('directAllow');
+  const deCol  = getCol('directDed');
   const ci = col => col ? attendanceRawHeaders.indexOf(col) : -1;
-  const idIdx=ci(idCol), nmIdx=ci(nmCol), wdIdx=ci(wdCol), ldIdx=ci(ldCol), adIdx=ci(adCol), otIdx=ci(otCol);
+  idIdx=ci(idCol); nmIdx=ci(nmCol); wdIdx=ci(wdCol); ldIdx=ci(ldCol); adIdx=ci(adCol); otIdx=ci(otCol); bIdx=ci(bCol); alIdx=ci(alCol); deIdx=ci(deCol);
 
   attendanceMapped = attendanceRawRows.map(row => {
     const empId = (row[idIdx]||'').toString().trim();
@@ -3096,6 +3159,9 @@ function processAttendanceMapping() {
       leaveDays: ldIdx>=0 ? parseFloat(row[ldIdx])||0 : 0,
       absentDays: adIdx>=0 ? parseFloat(row[adIdx])||0 : 0,
       overtimeHrs: otIdx>=0 ? parseFloat(row[otIdx])||0 : 0,
+      directBasic: bIdx>=0 ? parseFloat(row[bIdx])||null : null,
+      directAllow: alIdx>=0 ? parseFloat(row[alIdx])||0 : 0,
+      directDed: deIdx>=0 ? parseFloat(row[deIdx])||0 : 0,
       emp: emp||null, matched: !!emp
     };
   }).filter(r => r.rawId);
@@ -3150,19 +3216,30 @@ async function generatePayrollFromAttendance() {
   let created=0, updated=0;
   for (const r of matched) {
     const emp = r.emp;
-    const basic = emp.salary||0;
+    const basic = r.directBasic !== null ? r.directBasic : (emp.salary||0);
     const daily = basic/workingDays;
     const absentDed = daily*(r.absentDays||0);
     const otPay = (basic/workingDays/8)*1.5*(r.overtimeHrs||0);
-    const gross = basic - absentDed + otPay;
-    const epf = Math.round(basic*0.08);
-    const etf = Math.round(basic*0.03);
-    const net = Math.round(gross - epf);
+
+    // If direct allow/ded are provided, use them, otherwise use calculated OT/EPF
+    const hasDirectAllow = bIdx >= 0 && alIdx >= 0 && r.directAllow !== null;
+    const hasDirectDed = bIdx >= 0 && deIdx >= 0 && r.directDed !== null;
+
+    const allowances = hasDirectAllow ? r.directAllow : Math.round(otPay);
+    const deductions = hasDirectDed ? r.directDed : Math.round(basic * 0.08);
+
+    const gross = basic - absentDed + allowances;
+    const net = Math.round(gross - deductions);
+
     const pd = {
       id: Date.now()+Math.random(), employeeId: emp.id, month,
-      basicSalary: basic, transport: 0, meal: 0, otherAllow: Math.round(otPay),
-      epf, etf, tax: 0, otherDeductions: 0,
-      grossEarnings: Math.round(gross), totalDeductions: epf+etf, netSalary: net,
+      basicSalary: basic, transport: 0, meal: 0, otherAllow: allowances,
+      epf: hasDirectDed ? 0 : Math.round(basic * 0.08),
+      etf: hasDirectDed ? 0 : Math.round(basic * 0.03),
+      tax: 0, otherDeductions: hasDirectDed ? deductions : 0,
+      grossEarnings: Math.round(gross),
+      totalDeductions: hasDirectDed ? deductions : (Math.round(basic * 0.08) + Math.round(basic * 0.03)),
+      netSalary: net,
       absentDays: r.absentDays||0, leaveDays: r.leaveDays||0, overtimeHrs: r.overtimeHrs||0,
       generatedFromAttendance: true, createdAt: new Date().toISOString()
     };
@@ -3459,6 +3536,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   document.getElementById('registerSubmitBtn').addEventListener('click', handleRegister);
   document.getElementById('regRole').addEventListener('change', function() {
     document.getElementById('deptFieldReg').style.display = this.value === 'DEPT_VIEWER' ? 'block' : 'none';
+    document.getElementById('empIdFieldReg').style.display = this.value === 'EMPLOYEE' ? 'block' : 'none';
   });
   document.getElementById('logoutBtn').addEventListener('click', handleLogout);
 
@@ -3509,6 +3587,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   document.getElementById('addUserBtn').addEventListener('click', addUser);
   document.getElementById('newRole').addEventListener('change', function() {
     document.getElementById('newDeptField').style.display = this.value === 'DEPT_VIEWER' ? 'block' : 'none';
+    document.getElementById('newEmpIdField').style.display = this.value === 'EMPLOYEE' ? 'block' : 'none';
   });
   
   document.querySelectorAll('.tab-btn').forEach(btn => {
