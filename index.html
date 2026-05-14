@@ -1202,13 +1202,13 @@ select option { background: #0F1628; color: var(--text); }
     <p>Submit for admin approval</p>
     <div class="warning-badge">⚠️ Admin approval required</div>
     <div id="regMessage" class="error-message"></div>
-    <div class="input-group"><label for="regUser">Username</label><input type="text" id="regUser" placeholder="Choose username"></div>
-    <div class="input-group"><label for="regPass">Password (min 4)</label><input type="password" id="regPass" placeholder="••••••••"></div>
-    <div class="input-group"><label for="regPass2">Confirm Password</label><input type="password" id="regPass2" placeholder="••••••••"></div>
-    <div class="input-group"><label for="regRole">Role Request</label>
+    <div class="input-group"><label>Username</label><input type="text" id="regUser" placeholder="Choose username"></div>
+    <div class="input-group"><label>Password (min 4)</label><input type="password" id="regPass" placeholder="••••••••"></div>
+    <div class="input-group"><label>Confirm Password</label><input type="password" id="regPass2" placeholder="••••••••"></div>
+    <div class="input-group"><label>Role Request</label>
       <select id="regRole"><option>VIEWER</option><option>HR</option><option>DEPT_VIEWER</option></select>
     </div>
-    <div class="input-group" id="deptFieldReg" style="display:none;"><label for="regDept">Department</label><input type="text" id="regDept" placeholder="e.g., IT, HR, Sales"></div>
+    <div class="input-group" id="deptFieldReg" style="display:none;"><label>Department</label><input type="text" id="regDept" placeholder="e.g., IT, HR, Sales"></div>
     <button class="auth-btn" id="registerSubmitBtn">Submit Request</button>
     <div class="link-text"><button id="backToLoginBtn">← Back to Sign In</button></div>
   </div>
@@ -1253,7 +1253,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- EMPLOYEE MODAL -->
 <div id="empModal" class="modal">
   <div class="modal-card">
-    <div class="modal-header"><h3 id="modalTitle">Employee</h3><button class="btn btn-sm" onclick="closeModal('empModal')" aria-label="Close modal" title="Close">✕</button></div>
+    <div class="modal-header"><h3 id="modalTitle">Employee</h3><button class="btn btn-sm" onclick="closeModal('empModal')">✕</button></div>
     <div class="modal-body">
       <div class="tabs">
         <button class="tab-btn active" data-tab="0">Personal</button>
@@ -1328,7 +1328,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- PAYROLL MODAL -->
 <div id="payrollModal" class="modal">
   <div class="modal-card" style="max-width:700px;">
-    <div class="modal-header"><h3>💰 Payroll Management</h3><button class="btn btn-sm" onclick="closeModal('payrollModal')" aria-label="Close modal" title="Close">✕</button></div>
+    <div class="modal-header"><h3>💰 Payroll Management</h3><button class="btn btn-sm" onclick="closeModal('payrollModal')">✕</button></div>
     <div class="modal-body">
       <div class="form-row">
         <div class="form-field"><label>Select Employee</label><select id="payrollEmpSelect"></select></div>
@@ -1364,7 +1364,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- ATTENDANCE UPLOAD MODAL -->
 <div id="attendanceModal" class="modal">
   <div class="modal-card" style="max-width:860px;">
-    <div class="modal-header"><h3>📋 Attendance Upload & Payroll Generator</h3><button class="btn btn-sm" onclick="closeModal('attendanceModal')" aria-label="Close modal" title="Close">✕</button></div>
+    <div class="modal-header"><h3>📋 Attendance Upload & Payroll Generator</h3><button class="btn btn-sm" onclick="closeModal('attendanceModal')">✕</button></div>
     <div class="modal-body">
       <div id="attStep1">
         <div style="font-size:0.7rem;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Step 1 — Upload Attendance File</div>
@@ -1418,7 +1418,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- REPORTS MODAL -->
 <div id="reportsModal" class="modal">
   <div class="modal-card" style="max-width:900px;">
-    <div class="modal-header"><h3>📊 Payroll Reports & Analytics</h3><button class="btn btn-sm" onclick="closeModal('reportsModal')" aria-label="Close modal" title="Close">✕</button></div>
+    <div class="modal-header"><h3>📊 Payroll Reports & Analytics</h3><button class="btn btn-sm" onclick="closeModal('reportsModal')">✕</button></div>
     <div class="modal-body">
       <div class="report-tabs">
         <button class="report-tab active" onclick="switchReport('overview',this)">📈 Overview</button>
@@ -1457,7 +1457,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- LEAVE MODAL -->
 <div id="leaveModal" class="modal">
   <div class="modal-card" style="max-width:820px;">
-    <div class="modal-header"><h3>🏖️ Leave Management</h3><button class="btn btn-sm" onclick="closeModal('leaveModal')" aria-label="Close modal" title="Close">✕</button></div>
+    <div class="modal-header"><h3>🏖️ Leave Management</h3><button class="btn btn-sm" onclick="closeModal('leaveModal')">✕</button></div>
     <div class="modal-body">
       <div class="report-tabs">
         <button class="report-tab active" onclick="switchLeaveTab('apply',this)">➕ Apply Leave</button>
@@ -1513,7 +1513,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- ATTENDANCE HISTORY MODAL -->
 <div id="attHistModal" class="modal">
   <div class="modal-card" style="max-width:860px;">
-    <div class="modal-header"><h3>📅 Attendance History & Reports</h3><button class="btn btn-sm" onclick="closeModal('attHistModal')" aria-label="Close modal" title="Close">✕</button></div>
+    <div class="modal-header"><h3>📅 Attendance History & Reports</h3><button class="btn btn-sm" onclick="closeModal('attHistModal')">✕</button></div>
     <div class="modal-body">
       <div class="att-hist-filter">
         <select id="ahEmpSel" onchange="renderAttHistory()" style="flex:1;min-width:160px;"></select>
@@ -1531,7 +1531,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- EMPLOYEE DOCUMENTS MODAL -->
 <div id="docsModal" class="modal">
   <div class="modal-card" style="max-width:780px;">
-    <div class="modal-header"><h3>📁 Employee Documents</h3><button class="btn btn-sm" onclick="closeModal('docsModal')" aria-label="Close modal" title="Close">✕</button></div>
+    <div class="modal-header"><h3>📁 Employee Documents</h3><button class="btn btn-sm" onclick="closeModal('docsModal')">✕</button></div>
     <div class="modal-body">
       <div style="display:flex;gap:10px;margin-bottom:1rem;align-items:center;flex-wrap:wrap;">
         <select id="docEmpSel" onchange="renderDocList()" style="flex:1;min-width:160px;"></select>
@@ -1556,7 +1556,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- USER MANAGEMENT MODAL -->
 <div id="userModal" class="modal">
   <div class="modal-card" style="max-width:800px;">
-    <div class="modal-header"><h3>👥 User Management</h3><button class="btn btn-sm" onclick="closeModal('userModal')" aria-label="Close modal" title="Close">✕</button></div>
+    <div class="modal-header"><h3>👥 User Management</h3><button class="btn btn-sm" onclick="closeModal('userModal')">✕</button></div>
     <div class="modal-body">
       <div id="userListContainer"></div>
       <hr style="margin:20px 0;border:none;border-top:1px solid rgba(255,255,255,0.07);">
@@ -1587,7 +1587,7 @@ select option { background: #0F1628; color: var(--text); }
       <h3>📍 Company Locations</h3>
       <div style="display:flex;gap:8px;align-items:center;">
         <span id="locTotalBadge" style="font-size:0.72rem;color:var(--text2);background:rgba(255,255,255,0.06);padding:3px 10px;border-radius:20px;border:1px solid rgba(255,255,255,0.09);"></span>
-        <button class="btn btn-sm" onclick="closeModal('locationModal')" aria-label="Close modal" title="Close">✕</button>
+        <button class="btn btn-sm" onclick="closeModal('locationModal')">✕</button>
       </div>
     </div>
     <div class="modal-body loc-modal-body">
