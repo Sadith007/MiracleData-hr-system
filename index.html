@@ -1240,7 +1240,7 @@ select option { background: #0F1628; color: var(--text); }
       <div class="search-box"><input type="search" id="searchInput" placeholder="Search name, ID, dept..." aria-label="Search employees"></div>
       <div class="sidebar-actions">
         <button id="addEmployeeBtn" class="btn btn-primary btn-sm" style="flex:1;">+ New Employee</button>
-        <button id="refreshListBtn" class="btn btn-sm" aria-label="Refresh employee list" title="Refresh employee list">↺</button>
+        <button id="refreshListBtn" class="btn btn-sm" aria-label="Refresh employee list" title="Refresh list">↺</button>
       </div>
       <div id="employeeListContainer" class="employee-list"></div>
     </div>
@@ -1272,53 +1272,53 @@ select option { background: #0F1628; color: var(--text); }
             <input type="file" id="empPhotoInput" accept="image/*" style="display:none;" onchange="handleEmpPhotoUpload(event)">
           </div>
           <div style="flex:1;">
-            <div class="form-field" style="margin-bottom:12px;"><label for="empFullName">Full Name *</label><input id="empFullName" placeholder="John Doe"></div>
-            <div class="form-field"><label for="empIdQuick">Employee ID Quick Set</label><input id="empIdQuick" placeholder="EMP001" oninput="document.getElementById('empId').value=this.value"></div>
+            <div class="form-field" style="margin-bottom:12px;"><label>Full Name *</label><input id="empFullName" placeholder="John Doe"></div>
+            <div class="form-field"><label>Employee ID Quick Set</label><input id="empIdQuick" placeholder="EMP001" oninput="document.getElementById('empId').value=this.value"></div>
           </div>
         </div>
         <div class="form-row">
-          <div class="form-field"><label for="empEmail">Email</label><input id="empEmail" placeholder="john@company.com"></div>
-          <div class="form-field"><label for="empMobile">Mobile *</label><input id="empMobile" placeholder="+94 XX XXX XXXX"></div>
+          <div class="form-field"><label>Email</label><input id="empEmail" placeholder="john@company.com"></div>
+          <div class="form-field"><label>Mobile *</label><input id="empMobile" placeholder="+94 XX XXX XXXX"></div>
         </div>
         <div class="form-row">
-          <div class="form-field"><label for="empNic">NIC</label><input id="empNic" placeholder="123456789V"></div>
-          <div class="form-field"><label for="empDob">Date of Birth</label><input id="empDob" placeholder="YYYY-MM-DD"></div>
+          <div class="form-field"><label>NIC</label><input id="empNic" placeholder="123456789V"></div>
+          <div class="form-field"><label>Date of Birth</label><input id="empDob" placeholder="YYYY-MM-DD"></div>
         </div>
         <div class="form-row">
-          <div class="form-field"><label for="empGender">Gender</label><select id="empGender"><option>Male</option><option>Female</option></select></div>
-          <div class="form-field"><label for="empMarital">Marital Status</label><select id="empMarital"><option>Single</option><option>Married</option></select></div>
+          <div class="form-field"><label>Gender</label><select id="empGender"><option>Male</option><option>Female</option></select></div>
+          <div class="form-field"><label>Marital Status</label><select id="empMarital"><option>Single</option><option>Married</option></select></div>
         </div>
-        <div class="form-field"><label for="empAddress">Permanent Address</label><textarea id="empAddress" rows="2" placeholder="Full address" style="width:100%;resize:vertical;"></textarea></div>
+        <div class="form-field"><label>Permanent Address</label><textarea id="empAddress" rows="2" placeholder="Full address" style="width:100%;resize:vertical;"></textarea></div>
         <div class="form-row">
-          <div class="form-field"><label for="empEmergeName">Emergency Name</label><input id="empEmergeName" placeholder="Emergency contact"></div>
-          <div class="form-field"><label for="empEmergePhone">Emergency Phone</label><input id="empEmergePhone" placeholder="Emergency number"></div>
+          <div class="form-field"><label>Emergency Name</label><input id="empEmergeName" placeholder="Emergency contact"></div>
+          <div class="form-field"><label>Emergency Phone</label><input id="empEmergePhone" placeholder="Emergency number"></div>
         </div>
       </div>
       <div id="tab1" class="tab-pane">
         <div class="form-row">
-          <div class="form-field"><label for="empId">Employee ID *</label><input id="empId" placeholder="EMP001"></div>
-          <div class="form-field"><label for="empDept">Department</label><input id="empDept" placeholder="IT, HR, Sales"></div>
+          <div class="form-field"><label>Employee ID *</label><input id="empId" placeholder="EMP001"></div>
+          <div class="form-field"><label>Department</label><input id="empDept" placeholder="IT, HR, Sales"></div>
         </div>
         <div class="form-row">
-          <div class="form-field"><label for="empDesignation">Designation</label><input id="empDesignation" placeholder="Software Engineer"></div>
-          <div class="form-field"><label for="empDoj">Date of Joining</label><input id="empDoj" placeholder="YYYY-MM-DD"></div>
+          <div class="form-field"><label>Designation</label><input id="empDesignation" placeholder="Software Engineer"></div>
+          <div class="form-field"><label>Date of Joining</label><input id="empDoj" placeholder="YYYY-MM-DD"></div>
         </div>
         <div class="form-row">
-          <div class="form-field"><label for="empType">Employment Type</label><select id="empType"><option>Permanent</option><option>Contract</option></select></div>
-          <div class="form-field"><label for="empStatus">Current Status</label><select id="empStatus"><option>Active</option><option>Resigned</option><option>Terminated</option></select></div>
+          <div class="form-field"><label>Employment Type</label><select id="empType"><option>Permanent</option><option>Contract</option></select></div>
+          <div class="form-field"><label>Current Status</label><select id="empStatus"><option>Active</option><option>Resigned</option><option>Terminated</option></select></div>
         </div>
-        <div class="form-field"><label for="empLocation">Work Location</label><input id="empLocation" placeholder="Colombo, Kandy" list="empLocationList" autocomplete="off"><datalist id="empLocationList"></datalist></div>
+        <div class="form-field"><label>Work Location</label><input id="empLocation" placeholder="Colombo, Kandy" list="empLocationList" autocomplete="off"><datalist id="empLocationList"></datalist></div>
       </div>
       <div id="tab2" class="tab-pane">
         <div class="form-row">
-          <div class="form-field"><label for="empSalary">Basic Salary (LKR)</label><input type="number" id="empSalary" placeholder="0.00"></div>
-          <div class="form-field"><label for="empBankAccount">Bank Account</label><input id="empBankAccount" placeholder="Account number"></div>
+          <div class="form-field"><label>Basic Salary (LKR)</label><input type="number" id="empSalary" placeholder="0.00"></div>
+          <div class="form-field"><label>Bank Account</label><input id="empBankAccount" placeholder="Account number"></div>
         </div>
         <div class="form-row">
-          <div class="form-field"><label for="empBankName">Bank Name</label><input id="empBankName" placeholder="Bank name"></div>
-          <div class="form-field"><label for="empPayMethod">Payment Method</label><select id="empPayMethod"><option>Bank Transfer</option><option>Cash</option></select></div>
+          <div class="form-field"><label>Bank Name</label><input id="empBankName" placeholder="Bank name"></div>
+          <div class="form-field"><label>Payment Method</label><select id="empPayMethod"><option>Bank Transfer</option><option>Cash</option></select></div>
         </div>
-        <div class="form-field"><label for="empRemarks">HR Remarks</label><textarea id="empRemarks" rows="2" placeholder="Notes..." style="width:100%;resize:vertical;"></textarea></div>
+        <div class="form-field"><label>HR Remarks</label><textarea id="empRemarks" rows="2" placeholder="Notes..." style="width:100%;resize:vertical;"></textarea></div>
       </div>
     </div>
     <div class="modal-footer"><button class="btn" onclick="closeModal('empModal')">Cancel</button><button id="saveEmpBtn" class="btn btn-primary">Save Employee</button></div>
@@ -1405,7 +1405,7 @@ select option { background: #0F1628; color: var(--text); }
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
             <button class="btn btn-primary btn-sm" onclick="generatePayrollFromAttendance()">⚡ Generate Payroll for All</button>
             <button class="btn btn-success btn-sm" onclick="exportAttendanceSummaryPDF()">📄 Export Summary PDF</button>
-            <button class="btn btn-sm" onclick="resetAttendance()" aria-label="Upload New File" title="Upload New File">↺ Upload New File</button>
+            <button class="btn btn-sm" onclick="resetAttendance()">↺ Upload New File</button>
           </div>
           <div id="attGenResult" class="payroll-gen-result" style="display:none;"></div>
         </div>
