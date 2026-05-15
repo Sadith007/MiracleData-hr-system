@@ -1179,11 +1179,11 @@ select option { background: #0F1628; color: var(--text); }
     <p>Complete HR & Payroll Management</p>
     <div id="loginError" class="error-message"></div>
     <div class="input-group">
-      <label for="loginUsername">Username</label>
+      <label>Username</label>
       <input type="text" id="loginUsername" placeholder="Enter username">
     </div>
     <div class="input-group">
-      <label for="loginPassword">Password</label>
+      <label>Password</label>
       <input type="password" id="loginPassword" placeholder="••••••••">
     </div>
     <button class="auth-btn" id="loginBtn">Sign In →</button>
@@ -1202,13 +1202,13 @@ select option { background: #0F1628; color: var(--text); }
     <p>Submit for admin approval</p>
     <div class="warning-badge">⚠️ Admin approval required</div>
     <div id="regMessage" class="error-message"></div>
-    <div class="input-group"><label for="regUser">Username</label><input type="text" id="regUser" placeholder="Choose username"></div>
-    <div class="input-group"><label for="regPass">Password (min 4)</label><input type="password" id="regPass" placeholder="••••••••"></div>
-    <div class="input-group"><label for="regPass2">Confirm Password</label><input type="password" id="regPass2" placeholder="••••••••"></div>
-    <div class="input-group"><label for="regRole">Role Request</label>
+    <div class="input-group"><label>Username</label><input type="text" id="regUser" placeholder="Choose username"></div>
+    <div class="input-group"><label>Password (min 4)</label><input type="password" id="regPass" placeholder="••••••••"></div>
+    <div class="input-group"><label>Confirm Password</label><input type="password" id="regPass2" placeholder="••••••••"></div>
+    <div class="input-group"><label>Role Request</label>
       <select id="regRole"><option>VIEWER</option><option>HR</option><option>DEPT_VIEWER</option></select>
     </div>
-    <div class="input-group" id="deptFieldReg" style="display:none;"><label for="regDept">Department</label><input type="text" id="regDept" placeholder="e.g., IT, HR, Sales"></div>
+    <div class="input-group" id="deptFieldReg" style="display:none;"><label>Department</label><input type="text" id="regDept" placeholder="e.g., IT, HR, Sales"></div>
     <button class="auth-btn" id="registerSubmitBtn">Submit Request</button>
     <div class="link-text"><button id="backToLoginBtn">← Back to Sign In</button></div>
   </div>
@@ -1237,7 +1237,7 @@ select option { background: #0F1628; color: var(--text); }
   </div>
   <div class="body-layout">
     <div class="sidebar">
-      <div class="search-box"><input type="search" id="searchInput" placeholder="Search name, ID, dept..." aria-label="Search employees"></div>
+      <div class="search-box"><input type="text" id="searchInput" placeholder="Search name, ID, dept..." aria-label="Search employees" type="search"></div>
       <div class="sidebar-actions">
         <button id="addEmployeeBtn" class="btn btn-primary btn-sm" style="flex:1;">+ New Employee</button>
         <button id="refreshListBtn" class="btn btn-sm" aria-label="Refresh employee list" title="Refresh employee list">↺</button>
