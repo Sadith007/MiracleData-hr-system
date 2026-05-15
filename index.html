@@ -1179,11 +1179,11 @@ select option { background: #0F1628; color: var(--text); }
     <p>Complete HR & Payroll Management</p>
     <div id="loginError" class="error-message"></div>
     <div class="input-group">
-      <label>Username</label>
+      <label for="loginUsername">Username</label>
       <input type="text" id="loginUsername" placeholder="Enter username">
     </div>
     <div class="input-group">
-      <label>Password</label>
+      <label for="loginPassword">Password</label>
       <input type="password" id="loginPassword" placeholder="••••••••">
     </div>
     <button class="auth-btn" id="loginBtn">Sign In →</button>
@@ -1202,13 +1202,13 @@ select option { background: #0F1628; color: var(--text); }
     <p>Submit for admin approval</p>
     <div class="warning-badge">⚠️ Admin approval required</div>
     <div id="regMessage" class="error-message"></div>
-    <div class="input-group"><label>Username</label><input type="text" id="regUser" placeholder="Choose username"></div>
-    <div class="input-group"><label>Password (min 4)</label><input type="password" id="regPass" placeholder="••••••••"></div>
-    <div class="input-group"><label>Confirm Password</label><input type="password" id="regPass2" placeholder="••••••••"></div>
-    <div class="input-group"><label>Role Request</label>
+    <div class="input-group"><label for="regUser">Username</label><input type="text" id="regUser" placeholder="Choose username"></div>
+    <div class="input-group"><label for="regPass">Password (min 4)</label><input type="password" id="regPass" placeholder="••••••••"></div>
+    <div class="input-group"><label for="regPass2">Confirm Password</label><input type="password" id="regPass2" placeholder="••••••••"></div>
+    <div class="input-group"><label for="regRole">Role Request</label>
       <select id="regRole"><option>VIEWER</option><option>HR</option><option>DEPT_VIEWER</option></select>
     </div>
-    <div class="input-group" id="deptFieldReg" style="display:none;"><label>Department</label><input type="text" id="regDept" placeholder="e.g., IT, HR, Sales"></div>
+    <div class="input-group" id="deptFieldReg" style="display:none;"><label for="regDept">Department</label><input type="text" id="regDept" placeholder="e.g., IT, HR, Sales"></div>
     <button class="auth-btn" id="registerSubmitBtn">Submit Request</button>
     <div class="link-text"><button id="backToLoginBtn">← Back to Sign In</button></div>
   </div>
@@ -1237,10 +1237,10 @@ select option { background: #0F1628; color: var(--text); }
   </div>
   <div class="body-layout">
     <div class="sidebar">
-      <div class="search-box"><input type="text" id="searchInput" placeholder="Search name, ID, dept..."></div>
+      <div class="search-box"><input type="search" id="searchInput" placeholder="Search name, ID, dept..." aria-label="Search employees"></div>
       <div class="sidebar-actions">
         <button id="addEmployeeBtn" class="btn btn-primary btn-sm" style="flex:1;">+ New Employee</button>
-        <button id="refreshListBtn" class="btn btn-sm">↺</button>
+        <button id="refreshListBtn" class="btn btn-sm" aria-label="Refresh employee list" title="Refresh employee list">↺</button>
       </div>
       <div id="employeeListContainer" class="employee-list"></div>
     </div>
@@ -1253,7 +1253,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- EMPLOYEE MODAL -->
 <div id="empModal" class="modal">
   <div class="modal-card">
-    <div class="modal-header"><h3 id="modalTitle">Employee</h3><button class="btn btn-sm" onclick="closeModal('empModal')">✕</button></div>
+    <div class="modal-header"><h3 id="modalTitle">Employee</h3><button class="btn btn-sm" onclick="closeModal('empModal')" aria-label="Close modal" title="Close modal">✕</button></div>
     <div class="modal-body">
       <div class="tabs">
         <button class="tab-btn active" data-tab="0">Personal</button>
@@ -1272,53 +1272,53 @@ select option { background: #0F1628; color: var(--text); }
             <input type="file" id="empPhotoInput" accept="image/*" style="display:none;" onchange="handleEmpPhotoUpload(event)">
           </div>
           <div style="flex:1;">
-            <div class="form-field" style="margin-bottom:12px;"><label>Full Name *</label><input id="empFullName" placeholder="John Doe"></div>
-            <div class="form-field"><label>Employee ID Quick Set</label><input id="empIdQuick" placeholder="EMP001" oninput="document.getElementById('empId').value=this.value"></div>
+            <div class="form-field" style="margin-bottom:12px;"><label for="empFullName">Full Name *</label><input id="empFullName" placeholder="John Doe"></div>
+            <div class="form-field"><label for="empIdQuick">Employee ID Quick Set</label><input id="empIdQuick" placeholder="EMP001" oninput="document.getElementById('empId').value=this.value"></div>
           </div>
         </div>
         <div class="form-row">
-          <div class="form-field"><label>Email</label><input id="empEmail" placeholder="john@company.com"></div>
-          <div class="form-field"><label>Mobile *</label><input id="empMobile" placeholder="+94 XX XXX XXXX"></div>
+          <div class="form-field"><label for="empEmail">Email</label><input id="empEmail" placeholder="john@company.com"></div>
+          <div class="form-field"><label for="empMobile">Mobile *</label><input id="empMobile" placeholder="+94 XX XXX XXXX"></div>
         </div>
         <div class="form-row">
-          <div class="form-field"><label>NIC</label><input id="empNic" placeholder="123456789V"></div>
-          <div class="form-field"><label>Date of Birth</label><input id="empDob" placeholder="YYYY-MM-DD"></div>
+          <div class="form-field"><label for="empNic">NIC</label><input id="empNic" placeholder="123456789V"></div>
+          <div class="form-field"><label for="empDob">Date of Birth</label><input id="empDob" placeholder="YYYY-MM-DD"></div>
         </div>
         <div class="form-row">
-          <div class="form-field"><label>Gender</label><select id="empGender"><option>Male</option><option>Female</option></select></div>
-          <div class="form-field"><label>Marital Status</label><select id="empMarital"><option>Single</option><option>Married</option></select></div>
+          <div class="form-field"><label for="empGender">Gender</label><select id="empGender"><option>Male</option><option>Female</option></select></div>
+          <div class="form-field"><label for="empMarital">Marital Status</label><select id="empMarital"><option>Single</option><option>Married</option></select></div>
         </div>
-        <div class="form-field"><label>Permanent Address</label><textarea id="empAddress" rows="2" placeholder="Full address" style="width:100%;resize:vertical;"></textarea></div>
+        <div class="form-field"><label for="empAddress">Permanent Address</label><textarea id="empAddress" rows="2" placeholder="Full address" style="width:100%;resize:vertical;"></textarea></div>
         <div class="form-row">
-          <div class="form-field"><label>Emergency Name</label><input id="empEmergeName" placeholder="Emergency contact"></div>
-          <div class="form-field"><label>Emergency Phone</label><input id="empEmergePhone" placeholder="Emergency number"></div>
+          <div class="form-field"><label for="empEmergeName">Emergency Name</label><input id="empEmergeName" placeholder="Emergency contact"></div>
+          <div class="form-field"><label for="empEmergePhone">Emergency Phone</label><input id="empEmergePhone" placeholder="Emergency number"></div>
         </div>
       </div>
       <div id="tab1" class="tab-pane">
         <div class="form-row">
-          <div class="form-field"><label>Employee ID *</label><input id="empId" placeholder="EMP001"></div>
-          <div class="form-field"><label>Department</label><input id="empDept" placeholder="IT, HR, Sales"></div>
+          <div class="form-field"><label for="empId">Employee ID *</label><input id="empId" placeholder="EMP001"></div>
+          <div class="form-field"><label for="empDept">Department</label><input id="empDept" placeholder="IT, HR, Sales"></div>
         </div>
         <div class="form-row">
-          <div class="form-field"><label>Designation</label><input id="empDesignation" placeholder="Software Engineer"></div>
-          <div class="form-field"><label>Date of Joining</label><input id="empDoj" placeholder="YYYY-MM-DD"></div>
+          <div class="form-field"><label for="empDesignation">Designation</label><input id="empDesignation" placeholder="Software Engineer"></div>
+          <div class="form-field"><label for="empDoj">Date of Joining</label><input id="empDoj" placeholder="YYYY-MM-DD"></div>
         </div>
         <div class="form-row">
-          <div class="form-field"><label>Employment Type</label><select id="empType"><option>Permanent</option><option>Contract</option></select></div>
-          <div class="form-field"><label>Current Status</label><select id="empStatus"><option>Active</option><option>Resigned</option><option>Terminated</option></select></div>
+          <div class="form-field"><label for="empType">Employment Type</label><select id="empType"><option>Permanent</option><option>Contract</option></select></div>
+          <div class="form-field"><label for="empStatus">Current Status</label><select id="empStatus"><option>Active</option><option>Resigned</option><option>Terminated</option></select></div>
         </div>
-        <div class="form-field"><label>Work Location</label><input id="empLocation" placeholder="Colombo, Kandy" list="empLocationList" autocomplete="off"><datalist id="empLocationList"></datalist></div>
+        <div class="form-field"><label for="empLocation">Work Location</label><input id="empLocation" placeholder="Colombo, Kandy" list="empLocationList" autocomplete="off"><datalist id="empLocationList"></datalist></div>
       </div>
       <div id="tab2" class="tab-pane">
         <div class="form-row">
-          <div class="form-field"><label>Basic Salary (LKR)</label><input type="number" id="empSalary" placeholder="0.00"></div>
-          <div class="form-field"><label>Bank Account</label><input id="empBankAccount" placeholder="Account number"></div>
+          <div class="form-field"><label for="empSalary">Basic Salary (LKR)</label><input type="number" id="empSalary" placeholder="0.00"></div>
+          <div class="form-field"><label for="empBankAccount">Bank Account</label><input id="empBankAccount" placeholder="Account number"></div>
         </div>
         <div class="form-row">
-          <div class="form-field"><label>Bank Name</label><input id="empBankName" placeholder="Bank name"></div>
-          <div class="form-field"><label>Payment Method</label><select id="empPayMethod"><option>Bank Transfer</option><option>Cash</option></select></div>
+          <div class="form-field"><label for="empBankName">Bank Name</label><input id="empBankName" placeholder="Bank name"></div>
+          <div class="form-field"><label for="empPayMethod">Payment Method</label><select id="empPayMethod"><option>Bank Transfer</option><option>Cash</option></select></div>
         </div>
-        <div class="form-field"><label>HR Remarks</label><textarea id="empRemarks" rows="2" placeholder="Notes..." style="width:100%;resize:vertical;"></textarea></div>
+        <div class="form-field"><label for="empRemarks">HR Remarks</label><textarea id="empRemarks" rows="2" placeholder="Notes..." style="width:100%;resize:vertical;"></textarea></div>
       </div>
     </div>
     <div class="modal-footer"><button class="btn" onclick="closeModal('empModal')">Cancel</button><button id="saveEmpBtn" class="btn btn-primary">Save Employee</button></div>
@@ -1328,7 +1328,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- PAYROLL MODAL -->
 <div id="payrollModal" class="modal">
   <div class="modal-card" style="max-width:700px;">
-    <div class="modal-header"><h3>💰 Payroll Management</h3><button class="btn btn-sm" onclick="closeModal('payrollModal')">✕</button></div>
+    <div class="modal-header"><h3>💰 Payroll Management</h3><button class="btn btn-sm" onclick="closeModal('payrollModal')" aria-label="Close modal" title="Close modal">✕</button></div>
     <div class="modal-body">
       <div class="form-row">
         <div class="form-field"><label>Select Employee</label><select id="payrollEmpSelect"></select></div>
@@ -1364,7 +1364,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- ATTENDANCE UPLOAD MODAL -->
 <div id="attendanceModal" class="modal">
   <div class="modal-card" style="max-width:860px;">
-    <div class="modal-header"><h3>📋 Attendance Upload & Payroll Generator</h3><button class="btn btn-sm" onclick="closeModal('attendanceModal')">✕</button></div>
+    <div class="modal-header"><h3>📋 Attendance Upload & Payroll Generator</h3><button class="btn btn-sm" onclick="closeModal('attendanceModal')" aria-label="Close modal" title="Close modal">✕</button></div>
     <div class="modal-body">
       <div id="attStep1">
         <div style="font-size:0.7rem;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Step 1 — Upload Attendance File</div>
@@ -1418,7 +1418,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- REPORTS MODAL -->
 <div id="reportsModal" class="modal">
   <div class="modal-card" style="max-width:900px;">
-    <div class="modal-header"><h3>📊 Payroll Reports & Analytics</h3><button class="btn btn-sm" onclick="closeModal('reportsModal')">✕</button></div>
+    <div class="modal-header"><h3>📊 Payroll Reports & Analytics</h3><button class="btn btn-sm" onclick="closeModal('reportsModal')" aria-label="Close modal" title="Close modal">✕</button></div>
     <div class="modal-body">
       <div class="report-tabs">
         <button class="report-tab active" onclick="switchReport('overview',this)">📈 Overview</button>
@@ -1457,7 +1457,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- LEAVE MODAL -->
 <div id="leaveModal" class="modal">
   <div class="modal-card" style="max-width:820px;">
-    <div class="modal-header"><h3>🏖️ Leave Management</h3><button class="btn btn-sm" onclick="closeModal('leaveModal')">✕</button></div>
+    <div class="modal-header"><h3>🏖️ Leave Management</h3><button class="btn btn-sm" onclick="closeModal('leaveModal')" aria-label="Close modal" title="Close modal">✕</button></div>
     <div class="modal-body">
       <div class="report-tabs">
         <button class="report-tab active" onclick="switchLeaveTab('apply',this)">➕ Apply Leave</button>
@@ -1513,7 +1513,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- ATTENDANCE HISTORY MODAL -->
 <div id="attHistModal" class="modal">
   <div class="modal-card" style="max-width:860px;">
-    <div class="modal-header"><h3>📅 Attendance History & Reports</h3><button class="btn btn-sm" onclick="closeModal('attHistModal')">✕</button></div>
+    <div class="modal-header"><h3>📅 Attendance History & Reports</h3><button class="btn btn-sm" onclick="closeModal('attHistModal')" aria-label="Close modal" title="Close modal">✕</button></div>
     <div class="modal-body">
       <div class="att-hist-filter">
         <select id="ahEmpSel" onchange="renderAttHistory()" style="flex:1;min-width:160px;"></select>
@@ -1531,7 +1531,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- EMPLOYEE DOCUMENTS MODAL -->
 <div id="docsModal" class="modal">
   <div class="modal-card" style="max-width:780px;">
-    <div class="modal-header"><h3>📁 Employee Documents</h3><button class="btn btn-sm" onclick="closeModal('docsModal')">✕</button></div>
+    <div class="modal-header"><h3>📁 Employee Documents</h3><button class="btn btn-sm" onclick="closeModal('docsModal')" aria-label="Close modal" title="Close modal">✕</button></div>
     <div class="modal-body">
       <div style="display:flex;gap:10px;margin-bottom:1rem;align-items:center;flex-wrap:wrap;">
         <select id="docEmpSel" onchange="renderDocList()" style="flex:1;min-width:160px;"></select>
@@ -1556,19 +1556,19 @@ select option { background: #0F1628; color: var(--text); }
 <!-- USER MANAGEMENT MODAL -->
 <div id="userModal" class="modal">
   <div class="modal-card" style="max-width:800px;">
-    <div class="modal-header"><h3>👥 User Management</h3><button class="btn btn-sm" onclick="closeModal('userModal')">✕</button></div>
+    <div class="modal-header"><h3>👥 User Management</h3><button class="btn btn-sm" onclick="closeModal('userModal')" aria-label="Close modal" title="Close modal">✕</button></div>
     <div class="modal-body">
       <div id="userListContainer"></div>
       <hr style="margin:20px 0;border:none;border-top:1px solid rgba(255,255,255,0.07);">
       <h4 style="margin-bottom:15px;font-family:'Syne',sans-serif;font-size:0.95rem;">Add New User</h4>
       <div class="form-row">
-        <div class="form-field"><label>Username</label><input id="newUsername" placeholder="Username"></div>
-        <div class="form-field"><label>Password</label><input id="newPassword" type="password" placeholder="Password"></div>
-        <div class="form-field"><label>Role</label>
+        <div class="form-field"><label for="newUsername">Username</label><input id="newUsername" placeholder="Username"></div>
+        <div class="form-field"><label for="newPassword">Password</label><input id="newPassword" type="password" placeholder="Password"></div>
+        <div class="form-field"><label for="newRole">Role</label>
           <select id="newRole"><option>VIEWER</option><option>HR</option><option>ADMIN</option><option>DEPT_VIEWER</option></select>
         </div>
       </div>
-      <div class="form-field" id="newDeptField" style="display:none;"><label>Department</label><input id="newDept" placeholder="Department"></div>
+      <div class="form-field" id="newDeptField" style="display:none;"><label for="newDept">Department</label><input id="newDept" placeholder="Department"></div>
       <button id="addUserBtn" class="btn btn-primary" style="margin-top:10px;">➕ Add User</button>
       <div id="userMsg" class="error-message" style="margin-top:10px;"></div>
       <hr style="margin:20px 0;border:none;border-top:1px solid rgba(255,255,255,0.07);">
@@ -1587,7 +1587,7 @@ select option { background: #0F1628; color: var(--text); }
       <h3>📍 Company Locations</h3>
       <div style="display:flex;gap:8px;align-items:center;">
         <span id="locTotalBadge" style="font-size:0.72rem;color:var(--text2);background:rgba(255,255,255,0.06);padding:3px 10px;border-radius:20px;border:1px solid rgba(255,255,255,0.09);"></span>
-        <button class="btn btn-sm" onclick="closeModal('locationModal')">✕</button>
+        <button class="btn btn-sm" onclick="closeModal('locationModal')" aria-label="Close modal" title="Close modal">✕</button>
       </div>
     </div>
     <div class="modal-body loc-modal-body">
