@@ -1237,10 +1237,10 @@ select option { background: #0F1628; color: var(--text); }
   </div>
   <div class="body-layout">
     <div class="sidebar">
-      <div class="search-box"><input type="text" id="searchInput" placeholder="Search name, ID, dept..."></div>
+      <div class="search-box"><input type="search" id="searchInput" placeholder="Search name, ID, dept..." aria-label="Search employees"></div>
       <div class="sidebar-actions">
         <button id="addEmployeeBtn" class="btn btn-primary btn-sm" style="flex:1;">+ New Employee</button>
-        <button id="refreshListBtn" class="btn btn-sm">↺</button>
+        <button id="refreshListBtn" class="btn btn-sm" aria-label="Refresh employee list" title="Refresh employee list">↺</button>
       </div>
       <div id="employeeListContainer" class="employee-list"></div>
     </div>
@@ -1253,7 +1253,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- EMPLOYEE MODAL -->
 <div id="empModal" class="modal">
   <div class="modal-card">
-    <div class="modal-header"><h3 id="modalTitle">Employee</h3><button class="btn btn-sm" onclick="closeModal('empModal')">✕</button></div>
+    <div class="modal-header"><h3 id="modalTitle">Employee</h3><button class="btn btn-sm" aria-label="Close modal" title="Close" onclick="closeModal('empModal')">✕</button></div>
     <div class="modal-body">
       <div class="tabs">
         <button class="tab-btn active" data-tab="0">Personal</button>
@@ -1328,7 +1328,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- PAYROLL MODAL -->
 <div id="payrollModal" class="modal">
   <div class="modal-card" style="max-width:700px;">
-    <div class="modal-header"><h3>💰 Payroll Management</h3><button class="btn btn-sm" onclick="closeModal('payrollModal')">✕</button></div>
+    <div class="modal-header"><h3>💰 Payroll Management</h3><button class="btn btn-sm" aria-label="Close modal" title="Close" onclick="closeModal('payrollModal')">✕</button></div>
     <div class="modal-body">
       <div class="form-row">
         <div class="form-field"><label>Select Employee</label><select id="payrollEmpSelect"></select></div>
@@ -1364,7 +1364,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- ATTENDANCE UPLOAD MODAL -->
 <div id="attendanceModal" class="modal">
   <div class="modal-card" style="max-width:860px;">
-    <div class="modal-header"><h3>📋 Attendance Upload & Payroll Generator</h3><button class="btn btn-sm" onclick="closeModal('attendanceModal')">✕</button></div>
+    <div class="modal-header"><h3>📋 Attendance Upload & Payroll Generator</h3><button class="btn btn-sm" aria-label="Close modal" title="Close" onclick="closeModal('attendanceModal')">✕</button></div>
     <div class="modal-body">
       <div id="attStep1">
         <div style="font-size:0.7rem;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Step 1 — Upload Attendance File</div>
@@ -1418,7 +1418,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- REPORTS MODAL -->
 <div id="reportsModal" class="modal">
   <div class="modal-card" style="max-width:900px;">
-    <div class="modal-header"><h3>📊 Payroll Reports & Analytics</h3><button class="btn btn-sm" onclick="closeModal('reportsModal')">✕</button></div>
+    <div class="modal-header"><h3>📊 Payroll Reports & Analytics</h3><button class="btn btn-sm" aria-label="Close modal" title="Close" onclick="closeModal('reportsModal')">✕</button></div>
     <div class="modal-body">
       <div class="report-tabs">
         <button class="report-tab active" onclick="switchReport('overview',this)">📈 Overview</button>
@@ -1457,7 +1457,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- LEAVE MODAL -->
 <div id="leaveModal" class="modal">
   <div class="modal-card" style="max-width:820px;">
-    <div class="modal-header"><h3>🏖️ Leave Management</h3><button class="btn btn-sm" onclick="closeModal('leaveModal')">✕</button></div>
+    <div class="modal-header"><h3>🏖️ Leave Management</h3><button class="btn btn-sm" aria-label="Close modal" title="Close" onclick="closeModal('leaveModal')">✕</button></div>
     <div class="modal-body">
       <div class="report-tabs">
         <button class="report-tab active" onclick="switchLeaveTab('apply',this)">➕ Apply Leave</button>
@@ -1513,7 +1513,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- ATTENDANCE HISTORY MODAL -->
 <div id="attHistModal" class="modal">
   <div class="modal-card" style="max-width:860px;">
-    <div class="modal-header"><h3>📅 Attendance History & Reports</h3><button class="btn btn-sm" onclick="closeModal('attHistModal')">✕</button></div>
+    <div class="modal-header"><h3>📅 Attendance History & Reports</h3><button class="btn btn-sm" aria-label="Close modal" title="Close" onclick="closeModal('attHistModal')">✕</button></div>
     <div class="modal-body">
       <div class="att-hist-filter">
         <select id="ahEmpSel" onchange="renderAttHistory()" style="flex:1;min-width:160px;"></select>
@@ -1531,7 +1531,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- EMPLOYEE DOCUMENTS MODAL -->
 <div id="docsModal" class="modal">
   <div class="modal-card" style="max-width:780px;">
-    <div class="modal-header"><h3>📁 Employee Documents</h3><button class="btn btn-sm" onclick="closeModal('docsModal')">✕</button></div>
+    <div class="modal-header"><h3>📁 Employee Documents</h3><button class="btn btn-sm" aria-label="Close modal" title="Close" onclick="closeModal('docsModal')">✕</button></div>
     <div class="modal-body">
       <div style="display:flex;gap:10px;margin-bottom:1rem;align-items:center;flex-wrap:wrap;">
         <select id="docEmpSel" onchange="renderDocList()" style="flex:1;min-width:160px;"></select>
@@ -1556,7 +1556,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- USER MANAGEMENT MODAL -->
 <div id="userModal" class="modal">
   <div class="modal-card" style="max-width:800px;">
-    <div class="modal-header"><h3>👥 User Management</h3><button class="btn btn-sm" onclick="closeModal('userModal')">✕</button></div>
+    <div class="modal-header"><h3>👥 User Management</h3><button class="btn btn-sm" aria-label="Close modal" title="Close" onclick="closeModal('userModal')">✕</button></div>
     <div class="modal-body">
       <div id="userListContainer"></div>
       <hr style="margin:20px 0;border:none;border-top:1px solid rgba(255,255,255,0.07);">
@@ -1587,7 +1587,7 @@ select option { background: #0F1628; color: var(--text); }
       <h3>📍 Company Locations</h3>
       <div style="display:flex;gap:8px;align-items:center;">
         <span id="locTotalBadge" style="font-size:0.72rem;color:var(--text2);background:rgba(255,255,255,0.06);padding:3px 10px;border-radius:20px;border:1px solid rgba(255,255,255,0.09);"></span>
-        <button class="btn btn-sm" onclick="closeModal('locationModal')">✕</button>
+        <button class="btn btn-sm" aria-label="Close modal" title="Close" onclick="closeModal('locationModal')">✕</button>
       </div>
     </div>
     <div class="modal-body loc-modal-body">
@@ -1731,7 +1731,12 @@ function showLoading() { if(document.getElementById('loadingOverlay'))return; co
 function hideLoading() { const el=document.getElementById('loadingOverlay'); if(el)el.remove(); }
 function showToast(message,type='success') { const t=document.createElement('div'); t.className=`toast ${type}`; t.textContent=message; document.body.appendChild(t); setTimeout(()=>t.classList.add('show'),10); setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300);},3000); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-function openModal(id) { document.getElementById(id).classList.add('open'); }
+function openModal(id) {
+  const modal = document.getElementById(id);
+  modal.classList.add('open');
+  const focusable = modal.querySelector('input:not([type="hidden"]), select, textarea, button');
+  if (focusable) setTimeout(() => focusable.focus(), 300);
+}
 document.addEventListener('click',e=>{ if(e.target.classList.contains('modal')&&e.target.classList.contains('open'))e.target.classList.remove('open'); });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape')document.querySelectorAll('.modal.open').forEach(m=>m.classList.remove('open')); });
 
