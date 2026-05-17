@@ -1732,9 +1732,11 @@ function hideLoading() { const el=document.getElementById('loadingOverlay'); if(
 function showToast(message,type='success') { const t=document.createElement('div'); t.className=`toast ${type}`; t.textContent=message; document.body.appendChild(t); setTimeout(()=>t.classList.add('show'),10); setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300);},3000); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 function openModal(id) {
-  document.getElementById(id).classList.add('open');
+  const modal = document.getElementById(id);
+  modal.classList.add('open');
   setTimeout(() => {
-    const firstInput = document.getElementById(id).querySelector('input:not([type="hidden"]), select, textarea, button');
+    // Prioritize first input/element in modal-body, fallback to any interactive element
+    const firstInput = modal.querySelector('.modal-body input:not([type="hidden"]), .modal-body select, .modal-body textarea, input:not([type="hidden"]), select, textarea, button');
     if (firstInput) firstInput.focus();
   }, 300);
 }
