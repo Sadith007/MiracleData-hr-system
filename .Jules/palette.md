@@ -1,0 +1,3 @@
+## 2025-05-14 - [Accessibility: Icon-only Buttons and Modal Focus]
+**Learning:** Icon-only buttons (like ✕ for close or ↺ for refresh) are invisible to screen readers without explicit `aria-label` attributes and lack discoverability for mouse users without `title` tooltips. Additionally, when opening modals with CSS transitions, programmatic focus should be delayed (e.g., 300ms) to ensure the element is ready to receive focus after the transition.
+**Action:** Always provide `aria-label` and `title` for icon-only components. Implement a focus-management helper for modals that selects the first interactive element (`input, select, textarea, button`) and applies focus after a short timeout.
