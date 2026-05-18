@@ -1307,7 +1307,7 @@ select option { background: #0F1628; color: var(--text); }
           <div class="form-field"><label>Employment Type</label><select id="empType"><option>Permanent</option><option>Contract</option></select></div>
           <div class="form-field"><label>Current Status</label><select id="empStatus"><option>Active</option><option>Resigned</option><option>Terminated</option></select></div>
         </div>
-        <div class="form-field"><label>Work Location</label><input id="empLocation" placeholder="Colombo, Kandy" list="empLocationList" autocomplete="off"><datalist id="empLocationList"></datalist></div>
+       <div class="form-field"><label>Work Location</label><select id="empLocation" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.82rem;outline:none;font-family:'DM Sans',sans-serif;"><option value="">— Select Location —</option></select></div>
       </div>
       <div id="tab2" class="tab-pane">
         <div class="form-row">
@@ -1621,12 +1621,11 @@ select option { background: #0F1628; color: var(--text); }
           </div>
         </div>
         <!-- MAP PANEL -->
-        <div class="loc-map-panel">
-          <div class="loc-map-wrap" id="locMapWrap">
-            <div class="loc-map-placeholder" id="locMapPlaceholder">
+          <div class="loc-map-wrap" id="locMapWrap" style="position:relative;">
+            <div id="locLeafletMap" style="width:100%;height:100%;"></div>
+            <div class="loc-map-placeholder" id="locMapPlaceholder" style="position:absolute;inset:0;z-index:10;pointer-events:none;">
               <span>🗺️</span>
-              <p>Select a location to view on map</p>
-              <small style="font-size:0.72rem;">Or add your first company location</small>
+              <p>Add a location to see it on the map</p>
             </div>
           </div>
           <div class="loc-detail-bar" id="locDetailBar" style="display:none;">
@@ -2469,16 +2468,109 @@ const LOC_TYPE_ICONS = { HQ:'🏛', Branch:'🏢', Office:'💼', Warehouse:'�
 const LOC_TYPE_CSS   = { HQ:'loc-type-hq', Branch:'loc-type-branch', Office:'loc-type-office', Warehouse:'loc-type-warehouse', Factory:'loc-type-factory' };
 
 let activeLocId = null;
+let leafletMap = null;
+let leafletMarkers = [];
+
+function loadLeaflet(cb) {
+  if (window.L) { cb(); return; }
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+  document.head.appendChild(link);
+  const script = document.createElement('script');
+  script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+  script.onload = cb;
+  document.head.appendChild(script);
+}
 
 function openLocations() {
   if (!DB.locations) DB.locations = [];
   activeLocId = null;
   renderLocList();
-  // show placeholder, hide detail bar
-  document.getElementById('locMapPlaceholder').style.display = 'flex';
   document.getElementById('locDetailBar').style.display = 'none';
-  document.getElementById('locMapWrap').querySelectorAll('iframe').forEach(f=>f.remove());
+  // Show/hide add form based on role
+  const addForm = document.getElementById('locAddFormWrap');
+  if (addForm) addForm.style.display = (currentUser?.role === 'ADMIN' || currentUser?.role === 'HR') ? 'block' : 'none';
   openModal('locationModal');
+  // Init Leaflet map after modal opens
+  setTimeout(() => initLocMap(), 200);
+}
+
+function initLocMap() {
+  loadLeaflet(() => {
+    const mapEl = document.getElementById('locLeafletMap');
+    if (!mapEl) return;
+    // Destroy old map if exists
+    if (leafletMap) { leafletMap.remove(); leafletMap = null; leafletMarkers = []; }
+    leafletMap = L.map('locLeafletMap', { zoomControl: true }).setView([7.8731, 80.7718], 7);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors', maxZoom: 18
+    }).addTo(leafletMap);
+    // Show/hide placeholder
+    const placeholder = document.getElementById('locMapPlaceholder');
+    if (placeholder) placeholder.style.display = DB.locations.length ? 'none' : 'flex';
+    // Plot all locations
+    plotAllMarkers();
+  });
+}
+
+function plotAllMarkers() {
+  if (!leafletMap || !window.L) return;
+  // Clear old markers
+  leafletMarkers.forEach(m => m.remove());
+  leafletMarkers = [];
+  const placeholder = document.getElementById('locMapPlaceholder');
+  if (!DB.locations.length) {
+    if (placeholder) placeholder.style.display = 'flex';
+    return;
+  }
+  if (placeholder) placeholder.style.display = 'none';
+  // Geocode each location by address and add marker
+  DB.locations.forEach(loc => addMarkerForLocation(loc));
+  // Fit map to all markers after short delay
+  setTimeout(() => {
+    if (leafletMarkers.length && leafletMap) {
+      const group = L.featureGroup(leafletMarkers);
+      leafletMap.fitBounds(group.getBounds().pad(0.2));
+    }
+  }, 800);
+}
+
+function addMarkerForLocation(loc) {
+  if (!leafletMap || !window.L) return;
+  // Use Nominatim geocoding API to get lat/lng from address
+  const query = encodeURIComponent(loc.address + ', Sri Lanka');
+  fetch(`https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=1`)
+    .then(r => r.json())
+    .then(data => {
+      if (!data || !data.length) return;
+      const { lat, lon } = data[0];
+      const color = { HQ:'#4F8EF7', Branch:'#38C9A8', Office:'#9B72F8', Warehouse:'#F8B84E', Factory:'#F05252' }[loc.type] || '#4F8EF7';
+      const icon = L.divIcon({
+        className: '',
+        html: `<div style="position:relative;">
+          <div style="width:20px;height:20px;border-radius:50%;background:${color};border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.35);cursor:pointer;"></div>
+          <div style="position:absolute;top:-28px;left:50%;transform:translateX(-50%);background:rgba(10,16,32,0.9);color:white;font-size:10px;font-weight:600;white-space:nowrap;padding:3px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.15);pointer-events:none;">${loc.name}</div>
+        </div>`,
+        iconSize: [20, 20],
+        iconAnchor: [10, 10]
+      });
+      const marker = L.marker([parseFloat(lat), parseFloat(lon)], { icon }).addTo(leafletMap);
+      marker.bindPopup(`
+        <div style="font-family:'DM Sans',sans-serif;min-width:160px;">
+          <div style="font-weight:700;font-size:13px;margin-bottom:4px;">${LOC_TYPE_ICONS[loc.type]||'📍'} ${loc.name}</div>
+          <div style="font-size:11px;color:#64748b;margin-bottom:4px;">${loc.address}</div>
+          ${loc.phone ? `<div style="font-size:11px;">📞 ${loc.phone}</div>` : ''}
+          ${loc.manager ? `<div style="font-size:11px;">👔 ${loc.manager}</div>` : ''}
+        </div>
+      `);
+      marker.on('click', () => selectLocation(loc.id));
+      // Store lat/lng on loc for reuse
+      loc._lat = parseFloat(lat);
+      loc._lng = parseFloat(lon);
+      leafletMarkers.push(marker);
+    })
+    .catch(() => {});
 }
 
 function renderLocList() {
@@ -2489,10 +2581,8 @@ function renderLocList() {
     l.address.toLowerCase().includes(search) ||
     (l.type||'').toLowerCase().includes(search)
   );
-  // update badge
   const badge = document.getElementById('locTotalBadge');
   if (badge) badge.textContent = DB.locations.length + ' location' + (DB.locations.length!==1?'s':'');
-
   const container = document.getElementById('locListContainer');
   if (!container) return;
   if (!locs.length) {
@@ -2518,23 +2608,17 @@ function selectLocation(id) {
   if (!loc) return;
   activeLocId = id;
   renderLocList();
-
-  // Build Google Maps embed URL using address
-  const query = encodeURIComponent(loc.address + ', ' + loc.name);
-  const mapWrap = document.getElementById('locMapWrap');
-
-  // Remove old iframe
-  mapWrap.querySelectorAll('iframe').forEach(f => f.remove());
-  document.getElementById('locMapPlaceholder').style.display = 'none';
-
-  // Create iframe
-  const iframe = document.createElement('iframe');
-  iframe.src = `https://maps.google.com/maps?q=${query}&output=embed&z=15`;
-  iframe.style.cssText = 'width:100%;height:100%;border:none;display:block;';
-  iframe.loading = 'lazy';
-  iframe.referrerPolicy = 'no-referrer-when-downgrade';
-  mapWrap.appendChild(iframe);
-
+  // Fly to marker if we have coords
+  if (leafletMap && loc._lat && loc._lng) {
+    leafletMap.flyTo([loc._lat, loc._lng], 14, { animate: true, duration: 1 });
+    // Open popup on the matching marker
+    leafletMarkers.forEach(m => {
+      const latlng = m.getLatLng();
+      if (Math.abs(latlng.lat - loc._lat) < 0.001 && Math.abs(latlng.lng - loc._lng) < 0.001) {
+        m.openPopup();
+      }
+    });
+  }
   // Update detail bar
   const empCount = DB.employees.filter(e => e.location === loc.name).length;
   document.getElementById('locDetailName').textContent = loc.name;
@@ -2545,10 +2629,16 @@ function selectLocation(id) {
     ${loc.phone?`<span class="loc-tag" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:var(--text2);">📞 ${loc.phone}</span>`:''}
     ${loc.manager?`<span class="loc-tag" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:var(--text2);">👔 ${loc.manager}</span>`:''}
   `;
+  // Show/hide delete button based on role
+  const delBtn = document.getElementById('locDeleteBtn');
+  if (delBtn) delBtn.style.display = (currentUser?.role==='ADMIN'||currentUser?.role==='HR') ? 'inline-flex' : 'none';
   document.getElementById('locDetailBar').style.display = 'block';
 }
 
 function addLocation() {
+  if (currentUser?.role !== 'ADMIN' && currentUser?.role !== 'HR') {
+    showToast('Permission denied', 'error'); return;
+  }
   const name    = document.getElementById('locNameInput').value.trim();
   const address = document.getElementById('locAddrInput').value.trim();
   const type    = document.getElementById('locTypeInput').value;
@@ -2562,21 +2652,26 @@ function addLocation() {
   const newLoc = { id: Date.now(), name, address, type, phone, manager, createdAt: new Date().toISOString() };
   DB.locations.push(newLoc);
   saveDB();
-  // clear form
   ['locNameInput','locAddrInput','locPhoneInput','locManagerInput'].forEach(id => {
     const el = document.getElementById(id); if(el) el.value = '';
   });
   document.getElementById('locTypeInput').value = 'Branch';
   renderLocList();
-  // auto-select new location
-  selectLocation(newLoc.id);
+  // Add new marker on map
+  const placeholder = document.getElementById('locMapPlaceholder');
+  if (placeholder) placeholder.style.display = 'none';
+  addMarkerForLocation(newLoc);
   showToast('Location added: ' + name, 'success');
-  // Also update empLocation dropdown in modal if open
   refreshEmpLocationDropdown();
+  // Select after short delay (geocoding needs time)
+  setTimeout(() => selectLocation(newLoc.id), 1200);
 }
 
 function deleteActiveLocation() {
   if (!activeLocId) return;
+  if (currentUser?.role !== 'ADMIN' && currentUser?.role !== 'HR') {
+    showToast('Permission denied', 'error'); return;
+  }
   const loc = DB.locations.find(l => l.id === activeLocId);
   if (!loc) return;
   if (!confirm(`Remove "${loc.name}" from locations?`)) return;
@@ -2584,11 +2679,11 @@ function deleteActiveLocation() {
   saveDB();
   activeLocId = null;
   renderLocList();
-  // hide detail bar + show placeholder
   document.getElementById('locDetailBar').style.display = 'none';
-  document.getElementById('locMapWrap').querySelectorAll('iframe').forEach(f=>f.remove());
-  document.getElementById('locMapPlaceholder').style.display = 'flex';
+  // Re-plot all markers
+  plotAllMarkers();
   showToast('Location removed', 'success');
+  refreshEmpLocationDropdown();
 }
 
 function openInGoogleMaps() {
@@ -2599,10 +2694,14 @@ function openInGoogleMaps() {
 }
 
 function refreshEmpLocationDropdown() {
-  // If employee modal is open, refresh location datalist
-  const dl = document.getElementById('empLocationList');
-  if (dl && DB.locations) {
-    dl.innerHTML = DB.locations.map(l => `<option value="${l.name}">`).join('');
+  const sel = document.getElementById('empLocation');
+  if (sel && DB.locations) {
+    const cur = sel.value;
+    sel.innerHTML = '<option value="">— Select Location —</option>' +
+      DB.locations.map(l =>
+        `<option value="${l.name}" ${cur===l.name?'selected':''}>${LOC_TYPE_ICONS[l.type]||'📍'} ${l.name} (${l.type||'Office'})</option>`
+      ).join('');
+    if (cur) sel.value = cur;
   }
 }
 
