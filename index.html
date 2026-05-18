@@ -64,6 +64,173 @@ body::before {
   </div>
   <button onclick="document.getElementById('hrChatBox').style.display=document.getElementById('hrChatBox').style.display==='none'?'flex':'none'" style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#4F8EF7,#9B72F8);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(79,142,247,0.4);font-size:1.4rem;margin-top:8px;margin-left:auto;">🤖</button>
 </div>
+
+/* ===== HR NEXUS CHATBOT ===== */
+#hrChatWidget {
+  position: fixed; bottom: 24px; right: 24px;
+  z-index: 9998; font-family: 'DM Sans', sans-serif;
+}
+#hrChatBox {
+  display: none;
+  width: 380px; height: 580px;
+  background: rgba(8,14,26,0.96);
+  border: 1px solid rgba(79,142,247,0.25);
+  border-radius: 20px; overflow: hidden;
+  flex-direction: column;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.6), 0 0 0 1px rgba(79,142,247,0.1);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  animation: chatSlideUp 0.3s cubic-bezier(0.16,1,0.3,1);
+  position: absolute; bottom: 70px; right: 0;
+}
+@keyframes chatSlideUp {
+  from { opacity: 0; transform: translateY(20px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.hc-top {
+  padding: 14px 16px;
+  background: rgba(6,11,20,0.8);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  display: flex; align-items: center; gap: 12px;
+  flex-shrink: 0;
+}
+.hc-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: linear-gradient(135deg,#4F8EF7,#9B72F8);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; flex-shrink: 0;
+}
+.hc-title { font-size: 0.88rem; font-weight: 600; color: var(--text); }
+.hc-sub { font-size: 0.68rem; color: var(--muted); }
+.hc-online {
+  margin-left: auto; display: flex; align-items: center;
+  gap: 5px; font-size: 0.68rem; color: var(--success);
+}
+.hc-online-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--success);
+  animation: pulse-dot 2s infinite;
+}
+@keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.6;transform:scale(1.3)} }
+.hc-messages {
+  flex: 1; overflow-y: auto;
+  padding: 14px; display: flex;
+  flex-direction: column; gap: 10px;
+  scroll-behavior: smooth;
+}
+.hc-messages::-webkit-scrollbar { width: 3px; }
+.hc-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 3px; }
+.hc-msg { display: flex; gap: 8px; align-items: flex-end; max-width: 92%; }
+.hc-msg.hc-user { flex-direction: row-reverse; align-self: flex-end; }
+.hc-bubble {
+  padding: 9px 13px; border-radius: 16px;
+  font-size: 0.8rem; line-height: 1.55;
+}
+.hc-msg.hc-bot .hc-bubble {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.09);
+  color: var(--text);
+  border-radius: 4px 16px 16px 16px;
+}
+.hc-msg.hc-user .hc-bubble {
+  background: linear-gradient(135deg,rgba(79,142,247,0.85),rgba(155,114,248,0.8));
+  color: white; border: none;
+  border-radius: 16px 16px 4px 16px;
+  box-shadow: 0 4px 12px rgba(79,142,247,0.25);
+}
+.hc-msg-icon {
+  width: 26px; height: 26px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; flex-shrink: 0;
+}
+.hc-bot-icon { background: rgba(79,142,247,0.15); border: 1px solid rgba(79,142,247,0.2); }
+.hc-user-icon { background: rgba(155,114,248,0.15); border: 1px solid rgba(155,114,248,0.2); }
+.hc-typing {
+  display: flex; gap: 4px;
+  padding: 10px 13px; align-items: center;
+}
+.hc-typing span {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--muted); animation: hc-bounce 1.2s infinite;
+}
+.hc-typing span:nth-child(2) { animation-delay: 0.2s; }
+.hc-typing span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes hc-bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-5px)} }
+.hc-suggs {
+  padding: 8px 12px;
+  display: flex; gap: 5px; flex-wrap: wrap;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  background: rgba(6,11,20,0.5);
+}
+.hc-sugg {
+  font-size: 0.68rem; padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(79,142,247,0.2);
+  background: rgba(79,142,247,0.08);
+  color: var(--text2); cursor: pointer;
+  white-space: nowrap; transition: all 0.15s;
+  font-family: 'DM Sans', sans-serif;
+}
+.hc-sugg:hover {
+  background: rgba(79,142,247,0.15);
+  border-color: rgba(79,142,247,0.35);
+  color: var(--text);
+}
+.hc-input-row {
+  padding: 10px 12px;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  display: flex; gap: 8px; align-items: flex-end;
+  background: rgba(6,11,20,0.6);
+  flex-shrink: 0;
+}
+.hc-textarea {
+  flex: 1;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px; padding: 8px 12px;
+  color: var(--text); font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem; resize: none; outline: none;
+  line-height: 1.4; max-height: 90px; overflow-y: auto;
+  transition: border-color 0.2s;
+}
+.hc-textarea:focus { border-color: rgba(79,142,247,0.45); }
+.hc-textarea::placeholder { color: var(--muted); }
+.hc-send {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: linear-gradient(135deg,#4F8EF7,#9B72F8);
+  border: none; cursor: pointer; display: flex;
+  align-items: center; justify-content: center;
+  flex-shrink: 0; font-size: 0.9rem;
+  transition: all 0.15s;
+  box-shadow: 0 4px 12px rgba(79,142,247,0.3);
+}
+.hc-send:hover { transform: scale(1.08); box-shadow: 0 6px 16px rgba(79,142,247,0.4); }
+.hc-send:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+#hrChatToggle {
+  width: 54px; height: 54px; border-radius: 50%;
+  background: linear-gradient(135deg,#4F8EF7,#9B72F8);
+  border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; margin-left: auto;
+  box-shadow: 0 8px 24px rgba(79,142,247,0.4), 0 0 0 1px rgba(79,142,247,0.2);
+  transition: all 0.2s; position: relative;
+}
+#hrChatToggle:hover { transform: scale(1.08); box-shadow: 0 12px 32px rgba(79,142,247,0.5); }
+.hc-notif {
+  position: absolute; top: -2px; right: -2px;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--danger); border: 2px solid var(--bg);
+  font-size: 0.5rem; color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700;
+}
+.hc-bubble ol, .hc-bubble ul {
+  padding-left: 16px; margin: 4px 0;
+}
+.hc-bubble li { margin: 2px 0; }
+.hc-bubble p { margin: 3px 0; }
+.hc-bubble strong { font-weight: 600; }
+  
 body > * { position: relative; z-index: 1; }
 
 /* ===== GLASS MIXIN ===== */
@@ -1672,6 +1839,40 @@ select option { background: #0F1628; color: var(--text); }
       <div id="licenseError" class="lock-error"></div>
     </div>
   </div>
+  
+<!-- ===== HR NEXUS CHATBOT WIDGET ===== -->
+<div id="hrChatWidget">
+  <div id="hrChatBox">
+    <div class="hc-top">
+      <div class="hc-avatar">🤖</div>
+      <div>
+        <div class="hc-title">HR Nexus Assistant</div>
+        <div class="hc-sub">Powered by Claude AI</div>
+      </div>
+      <div class="hc-online">
+        <div class="hc-online-dot"></div>
+        Online
+      </div>
+    </div>
+    <div class="hc-messages" id="hcMessages"></div>
+    <div class="hc-suggs" id="hcSuggs">
+      <button class="hc-sugg" onclick="hcSendSugg(this)">Add employee</button>
+      <button class="hc-sugg" onclick="hcSendSugg(this)">Leave types</button>
+      <button class="hc-sugg" onclick="hcSendSugg(this)">Payroll calc</button>
+      <button class="hc-sugg" onclick="hcSendSugg(this)">EPF & ETF</button>
+      <button class="hc-sugg" onclick="hcSendSugg(this)">User roles</button>
+      <button class="hc-sugg" onclick="hcSendSugg(this)">Attendance upload</button>
+    </div>
+    <div class="hc-input-row">
+      <textarea class="hc-textarea" id="hcInput" rows="1" placeholder="Ask anything about HR Nexus..."></textarea>
+      <button class="hc-send" id="hcSendBtn" onclick="hcSend()">➤</button>
+    </div>
+  </div>
+  <button id="hrChatToggle" onclick="hcToggle()">
+    🤖
+    <span class="hc-notif" id="hcNotif" style="display:none;">1</span>
+  </button>
+</div>
 </div>
 
 <script>
@@ -2710,6 +2911,188 @@ function refreshEmpLocationDropdown() {
     if (cur) sel.value = cur;
   }
 }
+
+// ===== HR NEXUS CHATBOT =====
+(function() {
+  const HC_SYSTEM = `You are the HR Nexus Assistant — an expert AI built into HR Nexus, a complete HR & Payroll Management System developed by Miracle Data (Sri Lanka).
+
+Your role: help HR managers, admins, and staff understand and use the system efficiently. Be concise, friendly, and practical. Always respond in the same language the user writes in (Sinhala or English).
+
+KEY SYSTEM FEATURES:
+- Employee Management: add/edit/delete employees, upload profile photos, export PDF profiles. Fields: personal info, NIC, DOB, emergency contact, department, designation, DOJ, employment type, work location, salary, bank details.
+- Payroll: calculate gross pay, EPF deduction (employee 8%), ETF (employer 3%), PAYE tax, net salary. Export payslips as PDF. History per employee.
+- Attendance: upload CSV/Excel/JSON/TXT files, smart column mapping, auto-generate payroll from attendance data. Fields: working days, absent days, leave days, overtime hours.
+- Leave Management: apply leave requests, approve/reject, view balances. Types: Annual (14 days), Casual (7 days), Sick (7 days), Maternity (84 days), No-Pay (unlimited), Other.
+- Reports & Analytics: payroll trends (line chart), department salary distribution (doughnut), employee salary history (line), monthly payroll table, department averages.
+- Documents: upload/download employee documents (NIC, CV, contract, certificates, payslips) — PDF/DOCX/JPG/PNG/XLSX, max 5MB.
+- User Management: roles — ADMIN (full access), HR (manage employees & payroll), VIEWER (read only), DEPT_VIEWER (own dept only). Approve/reject user registration requests.
+- Company Locations: add branches/offices/HQ/warehouses/factories with Leaflet map view. Auto-geocoded using Nominatim. Employee location assignment.
+- Trial & License: 30-day trial, admin can extend trial or generate license keys for activation.
+
+Sri Lanka labour law context:
+- EPF: Employees Provident Fund — employee contributes 8%, employer contributes 12% of basic salary monthly
+- ETF: Employees Trust Fund — employer contributes 3% of basic salary monthly  
+- PAYE: Pay As You Earn tax — deducted monthly based on taxable income thresholds
+- Annual leave entitlement: 14 working days per year (after 1 year service)
+- Casual leave: 7 days per year
+- Sick leave: 7 days per year  
+- Maternity leave: 84 working days (12 weeks) — paid
+- Gratuity: payable after 5 years continuous service (½ month salary per year)
+
+Navigation tips:
+- Top bar buttons: Attendance, History, Leave, Documents, Reports, Payroll, Users, Locations
+- Sidebar: search and select employees, + New Employee button
+- Employee modal has 3 tabs: Personal, Employment, HR & Pay
+- Admin-only: User Management, License management, extend trial
+
+Format: use numbered lists for steps, bullet points for features. Keep answers under 120 words unless asked for detail. Be warm and professional.`;
+
+  let hcHistory = [];
+  let hcTyping = false;
+  let hcOpen = false;
+
+  function hcToggle() {
+    hcOpen = !hcOpen;
+    const box = document.getElementById('hrChatBox');
+    const notif = document.getElementById('hcNotif');
+    const toggle = document.getElementById('hrChatToggle');
+    box.style.display = hcOpen ? 'flex' : 'none';
+    notif.style.display = 'none';
+    toggle.textContent = hcOpen ? '✕' : '🤖';
+    if (hcOpen && document.getElementById('hcMessages').children.length === 0) {
+      hcAddMsg('bot', 'Hello! I am your <strong>HR Nexus Assistant</strong>. I can help you with:<br><ul><li>Managing employees & payroll</li><li>Leave & attendance tracking</li><li>Reports and analytics</li><li>System navigation & features</li></ul>What would you like help with?', true);
+    }
+    if (hcOpen) setTimeout(() => document.getElementById('hcInput').focus(), 200);
+  }
+
+  function hcAddMsg(role, text, isHtml) {
+    const msgs = document.getElementById('hcMessages');
+    const wrap = document.createElement('div');
+    wrap.className = 'hc-msg hc-' + role;
+    const icon = document.createElement('div');
+    icon.className = 'hc-msg-icon hc-' + (role === 'bot' ? 'bot' : 'user') + '-icon';
+    icon.textContent = role === 'bot' ? '🤖' : '👤';
+    const bubble = document.createElement('div');
+    bubble.className = 'hc-bubble';
+    if (isHtml) bubble.innerHTML = text;
+    else bubble.textContent = text;
+    wrap.appendChild(icon);
+    wrap.appendChild(bubble);
+    msgs.appendChild(wrap);
+    msgs.scrollTop = msgs.scrollHeight;
+    return bubble;
+  }
+
+  function hcShowTyping() {
+    const msgs = document.getElementById('hcMessages');
+    const wrap = document.createElement('div');
+    wrap.className = 'hc-msg hc-bot';
+    wrap.id = 'hcTypingInd';
+    const icon = document.createElement('div');
+    icon.className = 'hc-msg-icon hc-bot-icon';
+    icon.textContent = '🤖';
+    const bubble = document.createElement('div');
+    bubble.className = 'hc-bubble';
+    bubble.innerHTML = '<div class="hc-typing"><span></span><span></span><span></span></div>';
+    wrap.appendChild(icon);
+    wrap.appendChild(bubble);
+    msgs.appendChild(wrap);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function hcHideTyping() {
+    const el = document.getElementById('hcTypingInd');
+    if (el) el.remove();
+  }
+
+  function hcFormat(text) {
+    text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    const lines = text.split('\n');
+    let out = '', inList = false;
+    for (const line of lines) {
+      const t = line.trim();
+      if (/^\d+\.\s/.test(t)) {
+        if (inList !== 'ol') { if (inList) out += '</' + inList + '>'; out += '<ol style="padding-left:16px;margin:4px 0;">'; inList = 'ol'; }
+        out += '<li style="margin:2px 0;">' + t.replace(/^\d+\.\s/, '') + '</li>';
+      } else if (/^[-•]\s/.test(t)) {
+        if (inList !== 'ul') { if (inList) out += '</' + inList + '>'; out += '<ul style="padding-left:16px;margin:4px 0;">'; inList = 'ul'; }
+        out += '<li style="margin:2px 0;">' + t.replace(/^[-•]\s/, '') + '</li>';
+      } else {
+        if (inList) { out += '</' + inList + '>'; inList = false; }
+        if (t) out += '<p style="margin:3px 0;">' + t + '</p>';
+      }
+    }
+    if (inList) out += '</' + inList + '>';
+    return out;
+  }
+
+  window.hcSend = async function() {
+    const inp = document.getElementById('hcInput');
+    const text = inp.value.trim();
+    if (!text || hcTyping) return;
+    hcTyping = true;
+    document.getElementById('hcSendBtn').disabled = true;
+    document.getElementById('hcSuggs').style.display = 'none';
+    inp.value = '';
+    inp.style.height = 'auto';
+    hcAddMsg('user', text);
+    hcHistory.push({ role: 'user', content: text });
+    hcShowTyping();
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 800,
+          system: HC_SYSTEM,
+          messages: hcHistory
+        })
+      });
+      const data = await res.json();
+      hcHideTyping();
+      const reply = data.content?.[0]?.text || 'Sorry, I could not get a response. Please try again.';
+      hcHistory.push({ role: 'assistant', content: reply });
+      if (hcHistory.length > 20) hcHistory = hcHistory.slice(-20);
+      hcAddMsg('bot', hcFormat(reply), true);
+    } catch(e) {
+      hcHideTyping();
+      hcAddMsg('bot', 'Connection error. Please check your internet connection and try again.');
+    }
+    hcTyping = false;
+    document.getElementById('hcSendBtn').disabled = false;
+    inp.focus();
+  };
+
+  window.hcSendSugg = function(btn) {
+    document.getElementById('hcInput').value = btn.textContent;
+    hcSend();
+  };
+
+  window.hcToggle = hcToggle;
+
+  // Keyboard handler
+  document.addEventListener('DOMContentLoaded', function() {
+    const inp = document.getElementById('hcInput');
+    if (inp) {
+      inp.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); hcSend(); }
+      });
+      inp.addEventListener('input', () => {
+        inp.style.height = 'auto';
+        inp.style.height = Math.min(inp.scrollHeight, 90) + 'px';
+      });
+    }
+    // Show notification badge after 3s
+    setTimeout(() => {
+      if (!hcOpen) {
+        const notif = document.getElementById('hcNotif');
+        if (notif) notif.style.display = 'flex';
+      }
+    }, 3000);
+  });
+})();
 
 </script>
 </body>
