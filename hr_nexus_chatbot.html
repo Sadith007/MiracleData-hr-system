@@ -1,0 +1,232 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+#hr-chat{display:flex;flex-direction:column;height:580px;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;font-family:var(--font-sans)}
+.hc-top{padding:14px 16px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:12px;background:var(--color-background-secondary)}
+.hc-avatar{width:38px;height:38px;border-radius:50%;background:#185FA5;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hc-avatar i{font-size:18px;color:#E6F1FB}
+.hc-title{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.hc-sub{font-size:12px;color:var(--color-text-secondary)}
+.hc-status{margin-left:auto;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--color-text-secondary)}
+.hc-dot{width:7px;height:7px;border-radius:50%;background:#1D9E75}
+.hc-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.hc-messages::-webkit-scrollbar{width:3px}
+.hc-messages::-webkit-scrollbar-thumb{background:var(--color-border-secondary);border-radius:3px}
+.msg{display:flex;gap:10px;align-items:flex-end;max-width:88%}
+.msg.user{flex-direction:row-reverse;align-self:flex-end}
+.msg-bubble{padding:10px 14px;border-radius:16px;font-size:13.5px;line-height:1.55;border:0.5px solid var(--color-border-tertiary)}
+.msg.bot .msg-bubble{background:var(--color-background-secondary);color:var(--color-text-primary);border-radius:4px 16px 16px 16px}
+.msg.user .msg-bubble{background:#185FA5;color:#E6F1FB;border:none;border-radius:16px 16px 4px 16px}
+.msg-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px}
+.bot-icon{background:#E6F1FB}
+.bot-icon i{color:#185FA5;font-size:14px}
+.user-icon{background:#185FA5}
+.user-icon i{color:#E6F1FB;font-size:14px}
+.typing{display:flex;gap:4px;padding:12px 14px;align-items:center}
+.typing span{width:6px;height:6px;border-radius:50%;background:var(--color-text-secondary);animation:bounce 1.2s infinite}
+.typing span:nth-child(2){animation-delay:.2s}
+.typing span:nth-child(3){animation-delay:.4s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+.hc-suggestions{padding:8px 16px;display:flex;gap:6px;flex-wrap:wrap;border-top:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary)}
+.sugg-btn{font-size:11.5px;padding:5px 10px;border-radius:20px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;white-space:nowrap;transition:all .15s}
+.sugg-btn:hover{background:var(--color-background-secondary);color:var(--color-text-primary);border-color:var(--color-border-primary)}
+.hc-input-row{padding:12px 16px;border-top:0.5px solid var(--color-border-tertiary);display:flex;gap:8px;align-items:flex-end;background:var(--color-background-primary)}
+.hc-textarea{flex:1;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-lg);padding:9px 12px;font-size:13.5px;font-family:var(--font-sans);resize:none;outline:none;color:var(--color-text-primary);background:var(--color-background-secondary);line-height:1.4;max-height:100px;overflow-y:auto;transition:border-color .15s}
+.hc-textarea:focus{border-color:var(--color-border-info)}
+.hc-send{width:36px;height:36px;border-radius:50%;background:#185FA5;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.hc-send:hover{background:#0C447C;transform:scale(1.05)}
+.hc-send:disabled{background:var(--color-border-tertiary);cursor:not-allowed;transform:none}
+.hc-send i{color:#E6F1FB;font-size:16px}
+.tool-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:10px 12px;margin-top:8px;font-size:12px}
+.tool-card-label{font-size:11px;color:var(--color-text-secondary);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.tool-row{display:flex;justify-content:space-between;padding:3px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.tool-row:last-child{border:none}
+.tool-row .k{color:var(--color-text-secondary)}
+.tool-row .v{font-weight:500;color:var(--color-text-primary)}
+</style>
+
+<div id="hr-chat" role="main">
+  <h2 class="sr-only">HR Nexus AI Assistant — chat with your HR system</h2>
+
+  <div class="hc-top">
+    <div class="hc-avatar"><i class="ti ti-robot" aria-hidden="true"></i></div>
+    <div>
+      <div class="hc-title">HR Nexus Assistant</div>
+      <div class="hc-sub">Powered by Claude AI</div>
+    </div>
+    <div class="hc-status">
+      <div class="hc-dot"></div>
+      Online
+    </div>
+  </div>
+
+  <div class="hc-messages" id="hcMsgs"></div>
+
+  <div class="hc-suggestions" id="hcSuggs">
+    <button class="sugg-btn" onclick="sendSugg(this)">How do I add an employee?</button>
+    <button class="sugg-btn" onclick="sendSugg(this)">Explain leave types</button>
+    <button class="sugg-btn" onclick="sendSugg(this)">How does payroll work?</button>
+    <button class="sugg-btn" onclick="sendSugg(this)">What is EPF & ETF?</button>
+    <button class="sugg-btn" onclick="sendSugg(this)">How to generate reports?</button>
+  </div>
+
+  <div class="hc-input-row">
+    <textarea class="hc-textarea" id="hcInput" rows="1" placeholder="Ask anything about HR Nexus..." aria-label="Chat message"></textarea>
+    <button class="hc-send" id="hcSend" onclick="sendMsg()" aria-label="Send message">
+      <i class="ti ti-send" aria-hidden="true"></i>
+    </button>
+  </div>
+</div>
+
+<script>
+const msgs = document.getElementById('hcMsgs');
+const inp  = document.getElementById('hcInput');
+const btn  = document.getElementById('hcSend');
+const suggs = document.getElementById('hcSuggs');
+
+const SYSTEM = `You are the HR Nexus Assistant — an expert AI built into HR Nexus, a complete HR & Payroll Management System built by Miracle Data.
+
+Your role: help HR managers, admins, and staff understand and use the system. Be concise, friendly, and practical.
+
+KEY SYSTEM FEATURES you know deeply:
+- Employee Management: add/edit/delete employees, upload profile photos, export PDF profiles
+- Payroll: calculate gross, EPF (8%), ETF (3%), PAYE tax, net salary, export payslips as PDF
+- Attendance: upload CSV/Excel/JSON attendance files, map columns, auto-generate payroll from attendance
+- Leave Management: apply leave (Annual 14d, Casual 7d, Sick 7d, Maternity 84d, No-Pay), approve/reject, view balances
+- Reports & Analytics: payroll trends, department salary distribution, employee history charts
+- Documents: upload/download employee docs (NIC, contract, certificates, etc.)
+- User Management: ADMIN, HR, VIEWER, DEPT_VIEWER roles; approve/reject user requests
+- Company Locations: add branches with map view using OpenStreetMap/Leaflet
+- Trial system: 30-day trial, license key activation
+
+Sri Lanka context: EPF = Employees' Provident Fund (employer 12% + employee 8%), ETF = Employees' Trust Fund (employer 3%), PAYE = Pay As You Earn tax.
+
+Format responses cleanly. Use short paragraphs. For step-by-step instructions use numbered lists. Keep answers under 150 words unless the user asks for detail. Never mention competitor systems. Always be helpful and professional.`;
+
+let history = [];
+let isTyping = false;
+
+function addMsg(role, text, isHtml) {
+  const wrap = document.createElement('div');
+  wrap.className = 'msg ' + role;
+  const icon = document.createElement('div');
+  icon.className = 'msg-icon ' + (role === 'bot' ? 'bot-icon' : 'user-icon');
+  icon.innerHTML = role === 'bot'
+    ? '<i class="ti ti-robot" aria-hidden="true"></i>'
+    : '<i class="ti ti-user" aria-hidden="true"></i>';
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+  if (isHtml) bubble.innerHTML = text;
+  else bubble.textContent = text;
+  wrap.appendChild(icon);
+  wrap.appendChild(bubble);
+  msgs.appendChild(wrap);
+  msgs.scrollTop = msgs.scrollHeight;
+  return bubble;
+}
+
+function showTyping() {
+  const wrap = document.createElement('div');
+  wrap.className = 'msg bot';
+  wrap.id = 'typing-ind';
+  const icon = document.createElement('div');
+  icon.className = 'msg-icon bot-icon';
+  icon.innerHTML = '<i class="ti ti-robot" aria-hidden="true"></i>';
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+  bubble.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
+  wrap.appendChild(icon);
+  wrap.appendChild(bubble);
+  msgs.appendChild(wrap);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function hideTyping() {
+  const el = document.getElementById('typing-ind');
+  if (el) el.remove();
+}
+
+function formatResponse(text) {
+  text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+  const lines = text.split('\n');
+  let out = '', inList = false;
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (/^\d+\.\s/.test(trimmed)) {
+      if (!inList) { out += '<ol style="padding-left:18px;margin:6px 0;">'; inList = 'ol'; }
+      out += '<li style="margin:2px 0;">' + trimmed.replace(/^\d+\.\s/, '') + '</li>';
+    } else if (/^[-•]\s/.test(trimmed)) {
+      if (!inList) { out += '<ul style="padding-left:18px;margin:6px 0;">'; inList = 'ul'; }
+      out += '<li style="margin:2px 0;">' + trimmed.replace(/^[-•]\s/, '') + '</li>';
+    } else {
+      if (inList) { out += '</' + inList + '>'; inList = false; }
+      if (trimmed) out += '<p style="margin:4px 0;">' + trimmed + '</p>';
+    }
+  }
+  if (inList) out += '</' + inList + '>';
+  return out;
+}
+
+async function sendMsg() {
+  const text = inp.value.trim();
+  if (!text || isTyping) return;
+  isTyping = true;
+  btn.disabled = true;
+  suggs.style.display = 'none';
+
+  inp.value = '';
+  inp.style.height = 'auto';
+
+  addMsg('user', text);
+  history.push({ role: 'user', content: text });
+
+  showTyping();
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: SYSTEM,
+        messages: history
+      })
+    });
+
+    const data = await res.json();
+    hideTyping();
+
+    const reply = data.content?.[0]?.text || 'Sorry, I could not get a response. Please try again.';
+    history.push({ role: 'assistant', content: reply });
+
+    addMsg('bot', formatResponse(reply), true);
+  } catch (e) {
+    hideTyping();
+    addMsg('bot', 'Connection error. Please check your internet and try again.', false);
+  }
+
+  isTyping = false;
+  btn.disabled = false;
+  inp.focus();
+}
+
+function sendSugg(btn) {
+  inp.value = btn.textContent;
+  sendMsg();
+}
+
+inp.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); }
+});
+
+inp.addEventListener('input', () => {
+  inp.style.height = 'auto';
+  inp.style.height = Math.min(inp.scrollHeight, 100) + 'px';
+});
+
+addMsg('bot', formatResponse(
+  "Hello! I'm your **HR Nexus Assistant**, here to help you get the most out of the system.\n\nI can help you with:\n- Adding and managing employees\n- Processing payroll and generating payslips\n- Leave management and approvals\n- Attendance tracking\n- Reports and analytics\n- User roles and permissions\n\nWhat would you like help with today?"
+), true);
+</script>
