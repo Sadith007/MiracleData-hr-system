@@ -1174,7 +1174,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- LOGIN VIEW -->
 <div id="loginView" class="auth-container">
   <div class="auth-card">
-    <div class="auth-logo">👥</div>
+    <div class="auth-logo">ðŸ‘¥</div>
     <h2>HR Nexus</h2>
     <p>Complete HR & Payroll Management</p>
     <div id="loginError" class="error-message"></div>
@@ -1184,9 +1184,9 @@ select option { background: #0F1628; color: var(--text); }
     </div>
     <div class="input-group">
       <label>Password</label>
-      <input type="password" id="loginPassword" placeholder="••••••••">
+      <input type="password" id="loginPassword" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
     </div>
-    <button class="auth-btn" id="loginBtn">Sign In →</button>
+    <button class="auth-btn" id="loginBtn">Sign In â†’</button>
     <div class="link-text">
       Don't have access? <button id="showRegisterBtn">Request Access</button>
     </div>
@@ -1197,20 +1197,20 @@ select option { background: #0F1628; color: var(--text); }
 <!-- REGISTER VIEW -->
 <div id="registerView" class="auth-container" style="display:none;">
   <div class="auth-card">
-    <div class="auth-logo">📝</div>
+    <div class="auth-logo">ðŸ“</div>
     <h2>Request Access</h2>
     <p>Submit for admin approval</p>
-    <div class="warning-badge">⚠️ Admin approval required</div>
+    <div class="warning-badge">âš ï¸ Admin approval required</div>
     <div id="regMessage" class="error-message"></div>
     <div class="input-group"><label>Username</label><input type="text" id="regUser" placeholder="Choose username"></div>
-    <div class="input-group"><label>Password (min 4)</label><input type="password" id="regPass" placeholder="••••••••"></div>
-    <div class="input-group"><label>Confirm Password</label><input type="password" id="regPass2" placeholder="••••••••"></div>
+    <div class="input-group"><label>Password (min 4)</label><input type="password" id="regPass" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"></div>
+    <div class="input-group"><label>Confirm Password</label><input type="password" id="regPass2" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"></div>
     <div class="input-group"><label>Role Request</label>
       <select id="regRole"><option>VIEWER</option><option>HR</option><option>DEPT_VIEWER</option></select>
     </div>
     <div class="input-group" id="deptFieldReg" style="display:none;"><label>Department</label><input type="text" id="regDept" placeholder="e.g., IT, HR, Sales"></div>
     <button class="auth-btn" id="registerSubmitBtn">Submit Request</button>
-    <div class="link-text"><button id="backToLoginBtn">← Back to Sign In</button></div>
+    <div class="link-text"><button id="backToLoginBtn">â† Back to Sign In</button></div>
   </div>
 </div>
 
@@ -1218,21 +1218,21 @@ select option { background: #0F1628; color: var(--text); }
 <div id="mainApp" class="app">
   <div class="topbar">
     <div class="brand">
-      <div class="brand-icon">🏢</div>
+      <div class="brand-icon">ðŸ¢</div>
       <h1>HR Management System</h1>
     </div>
     <div class="top-actions">
       <span id="userRoleBadge" class="badge-status" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);padding:4px 12px;border-radius:20px;font-size:0.72rem;"></span>
       <span id="trialBadge" class="trial-badge trial-ok" style="display:none;"></span>
-      <button id="attendanceBtn" class="btn btn-sm" style="display:none;">📋 Attendance</button>
-      <button id="attHistBtn" class="btn btn-sm" style="display:none;">📅 History</button>
-      <button id="leaveBtn" class="btn btn-sm" style="display:none;">🏖️ Leave</button>
-      <button id="docsBtn" class="btn btn-sm" style="display:none;">📁 Documents</button>
-      <button id="reportsBtn" class="btn btn-sm" style="display:none;">📊 Reports</button>
-      <button id="payrollBtn" class="btn btn-sm" style="display:none;">💰 Payroll</button>
-      <button id="userMgmtBtn" class="btn btn-sm" style="display:none;">👥 Users</button>
-      <button id="locationBtn" class="btn btn-sm" style="display:none;">📍 Locations</button>
-      <button id="logoutBtn" class="btn btn-sm">⏻ Logout</button>
+      <button id="attendanceBtn" class="btn btn-sm" style="display:none;">ðŸ“‹ Attendance</button>
+      <button id="attHistBtn" class="btn btn-sm" style="display:none;">ðŸ“… History</button>
+      <button id="leaveBtn" class="btn btn-sm" style="display:none;">ðŸ–ï¸ Leave</button>
+      <button id="docsBtn" class="btn btn-sm" style="display:none;">ðŸ“ Documents</button>
+      <button id="reportsBtn" class="btn btn-sm" style="display:none;">ðŸ“Š Reports</button>
+      <button id="payrollBtn" class="btn btn-sm" style="display:none;">ðŸ’° Payroll</button>
+      <button id="userMgmtBtn" class="btn btn-sm" style="display:none;">ðŸ‘¥ Users</button>
+      <button id="locationBtn" class="btn btn-sm" style="display:none;">ðŸ“ Locations</button>
+      <button id="logoutBtn" class="btn btn-sm">â» Logout</button>
     </div>
   </div>
   <div class="body-layout">
@@ -1240,12 +1240,12 @@ select option { background: #0F1628; color: var(--text); }
       <div class="search-box"><input type="text" id="searchInput" placeholder="Search name, ID, dept..."></div>
       <div class="sidebar-actions">
         <button id="addEmployeeBtn" class="btn btn-primary btn-sm" style="flex:1;">+ New Employee</button>
-        <button id="refreshListBtn" class="btn btn-sm">↺</button>
+        <button id="refreshListBtn" class="btn btn-sm">â†º</button>
       </div>
       <div id="employeeListContainer" class="employee-list"></div>
     </div>
     <div id="detailContainer" class="detail-panel">
-      <div class="empty-state"><span>👤</span><p>Select an employee to view profile</p></div>
+      <div class="empty-state"><span>ðŸ‘¤</span><p>Select an employee to view profile</p></div>
     </div>
   </div>
 </div>
@@ -1253,7 +1253,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- EMPLOYEE MODAL -->
 <div id="empModal" class="modal">
   <div class="modal-card">
-    <div class="modal-header"><h3 id="modalTitle">Employee</h3><button class="btn btn-sm" onclick="closeModal('empModal')">✕</button></div>
+    <div class="modal-header"><h3 id="modalTitle">Employee</h3><button class="btn btn-sm" onclick="closeModal('empModal')">âœ•</button></div>
     <div class="modal-body">
       <div class="tabs">
         <button class="tab-btn active" data-tab="0">Personal</button>
@@ -1265,9 +1265,9 @@ select option { background: #0F1628; color: var(--text); }
           <div>
             <div style="font-size:0.68rem;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Profile Photo</div>
             <div class="photo-upload-zone" id="photoUploadZone" onclick="document.getElementById('empPhotoInput').click()">
-              <span class="upload-icon">📷</span>
+              <span class="upload-icon">ðŸ“·</span>
               <span class="upload-hint">Click to<br>upload</span>
-              <button class="photo-remove" id="photoRemoveBtn" onclick="removeEmpPhoto(event)" style="display:none;">✕</button>
+              <button class="photo-remove" id="photoRemoveBtn" onclick="removeEmpPhoto(event)" style="display:none;">âœ•</button>
             </div>
             <input type="file" id="empPhotoInput" accept="image/*" style="display:none;" onchange="handleEmpPhotoUpload(event)">
           </div>
@@ -1307,7 +1307,7 @@ select option { background: #0F1628; color: var(--text); }
           <div class="form-field"><label>Employment Type</label><select id="empType"><option>Permanent</option><option>Contract</option></select></div>
           <div class="form-field"><label>Current Status</label><select id="empStatus"><option>Active</option><option>Resigned</option><option>Terminated</option></select></div>
         </div>
-       <div class="form-field"><label>Work Location</label><select id="empLocation" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.82rem;outline:none;font-family:'DM Sans',sans-serif;"><option value="">— Select Location —</option></select></div>
+       <div class="form-field"><label>Work Location</label><select id="empLocation" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.82rem;outline:none;font-family:'DM Sans',sans-serif;"><option value="">â€” Select Location â€”</option></select></div>
       </div>
       <div id="tab2" class="tab-pane">
         <div class="form-row">
@@ -1328,7 +1328,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- PAYROLL MODAL -->
 <div id="payrollModal" class="modal">
   <div class="modal-card" style="max-width:700px;">
-    <div class="modal-header"><h3>💰 Payroll Management</h3><button class="btn btn-sm" onclick="closeModal('payrollModal')">✕</button></div>
+    <div class="modal-header"><h3>ðŸ’° Payroll Management</h3><button class="btn btn-sm" onclick="closeModal('payrollModal')">âœ•</button></div>
     <div class="modal-body">
       <div class="form-row">
         <div class="form-field"><label>Select Employee</label><select id="payrollEmpSelect"></select></div>
@@ -1355,8 +1355,8 @@ select option { background: #0F1628; color: var(--text); }
     </div>
     <div class="modal-footer">
       <button class="btn" onclick="closeModal('payrollModal')">Close</button>
-      <button id="exportPayrollPdfBtn" class="btn btn-success">📄 Export PDF</button>
-      <button id="savePayslipBtn" class="btn btn-primary">💾 Save Payslip</button>
+      <button id="exportPayrollPdfBtn" class="btn btn-success">ðŸ“„ Export PDF</button>
+      <button id="savePayslipBtn" class="btn btn-primary">ðŸ’¾ Save Payslip</button>
     </div>
   </div>
 </div>
@@ -1364,32 +1364,32 @@ select option { background: #0F1628; color: var(--text); }
 <!-- ATTENDANCE UPLOAD MODAL -->
 <div id="attendanceModal" class="modal">
   <div class="modal-card" style="max-width:860px;">
-    <div class="modal-header"><h3>📋 Attendance Upload & Payroll Generator</h3><button class="btn btn-sm" onclick="closeModal('attendanceModal')">✕</button></div>
+    <div class="modal-header"><h3>ðŸ“‹ Attendance Upload & Payroll Generator</h3><button class="btn btn-sm" onclick="closeModal('attendanceModal')">âœ•</button></div>
     <div class="modal-body">
       <div id="attStep1">
-        <div style="font-size:0.7rem;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Step 1 — Upload Attendance File</div>
+        <div style="font-size:0.7rem;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Step 1 â€” Upload Attendance File</div>
         <div class="attendance-drop-zone" id="attDropZone" onclick="document.getElementById('attFileInput').click()">
-          <div class="drop-icon">📂</div>
+          <div class="drop-icon">ðŸ“‚</div>
           <p><strong>Click to upload</strong> or drag & drop your attendance file</p>
-          <small>CSV · Excel (XLSX/XLS) · JSON · TXT — Any format supported</small>
+          <small>CSV Â· Excel (XLSX/XLS) Â· JSON Â· TXT â€” Any format supported</small>
         </div>
         <input type="file" id="attFileInput" accept=".csv,.xlsx,.xls,.json,.txt" style="display:none;">
-        <div style="text-align:center;margin:0.5rem 0;color:var(--muted);font-size:0.78rem;">— or enter manually —</div>
+        <div style="text-align:center;margin:0.5rem 0;color:var(--muted);font-size:0.78rem;">â€” or enter manually â€”</div>
         <textarea id="attManualInput" rows="4" placeholder="Paste CSV or tab-separated data here&#10;e.g.: EMP001,John,26,2,0"></textarea>
         <div style="display:flex;gap:8px;margin-top:8px;">
-          <button class="btn btn-primary btn-sm" onclick="parseAttendanceInput()">Parse Data →</button>
-          <button class="btn btn-sm" onclick="loadSampleAttendance()">📄 Load Sample</button>
+          <button class="btn btn-primary btn-sm" onclick="parseAttendanceInput()">Parse Data â†’</button>
+          <button class="btn btn-sm" onclick="loadSampleAttendance()">ðŸ“„ Load Sample</button>
         </div>
       </div>
       <div id="attStep2" style="display:none;">
-        <div style="font-size:0.7rem;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Step 2 — Map Columns</div>
+        <div style="font-size:0.7rem;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Step 2 â€” Map Columns</div>
         <div class="att-col-map" id="attColMap"></div>
         <div style="display:flex;gap:8px;margin-bottom:1rem;">
-          <button class="btn btn-primary btn-sm" onclick="processAttendanceMapping()">Apply Mapping →</button>
-          <button class="btn btn-sm" onclick="resetAttendance()">← Back</button>
+          <button class="btn btn-primary btn-sm" onclick="processAttendanceMapping()">Apply Mapping â†’</button>
+          <button class="btn btn-sm" onclick="resetAttendance()">â† Back</button>
         </div>
         <div id="attPreviewSection" style="display:none;">
-          <div style="font-size:0.7rem;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Step 3 — Preview & Generate Payroll</div>
+          <div style="font-size:0.7rem;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Step 3 â€” Preview & Generate Payroll</div>
           <div class="att-summary-bar" id="attSummaryBar"></div>
           <div class="att-table-wrap"><table class="att-table" id="attPreviewTable"></table></div>
           <div class="form-row" style="margin-bottom:1rem;">
@@ -1403,9 +1403,9 @@ select option { background: #0F1628; color: var(--text); }
             </div>
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <button class="btn btn-primary btn-sm" onclick="generatePayrollFromAttendance()">⚡ Generate Payroll for All</button>
-            <button class="btn btn-success btn-sm" onclick="exportAttendanceSummaryPDF()">📄 Export Summary PDF</button>
-            <button class="btn btn-sm" onclick="resetAttendance()">↺ Upload New File</button>
+            <button class="btn btn-primary btn-sm" onclick="generatePayrollFromAttendance()">âš¡ Generate Payroll for All</button>
+            <button class="btn btn-success btn-sm" onclick="exportAttendanceSummaryPDF()">ðŸ“„ Export Summary PDF</button>
+            <button class="btn btn-sm" onclick="resetAttendance()">â†º Upload New File</button>
           </div>
           <div id="attGenResult" class="payroll-gen-result" style="display:none;"></div>
         </div>
@@ -1418,13 +1418,13 @@ select option { background: #0F1628; color: var(--text); }
 <!-- REPORTS MODAL -->
 <div id="reportsModal" class="modal">
   <div class="modal-card" style="max-width:900px;">
-    <div class="modal-header"><h3>📊 Payroll Reports & Analytics</h3><button class="btn btn-sm" onclick="closeModal('reportsModal')">✕</button></div>
+    <div class="modal-header"><h3>ðŸ“Š Payroll Reports & Analytics</h3><button class="btn btn-sm" onclick="closeModal('reportsModal')">âœ•</button></div>
     <div class="modal-body">
       <div class="report-tabs">
-        <button class="report-tab active" onclick="switchReport('overview',this)">📈 Overview</button>
-        <button class="report-tab" onclick="switchReport('monthly',this)">📅 Monthly Payroll</button>
-        <button class="report-tab" onclick="switchReport('dept',this)">🏢 By Department</button>
-        <button class="report-tab" onclick="switchReport('emp',this)">👤 Employee History</button>
+        <button class="report-tab active" onclick="switchReport('overview',this)">ðŸ“ˆ Overview</button>
+        <button class="report-tab" onclick="switchReport('monthly',this)">ðŸ“… Monthly Payroll</button>
+        <button class="report-tab" onclick="switchReport('dept',this)">ðŸ¢ By Department</button>
+        <button class="report-tab" onclick="switchReport('emp',this)">ðŸ‘¤ Employee History</button>
       </div>
       <div id="rpOverview" class="report-pane active">
         <div class="kpi-grid" id="rKpiGrid"></div>
@@ -1434,7 +1434,7 @@ select option { background: #0F1628; color: var(--text); }
       <div id="rpMonthly" class="report-pane">
         <div style="display:flex;gap:10px;margin-bottom:1rem;align-items:center;">
           <select id="rMonthSel" style="flex:1;" onchange="renderMonthlyReport()"></select>
-          <button class="btn btn-success btn-sm" onclick="exportReportPDF()">📄 Export PDF</button>
+          <button class="btn btn-success btn-sm" onclick="exportReportPDF()">ðŸ“„ Export PDF</button>
         </div>
         <div id="rMonthlyTable"></div>
       </div>
@@ -1457,12 +1457,12 @@ select option { background: #0F1628; color: var(--text); }
 <!-- LEAVE MODAL -->
 <div id="leaveModal" class="modal">
   <div class="modal-card" style="max-width:820px;">
-    <div class="modal-header"><h3>🏖️ Leave Management</h3><button class="btn btn-sm" onclick="closeModal('leaveModal')">✕</button></div>
+    <div class="modal-header"><h3>ðŸ–ï¸ Leave Management</h3><button class="btn btn-sm" onclick="closeModal('leaveModal')">âœ•</button></div>
     <div class="modal-body">
       <div class="report-tabs">
-        <button class="report-tab active" onclick="switchLeaveTab('apply',this)">➕ Apply Leave</button>
-        <button class="report-tab" onclick="switchLeaveTab('requests',this)">📋 All Requests</button>
-        <button class="report-tab" onclick="switchLeaveTab('balances',this)">📊 Balances</button>
+        <button class="report-tab active" onclick="switchLeaveTab('apply',this)">âž• Apply Leave</button>
+        <button class="report-tab" onclick="switchLeaveTab('requests',this)">ðŸ“‹ All Requests</button>
+        <button class="report-tab" onclick="switchLeaveTab('balances',this)">ðŸ“Š Balances</button>
       </div>
       <div id="lvApply" class="report-pane active">
         <div class="form-row">
@@ -1488,7 +1488,7 @@ select option { background: #0F1628; color: var(--text); }
           </div>
         </div>
         <div class="form-field" style="margin-bottom:1rem;"><label>Reason</label><textarea id="lvReason" rows="2" placeholder="Reason for leave..." style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.8rem;outline:none;resize:vertical;"></textarea></div>
-        <button class="btn btn-primary btn-sm" onclick="submitLeave()">💾 Submit Leave Request</button>
+        <button class="btn btn-primary btn-sm" onclick="submitLeave()">ðŸ’¾ Submit Leave Request</button>
         <div id="lvMsg" style="margin-top:8px;font-size:0.78rem;min-height:1rem;"></div>
       </div>
       <div id="lvRequests" class="report-pane">
@@ -1497,7 +1497,7 @@ select option { background: #0F1628; color: var(--text); }
           <select id="lvFilterStatus" onchange="renderLeaveList()">
             <option value="">All Status</option><option>Pending</option><option>Approved</option><option>Rejected</option>
           </select>
-          <button class="btn btn-success btn-sm" onclick="exportLeavePDF()">📄 Export PDF</button>
+          <button class="btn btn-success btn-sm" onclick="exportLeavePDF()">ðŸ“„ Export PDF</button>
         </div>
         <div id="lvListContainer"></div>
       </div>
@@ -1513,12 +1513,12 @@ select option { background: #0F1628; color: var(--text); }
 <!-- ATTENDANCE HISTORY MODAL -->
 <div id="attHistModal" class="modal">
   <div class="modal-card" style="max-width:860px;">
-    <div class="modal-header"><h3>📅 Attendance History & Reports</h3><button class="btn btn-sm" onclick="closeModal('attHistModal')">✕</button></div>
+    <div class="modal-header"><h3>ðŸ“… Attendance History & Reports</h3><button class="btn btn-sm" onclick="closeModal('attHistModal')">âœ•</button></div>
     <div class="modal-body">
       <div class="att-hist-filter">
         <select id="ahEmpSel" onchange="renderAttHistory()" style="flex:1;min-width:160px;"></select>
         <input type="month" id="ahMonth" onchange="renderAttHistory()" style="min-width:140px;">
-        <button class="btn btn-success btn-sm" onclick="exportAttHistPDF()">📄 Export PDF</button>
+        <button class="btn btn-success btn-sm" onclick="exportAttHistPDF()">ðŸ“„ Export PDF</button>
       </div>
       <div id="ahSummaryBar" class="att-summary-bar"></div>
       <div id="ahCalendar" style="margin-bottom:1rem;"></div>
@@ -1531,7 +1531,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- EMPLOYEE DOCUMENTS MODAL -->
 <div id="docsModal" class="modal">
   <div class="modal-card" style="max-width:780px;">
-    <div class="modal-header"><h3>📁 Employee Documents</h3><button class="btn btn-sm" onclick="closeModal('docsModal')">✕</button></div>
+    <div class="modal-header"><h3>ðŸ“ Employee Documents</h3><button class="btn btn-sm" onclick="closeModal('docsModal')">âœ•</button></div>
     <div class="modal-body">
       <div style="display:flex;gap:10px;margin-bottom:1rem;align-items:center;flex-wrap:wrap;">
         <select id="docEmpSel" onchange="renderDocList()" style="flex:1;min-width:160px;"></select>
@@ -1542,9 +1542,9 @@ select option { background: #0F1628; color: var(--text); }
         </select>
       </div>
       <div class="doc-drop-zone" id="docDropZone" onclick="document.getElementById('docFileInput').click()">
-        <div style="font-size:2rem;margin-bottom:6px;">📂</div>
+        <div style="font-size:2rem;margin-bottom:6px;">ðŸ“‚</div>
         <p style="font-size:0.85rem;"><strong>Click to upload</strong> or drag & drop</p>
-        <small style="color:var(--muted);font-size:0.72rem;">PDF, DOCX, JPG, PNG, XLSX — max 5MB per file</small>
+        <small style="color:var(--muted);font-size:0.72rem;">PDF, DOCX, JPG, PNG, XLSX â€” max 5MB per file</small>
       </div>
       <input type="file" id="docFileInput" multiple accept=".pdf,.docx,.doc,.jpg,.jpeg,.png,.xlsx,.xls" style="display:none;">
       <div id="docListContainer" class="doc-list"></div>
@@ -1556,7 +1556,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- USER MANAGEMENT MODAL -->
 <div id="userModal" class="modal">
   <div class="modal-card" style="max-width:800px;">
-    <div class="modal-header"><h3>👥 User Management</h3><button class="btn btn-sm" onclick="closeModal('userModal')">✕</button></div>
+    <div class="modal-header"><h3>ðŸ‘¥ User Management</h3><button class="btn btn-sm" onclick="closeModal('userModal')">âœ•</button></div>
     <div class="modal-body">
       <div id="userListContainer"></div>
       <hr style="margin:20px 0;border:none;border-top:1px solid rgba(255,255,255,0.07);">
@@ -1569,7 +1569,7 @@ select option { background: #0F1628; color: var(--text); }
         </div>
       </div>
       <div class="form-field" id="newDeptField" style="display:none;"><label>Department</label><input id="newDept" placeholder="Department"></div>
-      <button id="addUserBtn" class="btn btn-primary" style="margin-top:10px;">➕ Add User</button>
+      <button id="addUserBtn" class="btn btn-primary" style="margin-top:10px;">âž• Add User</button>
       <div id="userMsg" class="error-message" style="margin-top:10px;"></div>
       <hr style="margin:20px 0;border:none;border-top:1px solid rgba(255,255,255,0.07);">
       <h4 style="margin-bottom:15px;font-family:'Syne',sans-serif;font-size:0.95rem;">Pending Approvals</h4>
@@ -1584,10 +1584,10 @@ select option { background: #0F1628; color: var(--text); }
 <div id="locationModal" class="modal">
   <div class="modal-card" style="max-width:1000px;max-height:92vh;">
     <div class="modal-header">
-      <h3>📍 Company Locations</h3>
+      <h3>ðŸ“ Company Locations</h3>
       <div style="display:flex;gap:8px;align-items:center;">
         <span id="locTotalBadge" style="font-size:0.72rem;color:var(--text2);background:rgba(255,255,255,0.06);padding:3px 10px;border-radius:20px;border:1px solid rgba(255,255,255,0.09);"></span>
-        <button class="btn btn-sm" onclick="closeModal('locationModal')">✕</button>
+        <button class="btn btn-sm" onclick="closeModal('locationModal')">âœ•</button>
       </div>
     </div>
     <div class="modal-body loc-modal-body">
@@ -1595,23 +1595,23 @@ select option { background: #0F1628; color: var(--text); }
         <!-- SIDEBAR: location list + add form -->
         <div class="loc-sidebar">
           <div class="loc-sidebar-top">
-            <h4>📍 All Locations</h4>
+            <h4>ðŸ“ All Locations</h4>
             <input class="loc-input" id="locSearchInput" placeholder="Search locations..." oninput="renderLocList()" style="margin-bottom:0;">
           </div>
           <div class="loc-list" id="locListContainer"></div>
           <div class="loc-add-form-wrap" id="locAddFormWrap">
-            <div style="font-size:0.68rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">＋ Add New Location</div>
+            <div style="font-size:0.68rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">ï¼‹ Add New Location</div>
             <label class="form-label-sm">Location Name *</label>
             <input class="loc-input" id="locNameInput" placeholder="e.g. Colombo HQ">
             <label class="form-label-sm">Address / City *</label>
             <input class="loc-input" id="locAddrInput" placeholder="e.g. No.42, Galle Rd, Colombo 03">
             <label class="form-label-sm">Type</label>
             <select class="loc-type-select" id="locTypeInput">
-              <option value="HQ">🏛 Head Quarters</option>
-              <option value="Branch">🏢 Branch Office</option>
-              <option value="Office">💼 Office</option>
-              <option value="Warehouse">🏭 Warehouse</option>
-              <option value="Factory">⚙️ Factory</option>
+              <option value="HQ">ðŸ› Head Quarters</option>
+              <option value="Branch">ðŸ¢ Branch Office</option>
+              <option value="Office">ðŸ’¼ Office</option>
+              <option value="Warehouse">ðŸ­ Warehouse</option>
+              <option value="Factory">âš™ï¸ Factory</option>
             </select>
             <label class="form-label-sm">Phone (optional)</label>
             <input class="loc-input" id="locPhoneInput" placeholder="+94 11 XXX XXXX">
@@ -1624,7 +1624,7 @@ select option { background: #0F1628; color: var(--text); }
           <div class="loc-map-wrap" id="locMapWrap" style="position:relative;">
             <div id="locLeafletMap" style="width:100%;height:100%;"></div>
             <div class="loc-map-placeholder" id="locMapPlaceholder" style="position:absolute;inset:0;z-index:10;pointer-events:none;">
-              <span>🗺️</span>
+              <span>ðŸ—ºï¸</span>
               <p>Add a location to see it on the map</p>
             </div>
           </div>
@@ -1636,8 +1636,8 @@ select option { background: #0F1628; color: var(--text); }
                 <div class="loc-detail-tags" id="locDetailTags"></div>
               </div>
               <div style="display:flex;gap:6px;flex-shrink:0;">
-                <button class="btn btn-sm" id="locOpenGoogleBtn" onclick="openInGoogleMaps()" style="background:rgba(20,196,126,0.15);border-color:rgba(20,196,126,0.3);color:var(--success);">🌐 Open Maps</button>
-                <button class="btn btn-sm btn-danger" id="locDeleteBtn" onclick="deleteActiveLocation()">🗑 Remove</button>
+                <button class="btn btn-sm" id="locOpenGoogleBtn" onclick="openInGoogleMaps()" style="background:rgba(20,196,126,0.15);border-color:rgba(20,196,126,0.3);color:var(--success);">ðŸŒ Open Maps</button>
+                <button class="btn btn-sm btn-danger" id="locDeleteBtn" onclick="deleteActiveLocation()">ðŸ—‘ Remove</button>
               </div>
             </div>
           </div>
@@ -1650,7 +1650,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- LOCK SCREEN -->
 <div id="lockScreen" class="lock-overlay" style="display:none;">
   <div class="lock-card">
-    <div class="lock-icon">🔒</div>
+    <div class="lock-icon">ðŸ”’</div>
     <h2>Trial Expired</h2>
     <p>Your 30-day free trial has ended.<br>Please contact the administrator to activate a license.</p>
     <div class="lock-contact-box">
@@ -1735,7 +1735,7 @@ document.addEventListener('click',e=>{ if(e.target.classList.contains('modal')&&
 document.addEventListener('keydown',e=>{ if(e.key==='Escape')document.querySelectorAll('.modal.open').forEach(m=>m.classList.remove('open')); });
 
 function exportProfilePDF(emp) {
-  const pdfContent=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Employee Profile - ${emp.fullName}</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:40px;background:white;color:#1e293b}.header{background:linear-gradient(135deg,#3B82F6,#8B5CF6);color:white;padding:30px;border-radius:12px;margin-bottom:30px;text-align:center}.header h1{font-size:28px;margin-bottom:8px}.header p{font-size:14px;opacity:0.9}.section{margin-bottom:25px}.section-title{font-size:16px;font-weight:bold;color:#3B82F6;border-left:4px solid #3B82F6;padding-left:12px;margin-bottom:15px}.info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.info-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:12px}.info-card label{font-size:10px;text-transform:uppercase;color:#64748b;display:block;margin-bottom:5px}.info-card span{font-size:14px;font-weight:500;color:#1e293b}.footer{margin-top:40px;padding-top:20px;border-top:1px solid #e2e8f0;text-align:center;font-size:10px;color:#94a3b8}@media print{.header{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style></head><body><div class="header"><h1>Employee Profile</h1><p>${emp.empId} · ${emp.department}</p></div><div class="section"><div class="section-title">Personal Information</div><div class="info-grid"><div class="info-card"><label>Full Name</label><span>${emp.fullName||'-'}</span></div><div class="info-card"><label>Employee ID</label><span>${emp.empId||'-'}</span></div><div class="info-card"><label>Email</label><span>${emp.email||'-'}</span></div><div class="info-card"><label>Mobile</label><span>${emp.mobile||'-'}</span></div><div class="info-card"><label>NIC</label><span>${emp.nic||'-'}</span></div><div class="info-card"><label>Date of Birth</label><span>${emp.dob||'-'}</span></div><div class="info-card"><label>Gender</label><span>${emp.gender||'-'}</span></div><div class="info-card"><label>Marital Status</label><span>${emp.maritalStatus||'-'}</span></div></div></div><div class="section"><div class="section-title">Employment Details</div><div class="info-grid"><div class="info-card"><label>Department</label><span>${emp.department||'-'}</span></div><div class="info-card"><label>Designation</label><span>${emp.designation||'-'}</span></div><div class="info-card"><label>Date of Joining</label><span>${emp.doj||'-'}</span></div><div class="info-card"><label>Employment Type</label><span>${emp.employmentType||'-'}</span></div><div class="info-card"><label>Work Location</label><span>${emp.location||'-'}</span></div><div class="info-card"><label>Status</label><span>${emp.status||'Active'}</span></div></div></div><div class="section"><div class="section-title">Salary & Bank Details</div><div class="info-grid"><div class="info-card"><label>Basic Salary</label><span>LKR ${(emp.salary||0).toLocaleString()}</span></div><div class="info-card"><label>Bank Name</label><span>${emp.bankName||'-'}</span></div><div class="info-card"><label>Bank Account</label><span>${emp.bankAccount||'-'}</span></div><div class="info-card"><label>Payment Method</label><span>${emp.payMethod||'-'}</span></div></div></div><div class="footer">Generated on ${new Date().toLocaleString()} | HR Management System</div></body></html>`;
+  const pdfContent=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Employee Profile - ${emp.fullName}</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:40px;background:white;color:#1e293b}.header{background:linear-gradient(135deg,#3B82F6,#8B5CF6);color:white;padding:30px;border-radius:12px;margin-bottom:30px;text-align:center}.header h1{font-size:28px;margin-bottom:8px}.header p{font-size:14px;opacity:0.9}.section{margin-bottom:25px}.section-title{font-size:16px;font-weight:bold;color:#3B82F6;border-left:4px solid #3B82F6;padding-left:12px;margin-bottom:15px}.info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.info-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:12px}.info-card label{font-size:10px;text-transform:uppercase;color:#64748b;display:block;margin-bottom:5px}.info-card span{font-size:14px;font-weight:500;color:#1e293b}.footer{margin-top:40px;padding-top:20px;border-top:1px solid #e2e8f0;text-align:center;font-size:10px;color:#94a3b8}@media print{.header{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style></head><body><div class="header"><h1>Employee Profile</h1><p>${emp.empId} Â· ${emp.department}</p></div><div class="section"><div class="section-title">Personal Information</div><div class="info-grid"><div class="info-card"><label>Full Name</label><span>${emp.fullName||'-'}</span></div><div class="info-card"><label>Employee ID</label><span>${emp.empId||'-'}</span></div><div class="info-card"><label>Email</label><span>${emp.email||'-'}</span></div><div class="info-card"><label>Mobile</label><span>${emp.mobile||'-'}</span></div><div class="info-card"><label>NIC</label><span>${emp.nic||'-'}</span></div><div class="info-card"><label>Date of Birth</label><span>${emp.dob||'-'}</span></div><div class="info-card"><label>Gender</label><span>${emp.gender||'-'}</span></div><div class="info-card"><label>Marital Status</label><span>${emp.maritalStatus||'-'}</span></div></div></div><div class="section"><div class="section-title">Employment Details</div><div class="info-grid"><div class="info-card"><label>Department</label><span>${emp.department||'-'}</span></div><div class="info-card"><label>Designation</label><span>${emp.designation||'-'}</span></div><div class="info-card"><label>Date of Joining</label><span>${emp.doj||'-'}</span></div><div class="info-card"><label>Employment Type</label><span>${emp.employmentType||'-'}</span></div><div class="info-card"><label>Work Location</label><span>${emp.location||'-'}</span></div><div class="info-card"><label>Status</label><span>${emp.status||'Active'}</span></div></div></div><div class="section"><div class="section-title">Salary & Bank Details</div><div class="info-grid"><div class="info-card"><label>Basic Salary</label><span>LKR ${(emp.salary||0).toLocaleString()}</span></div><div class="info-card"><label>Bank Name</label><span>${emp.bankName||'-'}</span></div><div class="info-card"><label>Bank Account</label><span>${emp.bankAccount||'-'}</span></div><div class="info-card"><label>Payment Method</label><span>${emp.payMethod||'-'}</span></div></div></div><div class="footer">Generated on ${new Date().toLocaleString()} | HR Management System</div></body></html>`;
   const opt={margin:[0.5,0.5,0.5,0.5],filename:`Employee_Profile_${emp.empId}.pdf`,image:{type:'jpeg',quality:0.98},html2canvas:{scale:2},jsPDF:{unit:'in',format:'a4',orientation:'portrait'}};
   const el=document.createElement('div'); el.innerHTML=pdfContent; document.body.appendChild(el);
   if(window.html2pdf){html2pdf().set(opt).from(el).save().then(()=>{document.body.removeChild(el);showToast('PDF exported!','success');});}else{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';s.onload=()=>{html2pdf().set(opt).from(el).save().then(()=>{document.body.removeChild(el);showToast('PDF exported!','success');});};document.head.appendChild(s);}
@@ -1782,7 +1782,7 @@ function handleRegister() {
   if(role==='DEPT_VIEWER'&&!dept){msgDiv.textContent='Department required for DEPT_VIEWER';return;}
   if(DB.users.find(u=>u.username===username)){msgDiv.textContent='Username already exists';return;}
   DB.pendingUsers.push({id:Date.now(),username,password_hash:password,role,department:dept,requested_at:new Date().toISOString()});
-  saveDB(); msgDiv.style.color='var(--success)'; msgDiv.textContent='✓ Request submitted! Admin will approve.';
+  saveDB(); msgDiv.style.color='var(--success)'; msgDiv.textContent='âœ“ Request submitted! Admin will approve.';
   setTimeout(()=>{document.getElementById('loginView').style.display='flex';document.getElementById('registerView').style.display='none';msgDiv.textContent='';},2000);
 }
 
@@ -1803,7 +1803,7 @@ function handleLogout() {
 
 function setupApp() {
   const rb=document.getElementById('userRoleBadge');
-  rb.textContent=`${currentUser.username.toUpperCase()} · ${currentUser.role}`;
+  rb.textContent=`${currentUser.username.toUpperCase()} Â· ${currentUser.role}`;
   const canEdit=currentUser.role==='ADMIN'||currentUser.role==='HR';
   document.getElementById('addEmployeeBtn').style.display=canEdit?'flex':'none';
   document.getElementById('attendanceBtn').style.display=canEdit?'inline-flex':'none';
@@ -1824,7 +1824,7 @@ function renderEmployeeList() {
   const container=document.getElementById('employeeListContainer');
   if(!container)return;
   if(!filtered.length){container.innerHTML='<div style="padding:1rem;text-align:center;color:var(--muted);">No employees found</div>';return;}
-  container.innerHTML=filtered.map(emp=>`<div class="emp-card ${selectedEmployeeId===emp.id?'active':''}" onclick="selectEmployee(${emp.id})"><div class="avatar" style="overflow:hidden;padding:0;">${emp.photo?`<img class='avatar-img' src='${emp.photo}'>`:`<span>${emp.fullName?.charAt(0)||'?'}</span>`}</div><div class="emp-info"><div class="emp-name">${emp.fullName||'Unnamed'}</div><div class="emp-meta">${emp.empId||''} · ${emp.department||'-'}</div></div><div class="status-dot" style="background:${emp.status==='Active'?'#14C47E':'#F05252'}"></div></div>`).join('');
+  container.innerHTML=filtered.map(emp=>`<div class="emp-card ${selectedEmployeeId===emp.id?'active':''}" onclick="selectEmployee(${emp.id})"><div class="avatar" style="overflow:hidden;padding:0;">${emp.photo?`<img class='avatar-img' src='${emp.photo}'>`:`<span>${emp.fullName?.charAt(0)||'?'}</span>`}</div><div class="emp-info"><div class="emp-name">${emp.fullName||'Unnamed'}</div><div class="emp-meta">${emp.empId||''} Â· ${emp.department||'-'}</div></div><div class="status-dot" style="background:${emp.status==='Active'?'#14C47E':'#F05252'}"></div></div>`).join('');
 }
 
 function selectEmployee(id) { selectedEmployeeId=id; renderEmployeeList(); renderDetail(id); }
@@ -1832,22 +1832,22 @@ function selectEmployee(id) { selectedEmployeeId=id; renderEmployeeList(); rende
 function renderDetail(id) {
   const emp=DB.employees.find(e=>e.id==id);
   const container=document.getElementById('detailContainer');
-  if(!emp){container.innerHTML='<div class="empty-state"><span>👤</span><p>Select an employee to view profile</p></div>';return;}
+  if(!emp){container.innerHTML='<div class="empty-state"><span>ðŸ‘¤</span><p>Select an employee to view profile</p></div>';return;}
   const canEdit=currentUser?.role==='ADMIN'||currentUser?.role==='HR';
   const empPayrolls=DB.payrolls.filter(p=>p.employeeId==id).sort((a,b)=>b.month.localeCompare(a.month));
   container.innerHTML=`
     <div class="profile-header">
-      <div class="profile-avatar" style="overflow:hidden;padding:0;position:relative;cursor:pointer;" onclick="openPhotoEditForEmp(${emp.id})" title="Click to change photo">${emp.photo?`<img class='profile-avatar-img' src='${emp.photo}'>`:`<span>${emp.fullName?.charAt(0)||'E'}</span>`}<div style="position:absolute;inset:0;background:rgba(0,0,0,0.4);border-radius:18px;display:flex;align-items:center;justify-content:center;opacity:0;transition:0.2s;font-size:1.2rem;" class='photo-hover-overlay'>📷</div></div>
+      <div class="profile-avatar" style="overflow:hidden;padding:0;position:relative;cursor:pointer;" onclick="openPhotoEditForEmp(${emp.id})" title="Click to change photo">${emp.photo?`<img class='profile-avatar-img' src='${emp.photo}'>`:`<span>${emp.fullName?.charAt(0)||'E'}</span>`}<div style="position:absolute;inset:0;background:rgba(0,0,0,0.4);border-radius:18px;display:flex;align-items:center;justify-content:center;opacity:0;transition:0.2s;font-size:1.2rem;" class='photo-hover-overlay'>ðŸ“·</div></div>
       <div class="profile-info">
-        <h2>${emp.fullName||'—'}</h2>
-        <div class="profile-title">${emp.designation||'Staff'} · ${emp.department||'-'}</div>
+        <h2>${emp.fullName||'â€”'}</h2>
+        <div class="profile-title">${emp.designation||'Staff'} Â· ${emp.department||'-'}</div>
         <span class="badge-status" style="background:${emp.status==='Active'?'rgba(20,196,126,0.15)':'rgba(240,82,82,0.15)'};color:${emp.status==='Active'?'#14C47E':'#F05252'};border:1px solid ${emp.status==='Active'?'rgba(20,196,126,0.3)':'rgba(240,82,82,0.3)'};">${emp.status||'Active'}</span>
       </div>
       <div style="margin-left:auto;display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap;">
-        <button class="btn btn-success btn-sm" onclick='exportProfilePDF(${JSON.stringify(emp).replace(/"/g,"&quot;")})'>📄 Export PDF</button>
-        <button class="btn btn-sm" onclick="openDocsForEmp(${emp.id})" style="background:rgba(155,114,248,0.15);border-color:rgba(155,114,248,0.3);color:var(--accent2);">📁 Docs</button>
-        <button class="btn btn-sm" onclick="openLeaveForEmp(${emp.id})" style="background:rgba(248,184,78,0.12);border-color:rgba(248,184,78,0.3);color:var(--warning);">🏖️ Leave</button>
-        ${canEdit?`<button class="btn btn-sm" onclick="editEmployee(${emp.id})">✏ Edit</button><button class="btn btn-sm btn-danger" onclick="deleteEmployeeConfirm(${emp.id})">🗑 Delete</button>`:''}
+        <button class="btn btn-success btn-sm" onclick='exportProfilePDF(${JSON.stringify(emp).replace(/"/g,"&quot;")})'>ðŸ“„ Export PDF</button>
+        <button class="btn btn-sm" onclick="openDocsForEmp(${emp.id})" style="background:rgba(155,114,248,0.15);border-color:rgba(155,114,248,0.3);color:var(--accent2);">ðŸ“ Docs</button>
+        <button class="btn btn-sm" onclick="openLeaveForEmp(${emp.id})" style="background:rgba(248,184,78,0.12);border-color:rgba(248,184,78,0.3);color:var(--warning);">ðŸ–ï¸ Leave</button>
+        ${canEdit?`<button class="btn btn-sm" onclick="editEmployee(${emp.id})">âœ Edit</button><button class="btn btn-sm btn-danger" onclick="deleteEmployeeConfirm(${emp.id})">ðŸ—‘ Delete</button>`:''}
       </div>
     </div>
     <div class="section-title">Personal Details</div>
@@ -1902,9 +1902,9 @@ function editEmployee(id) {
   const pz = document.getElementById('photoUploadZone');
   if (pz) {
     if (emp.photo) {
-      pz.innerHTML = `<img src="${emp.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:16px;"><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:flex;">✕</button>`;
+      pz.innerHTML = `<img src="${emp.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:16px;"><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:flex;">âœ•</button>`;
     } else {
-      pz.innerHTML = '<span class="upload-icon">📷</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;">✕</button>';
+      pz.innerHTML = '<span class="upload-icon">ðŸ“·</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;">âœ•</button>';
     }
   }
   // Sync empIdQuick
@@ -2048,7 +2048,7 @@ function addUser() {
   DB.users.push({id:'u'+Date.now(),username,password,role,department:role==='DEPT_VIEWER'?dept:null,status:'active'});
   saveDB();
   document.getElementById('newUsername').value='';document.getElementById('newPassword').value='';document.getElementById('newDept').value='';
-  msgDiv.style.color='var(--success)';msgDiv.textContent='✓ User added successfully';
+  msgDiv.style.color='var(--success)';msgDiv.textContent='âœ“ User added successfully';
   renderUserList();setTimeout(()=>msgDiv.textContent='',2000);
 }
 
@@ -2089,7 +2089,7 @@ function renderMonthlyReport() {
   const rows=DB.payrolls.filter(p=>p.month===month);
   const empFn=id=>DB.employees.find(e=>e.id===id);
   const total=rows.reduce((s,r)=>s+(r.netSalary||0),0);
-  document.getElementById('rMonthlyTable').innerHTML=`<table class="report-table"><thead><tr><th>Emp ID</th><th>Name</th><th>Dept</th><th>Basic</th><th>Gross</th><th>EPF</th><th>ETF</th><th>Net Pay</th></tr></thead><tbody>${rows.map(r=>{const e=empFn(r.employeeId);return`<tr><td>${e?.empId||'—'}</td><td>${e?.fullName||'—'}</td><td>${e?.department||'—'}</td><td>LKR ${(r.basicSalary||0).toLocaleString()}</td><td>LKR ${(r.grossEarnings||0).toLocaleString()}</td><td>LKR ${(r.epf||0).toLocaleString()}</td><td>LKR ${(r.etf||0).toLocaleString()}</td><td><strong>LKR ${(r.netSalary||0).toLocaleString()}</strong></td></tr>`;}).join('')}<tr style="background:rgba(79,142,247,0.08);font-weight:700;"><td colspan="7" style="text-align:right;">Total Net Payroll:</td><td>LKR ${total.toLocaleString()}</td></tr></tbody></table>`;
+  document.getElementById('rMonthlyTable').innerHTML=`<table class="report-table"><thead><tr><th>Emp ID</th><th>Name</th><th>Dept</th><th>Basic</th><th>Gross</th><th>EPF</th><th>ETF</th><th>Net Pay</th></tr></thead><tbody>${rows.map(r=>{const e=empFn(r.employeeId);return`<tr><td>${e?.empId||'â€”'}</td><td>${e?.fullName||'â€”'}</td><td>${e?.department||'â€”'}</td><td>LKR ${(r.basicSalary||0).toLocaleString()}</td><td>LKR ${(r.grossEarnings||0).toLocaleString()}</td><td>LKR ${(r.epf||0).toLocaleString()}</td><td>LKR ${(r.etf||0).toLocaleString()}</td><td><strong>LKR ${(r.netSalary||0).toLocaleString()}</strong></td></tr>`;}).join('')}<tr style="background:rgba(79,142,247,0.08);font-weight:700;"><td colspan="7" style="text-align:right;">Total Net Payroll:</td><td>LKR ${total.toLocaleString()}</td></tr></tbody></table>`;
 }
 function renderDeptReport() {
   const depts={};DB.employees.forEach(e=>{const d=e.department||'Unknown';if(!depts[d])depts[d]={count:0,totalSalary:0};depts[d].count++;depts[d].totalSalary+=e.salary||0;});
@@ -2109,7 +2109,7 @@ function renderEmpPayrollHistory() {
 function exportReportPDF() {
   const month=document.getElementById('rMonthSel')?.value;if(!month)return;
   const rows=DB.payrolls.filter(p=>p.month===month);const empFn=id=>DB.employees.find(e=>e.id===id);const total=rows.reduce((s,r)=>s+(r.netSalary||0),0);
-  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:30px;color:#1e293b}.hdr{background:linear-gradient(135deg,#3B82F6,#8B5CF6);color:white;padding:20px;border-radius:10px;margin-bottom:20px;text-align:center}.hdr h1{font-size:20px}.hdr p{font-size:11px;opacity:.9}table{width:100%;border-collapse:collapse;font-size:10px}th{background:#3B82F6;color:white;padding:7px;text-align:left}td{padding:6px 7px;border-bottom:1px solid #e2e8f0}tr:nth-child(even) td{background:#f8fafc}.tot td{background:#1e293b!important;color:white;font-weight:700}</style></head><body><div class="hdr"><h1>Payroll Report — ${month}</h1><p>Generated: ${new Date().toLocaleString()}</p></div><table><thead><tr><th>Emp ID</th><th>Name</th><th>Dept</th><th>Basic</th><th>Gross</th><th>EPF</th><th>ETF</th><th>Net Pay</th></tr></thead><tbody>${rows.map(r=>{const e=empFn(r.employeeId);return`<tr><td>${e?.empId||'—'}</td><td>${e?.fullName||'—'}</td><td>${e?.department||'—'}</td><td>LKR ${(r.basicSalary||0).toLocaleString()}</td><td>LKR ${(r.grossEarnings||0).toLocaleString()}</td><td>LKR ${(r.epf||0).toLocaleString()}</td><td>LKR ${(r.etf||0).toLocaleString()}</td><td>LKR ${(r.netSalary||0).toLocaleString()}</td></tr>`;}).join('')}<tr class="tot"><td colspan="7" style="text-align:right">Total Net Payroll</td><td>LKR ${total.toLocaleString()}</td></tr></tbody></table></body></html>`;
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:30px;color:#1e293b}.hdr{background:linear-gradient(135deg,#3B82F6,#8B5CF6);color:white;padding:20px;border-radius:10px;margin-bottom:20px;text-align:center}.hdr h1{font-size:20px}.hdr p{font-size:11px;opacity:.9}table{width:100%;border-collapse:collapse;font-size:10px}th{background:#3B82F6;color:white;padding:7px;text-align:left}td{padding:6px 7px;border-bottom:1px solid #e2e8f0}tr:nth-child(even) td{background:#f8fafc}.tot td{background:#1e293b!important;color:white;font-weight:700}</style></head><body><div class="hdr"><h1>Payroll Report â€” ${month}</h1><p>Generated: ${new Date().toLocaleString()}</p></div><table><thead><tr><th>Emp ID</th><th>Name</th><th>Dept</th><th>Basic</th><th>Gross</th><th>EPF</th><th>ETF</th><th>Net Pay</th></tr></thead><tbody>${rows.map(r=>{const e=empFn(r.employeeId);return`<tr><td>${e?.empId||'â€”'}</td><td>${e?.fullName||'â€”'}</td><td>${e?.department||'â€”'}</td><td>LKR ${(r.basicSalary||0).toLocaleString()}</td><td>LKR ${(r.grossEarnings||0).toLocaleString()}</td><td>LKR ${(r.epf||0).toLocaleString()}</td><td>LKR ${(r.etf||0).toLocaleString()}</td><td>LKR ${(r.netSalary||0).toLocaleString()}</td></tr>`;}).join('')}<tr class="tot"><td colspan="7" style="text-align:right">Total Net Payroll</td><td>LKR ${total.toLocaleString()}</td></tr></tbody></table></body></html>`;
   const el=document.createElement('div');el.innerHTML=html;document.body.appendChild(el);
   const loadAndExport=()=>html2pdf().set({margin:[0.4,0.3],filename:`Payroll_Report_${month}.pdf`,image:{type:'jpeg',quality:0.95},html2canvas:{scale:2},jsPDF:{unit:'in',format:'a4',orientation:'landscape'}}).from(el).save().then(()=>{document.body.removeChild(el);showToast('Report exported!','success');});
   if(window.html2pdf)loadAndExport();else{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';s.onload=loadAndExport;document.head.appendChild(s);}
@@ -2141,7 +2141,7 @@ function submitLeave() {
   if(!from||!to||!days){msg.style.color='var(--danger)';msg.textContent='Please fill in all date fields';return;}
   if(!DB.leaves)DB.leaves=[];
   DB.leaves.push({id:Date.now(),employeeId:empId,type,from,to,days,status,reason,createdAt:new Date().toISOString()});
-  saveDB();msg.style.color='var(--success)';msg.textContent='✓ Leave request saved!';
+  saveDB();msg.style.color='var(--success)';msg.textContent='âœ“ Leave request saved!';
   setTimeout(()=>msg.textContent='',2500);
   ['lvFrom','lvTo','lvDays','lvReason'].forEach(id=>document.getElementById(id).value='');
   showToast('Leave request saved','success');
@@ -2156,7 +2156,7 @@ function renderLeaveList() {
   c.innerHTML=list.map(l=>{
     const emp=DB.employees.find(e=>e.id===l.employeeId);
     const sc=l.status==='Approved'?'leave-approved':l.status==='Rejected'?'leave-rejected':'leave-pending';
-    return`<div class="leave-card"><div style="font-size:1.6rem;">${l.type==='Sick'?'🤒':l.type==='Annual'?'🌴':l.type==='Casual'?'😊':l.type==='Maternity'?'👶':l.type==='Nopay'?'⛔':'📋'}</div><div class="leave-card-info"><strong>${emp?.fullName||'Unknown'} <span class="doc-type-badge">${l.type}</span></strong><small>${l.from} → ${l.to} · ${l.days} day${l.days!==1?'s':''} · ${l.reason||'No reason'}</small></div><span class="leave-status-pill ${sc}">${l.status}</span>${currentUser?.role==='ADMIN'||currentUser?.role==='HR'?`<div style="display:flex;gap:4px;"><button class="btn btn-sm btn-success" style="padding:3px 8px;" onclick="updateLeaveStatus(${l.id},'Approved')">✓</button><button class="btn btn-sm btn-danger" style="padding:3px 8px;" onclick="updateLeaveStatus(${l.id},'Rejected')">✗</button><button class="btn btn-sm btn-danger" style="padding:3px 8px;" onclick="deleteLeave(${l.id})">🗑</button></div>`:''}</div>`;
+    return`<div class="leave-card"><div style="font-size:1.6rem;">${l.type==='Sick'?'ðŸ¤’':l.type==='Annual'?'ðŸŒ´':l.type==='Casual'?'ðŸ˜Š':l.type==='Maternity'?'ðŸ‘¶':l.type==='Nopay'?'â›”':'ðŸ“‹'}</div><div class="leave-card-info"><strong>${emp?.fullName||'Unknown'} <span class="doc-type-badge">${l.type}</span></strong><small>${l.from} â†’ ${l.to} Â· ${l.days} day${l.days!==1?'s':''} Â· ${l.reason||'No reason'}</small></div><span class="leave-status-pill ${sc}">${l.status}</span>${currentUser?.role==='ADMIN'||currentUser?.role==='HR'?`<div style="display:flex;gap:4px;"><button class="btn btn-sm btn-success" style="padding:3px 8px;" onclick="updateLeaveStatus(${l.id},'Approved')">âœ“</button><button class="btn btn-sm btn-danger" style="padding:3px 8px;" onclick="updateLeaveStatus(${l.id},'Rejected')">âœ—</button><button class="btn btn-sm btn-danger" style="padding:3px 8px;" onclick="deleteLeave(${l.id})">ðŸ—‘</button></div>`:''}</div>`;
   }).join('');
 }
 function updateLeaveStatus(id,status) { const l=DB.leaves.find(x=>x.id===id);if(l){l.status=status;saveDB();renderLeaveList();showToast(`Leave ${status.toLowerCase()}`,'success');} }
@@ -2169,11 +2169,11 @@ function renderLeaveBalances() {
   const myLeaves=DB.leaves.filter(l=>l.employeeId===empId&&l.status==='Approved'&&l.from.startsWith(year));
   const used=type=>myLeaves.filter(l=>l.type===type).reduce((s,l)=>s+l.days,0);
   const entitlements={Annual:14,Casual:7,Sick:7,Maternity:84,Nopay:999};
-  document.getElementById('lvBalanceDisplay').innerHTML=`<div style="font-weight:600;margin-bottom:10px;">${emp.fullName} — ${year} Leave Balance</div><div class="leave-balance-grid">${Object.entries(entitlements).map(([t,ent])=>{const u=used(t);const rem=Math.max(0,ent-u);return`<div class="leave-balance-card"><div class="lb-val" style="color:${rem>3?'var(--success)':rem>0?'var(--warning)':'var(--danger)'}">${t==='Nopay'?'∞':rem}</div><div class="lb-lbl">${t} Remaining</div><div style="font-size:0.68rem;color:var(--muted);margin-top:2px;">${u} used${t!=='Nopay'?' / '+ent+' total':''}</div></div>`;}).join('')}</div>${myLeaves.length?`<div style="font-size:0.72rem;color:var(--muted);margin-top:6px;">${myLeaves.length} approved requests · ${myLeaves.reduce((s,l)=>s+l.days,0)} total days</div>`:'<div style="font-size:0.78rem;color:var(--muted);">No approved leaves this year</div>'}`;
+  document.getElementById('lvBalanceDisplay').innerHTML=`<div style="font-weight:600;margin-bottom:10px;">${emp.fullName} â€” ${year} Leave Balance</div><div class="leave-balance-grid">${Object.entries(entitlements).map(([t,ent])=>{const u=used(t);const rem=Math.max(0,ent-u);return`<div class="leave-balance-card"><div class="lb-val" style="color:${rem>3?'var(--success)':rem>0?'var(--warning)':'var(--danger)'}">${t==='Nopay'?'âˆž':rem}</div><div class="lb-lbl">${t} Remaining</div><div style="font-size:0.68rem;color:var(--muted);margin-top:2px;">${u} used${t!=='Nopay'?' / '+ent+' total':''}</div></div>`;}).join('')}</div>${myLeaves.length?`<div style="font-size:0.72rem;color:var(--muted);margin-top:6px;">${myLeaves.length} approved requests Â· ${myLeaves.reduce((s,l)=>s+l.days,0)} total days</div>`:'<div style="font-size:0.78rem;color:var(--muted);">No approved leaves this year</div>'}`;
 }
 function exportLeavePDF() {
   if(!DB.leaves)return;
-  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:30px;color:#1e293b}h1{color:#3B82F6;font-size:18px;margin-bottom:4px}p{font-size:11px;color:#64748b;margin-bottom:16px}table{width:100%;border-collapse:collapse;font-size:10px}th{background:#3B82F6;color:white;padding:7px}td{padding:6px 8px;border-bottom:1px solid #e2e8f0}.pend{color:#F59E0B}.appr{color:#10B981}.rej{color:#EF4444}</style></head><body><h1>Leave Report</h1><p>Generated: ${new Date().toLocaleString()}</p><table><thead><tr><th>Employee</th><th>Type</th><th>From</th><th>To</th><th>Days</th><th>Reason</th><th>Status</th></tr></thead><tbody>${DB.leaves.map(l=>{const e=DB.employees.find(x=>x.id===l.employeeId);const cls=l.status==='Approved'?'appr':l.status==='Rejected'?'rej':'pend';return`<tr><td>${e?.fullName||'—'}</td><td>${l.type}</td><td>${l.from}</td><td>${l.to}</td><td>${l.days}</td><td>${l.reason||'—'}</td><td class="${cls}">${l.status}</td></tr>`;}).join('')}</tbody></table></body></html>`;
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:30px;color:#1e293b}h1{color:#3B82F6;font-size:18px;margin-bottom:4px}p{font-size:11px;color:#64748b;margin-bottom:16px}table{width:100%;border-collapse:collapse;font-size:10px}th{background:#3B82F6;color:white;padding:7px}td{padding:6px 8px;border-bottom:1px solid #e2e8f0}.pend{color:#F59E0B}.appr{color:#10B981}.rej{color:#EF4444}</style></head><body><h1>Leave Report</h1><p>Generated: ${new Date().toLocaleString()}</p><table><thead><tr><th>Employee</th><th>Type</th><th>From</th><th>To</th><th>Days</th><th>Reason</th><th>Status</th></tr></thead><tbody>${DB.leaves.map(l=>{const e=DB.employees.find(x=>x.id===l.employeeId);const cls=l.status==='Approved'?'appr':l.status==='Rejected'?'rej':'pend';return`<tr><td>${e?.fullName||'â€”'}</td><td>${l.type}</td><td>${l.from}</td><td>${l.to}</td><td>${l.days}</td><td>${l.reason||'â€”'}</td><td class="${cls}">${l.status}</td></tr>`;}).join('')}</tbody></table></body></html>`;
   const el=document.createElement('div');el.innerHTML=html;document.body.appendChild(el);
   const go=()=>html2pdf().set({margin:[0.4,0.4],filename:'Leave_Report.pdf',image:{type:'jpeg',quality:0.95},html2canvas:{scale:2},jsPDF:{unit:'in',format:'a4'}}).from(el).save().then(()=>{document.body.removeChild(el);showToast('Leave report exported!','success');});
   if(window.html2pdf)go();else{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';s.onload=go;document.head.appendChild(s);}
@@ -2187,7 +2187,7 @@ function renderAttHistory() {
   const empId=parseInt(document.getElementById('ahEmpSel').value);const month=document.getElementById('ahMonth').value;if(!empId||!month)return;
   const payroll=DB.payrolls.find(p=>p.employeeId===empId&&p.month===month);
   const [year,mon]=month.split('-').map(Number);const daysInMonth=new Date(year,mon,0).getDate();const firstDay=new Date(year,mon-1,1).getDay();
-  const present=payroll?(payroll.workingDays||(26-(payroll.absentDays||0))):'—';const absent=payroll?(payroll.absentDays||0):'—';const leave=payroll?(payroll.leaveDays||0):'—';const ot=payroll?(payroll.overtimeHrs||0):'—';
+  const present=payroll?(payroll.workingDays||(26-(payroll.absentDays||0))):'â€”';const absent=payroll?(payroll.absentDays||0):'â€”';const leave=payroll?(payroll.leaveDays||0):'â€”';const ot=payroll?(payroll.overtimeHrs||0):'â€”';
   document.getElementById('ahSummaryBar').innerHTML=`<div class="att-summary-card"><div class="val" style="color:var(--success)">${present}</div><div class="lbl">Days Present</div></div><div class="att-summary-card"><div class="val" style="color:var(--danger)">${absent}</div><div class="lbl">Absent</div></div><div class="att-summary-card"><div class="val" style="color:var(--warning)">${leave}</div><div class="lbl">Leave Days</div></div><div class="att-summary-card"><div class="val" style="color:var(--accent)">${ot}</div><div class="lbl">OT Hours</div></div>`;
   const dayNames=['Su','Mo','Tu','We','Th','Fr','Sa'];
   let cal=`<div class="att-calendar">`;dayNames.forEach(d=>{cal+=`<div class="att-cal-head">${d}</div>`;});
@@ -2199,7 +2199,7 @@ function renderAttHistory() {
 function exportAttHistPDF() {
   const empId=parseInt(document.getElementById('ahEmpSel').value);const month=document.getElementById('ahMonth').value;const emp=DB.employees.find(e=>e.id===empId);const pay=DB.payrolls.find(p=>p.employeeId===empId&&p.month===month);
   if(!emp){showToast('Select an employee','error');return;}
-  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:30px;color:#1e293b}.hdr{background:linear-gradient(135deg,#3B82F6,#8B5CF6);color:white;padding:20px;border-radius:10px;margin-bottom:20px;text-align:center}table{width:100%;border-collapse:collapse;font-size:11px}th{background:#3B82F6;color:white;padding:7px}td{padding:7px 8px;border-bottom:1px solid #e2e8f0}</style></head><body><div class="hdr"><h1>Attendance Report — ${month}</h1><p>${emp.fullName} · ${emp.empId} · ${emp.department}</p></div>${pay?`<table><thead><tr><th>Item</th><th>Value</th></tr></thead><tbody><tr><td>Days Present</td><td>${pay.workingDays||'—'}</td></tr><tr><td>Absent Days</td><td>${pay.absentDays||0}</td></tr><tr><td>Leave Days</td><td>${pay.leaveDays||0}</td></tr><tr><td>OT Hours</td><td>${pay.overtimeHrs||0}</td></tr><tr><td>Basic Salary</td><td>LKR ${(pay.basicSalary||0).toLocaleString()}</td></tr><tr><td>Net Salary</td><td><strong>LKR ${(pay.netSalary||0).toLocaleString()}</strong></td></tr></tbody></table>`:'<p>No payroll record for this month.</p>'}</body></html>`;
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:30px;color:#1e293b}.hdr{background:linear-gradient(135deg,#3B82F6,#8B5CF6);color:white;padding:20px;border-radius:10px;margin-bottom:20px;text-align:center}table{width:100%;border-collapse:collapse;font-size:11px}th{background:#3B82F6;color:white;padding:7px}td{padding:7px 8px;border-bottom:1px solid #e2e8f0}</style></head><body><div class="hdr"><h1>Attendance Report â€” ${month}</h1><p>${emp.fullName} Â· ${emp.empId} Â· ${emp.department}</p></div>${pay?`<table><thead><tr><th>Item</th><th>Value</th></tr></thead><tbody><tr><td>Days Present</td><td>${pay.workingDays||'â€”'}</td></tr><tr><td>Absent Days</td><td>${pay.absentDays||0}</td></tr><tr><td>Leave Days</td><td>${pay.leaveDays||0}</td></tr><tr><td>OT Hours</td><td>${pay.overtimeHrs||0}</td></tr><tr><td>Basic Salary</td><td>LKR ${(pay.basicSalary||0).toLocaleString()}</td></tr><tr><td>Net Salary</td><td><strong>LKR ${(pay.netSalary||0).toLocaleString()}</strong></td></tr></tbody></table>`:'<p>No payroll record for this month.</p>'}</body></html>`;
   const el=document.createElement('div');el.innerHTML=html;document.body.appendChild(el);
   const go=()=>html2pdf().set({margin:[0.4,0.4],filename:`Attendance_${emp.empId}_${month}.pdf`,image:{type:'jpeg',quality:0.95},html2canvas:{scale:2},jsPDF:{unit:'in',format:'a4'}}).from(el).save().then(()=>{document.body.removeChild(el);showToast('Exported!','success');});
   if(window.html2pdf)go();else{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';s.onload=go;document.head.appendChild(s);}
@@ -2229,7 +2229,7 @@ function renderDocList() {
   const empId=parseInt(document.getElementById('docEmpSel')?.value);const docs=DB.documents.filter(d=>d.employeeId===empId).sort((a,b)=>b.uploadedAt.localeCompare(a.uploadedAt));
   const c=document.getElementById('docListContainer');
   if(!docs.length){c.innerHTML='<div style="text-align:center;color:var(--muted);padding:1.5rem;">No documents uploaded for this employee</div>';return;}
-  c.innerHTML=docs.map(d=>{const icon=d.type?.includes('pdf')?'📄':d.type?.includes('image')?'🖼️':d.type?.includes('word')||d.name.endsWith('.doc')?'📝':'📎';const size=d.size>1024*1024?(d.size/1024/1024).toFixed(1)+'MB':Math.round(d.size/1024)+'KB';return`<div class="doc-item"><div class="doc-icon">${icon}</div><div class="doc-info"><strong>${d.name}<span class="doc-type-badge">${d.category}</span></strong><small>${size} · Uploaded ${new Date(d.uploadedAt).toLocaleDateString()} by ${d.uploadedBy}</small></div><button class="btn btn-sm" onclick="downloadDoc(${d.id})">⬇ Download</button><button class="btn btn-sm btn-danger" onclick="deleteDoc(${d.id})" style="padding:5px 8px;">🗑</button></div>`;}).join('');
+  c.innerHTML=docs.map(d=>{const icon=d.type?.includes('pdf')?'ðŸ“„':d.type?.includes('image')?'ðŸ–¼ï¸':d.type?.includes('word')||d.name.endsWith('.doc')?'ðŸ“':'ðŸ“Ž';const size=d.size>1024*1024?(d.size/1024/1024).toFixed(1)+'MB':Math.round(d.size/1024)+'KB';return`<div class="doc-item"><div class="doc-icon">${icon}</div><div class="doc-info"><strong>${d.name}<span class="doc-type-badge">${d.category}</span></strong><small>${size} Â· Uploaded ${new Date(d.uploadedAt).toLocaleDateString()} by ${d.uploadedBy}</small></div><button class="btn btn-sm" onclick="downloadDoc(${d.id})">â¬‡ Download</button><button class="btn btn-sm btn-danger" onclick="deleteDoc(${d.id})" style="padding:5px 8px;">ðŸ—‘</button></div>`;}).join('');
 }
 function downloadDoc(id) { const doc=DB.documents?.find(d=>d.id===id);if(!doc){showToast('Not found','error');return;}const a=document.createElement('a');a.href=doc.data;a.download=doc.name;a.click();showToast('Downloading...','success'); }
 function deleteDoc(id) { if(!confirm('Delete this document?'))return;DB.documents=DB.documents.filter(d=>d.id!==id);saveDB();renderDocList();showToast('Deleted','success'); }
@@ -2264,11 +2264,11 @@ function showColumnMapper() {
   document.getElementById('attStep1').style.display='block';document.getElementById('attStep2').style.display='block';document.getElementById('attPreviewSection').style.display='none';
   const fds=[{key:'empId',label:'Employee ID / Code',required:true},{key:'empName',label:'Employee Name',required:false},{key:'workDays',label:'Working Days Present',required:false},{key:'leaveDays',label:'Leave Days',required:false},{key:'absentDays',label:'Absent / Unpaid Leave',required:false},{key:'overtimeHrs',label:'Overtime Hours',required:false}];
   const autoMatch=label=>{const l=label.toLowerCase();return attendanceRawHeaders.findIndex(h=>{const h2=h.toLowerCase().replace(/[\s_-]/g,'');if(l.includes('id')||l.includes('code'))return h2.includes('id')||h2.includes('code')||h2.includes('emp');if(l.includes('name'))return h2.includes('name');if(l.includes('working')||l.includes('present'))return h2.includes('work')||h2.includes('present');if(l.includes('leave'))return h2.includes('leave');if(l.includes('absent'))return h2.includes('absent')||h2.includes('unpaid');if(l.includes('overtime'))return h2.includes('ot')||h2.includes('overtime');return false;});};
-  const opts=['— Not in file —',...attendanceRawHeaders];
+  const opts=['â€” Not in file â€”',...attendanceRawHeaders];
   document.getElementById('attColMap').innerHTML=fds.map(fd=>{const ai=autoMatch(fd.label);const sv=ai>=0?attendanceRawHeaders[ai]:'';return`<div><label>${fd.label}${fd.required?' <span style="color:var(--danger)">*</span>':''}</label><select id="map_${fd.key}">${opts.map(o=>`<option value="${o}" ${o===sv?'selected':''}>${o}</option>`).join('')}</select></div>`;}).join('');
 }
 function processAttendanceMapping() {
-  const getCol=key=>{const v=document.getElementById('map_'+key)?.value;return(v&&v!=='— Not in file —')?v:null;};
+  const getCol=key=>{const v=document.getElementById('map_'+key)?.value;return(v&&v!=='â€” Not in file â€”')?v:null;};
   const idCol=getCol('empId');if(!idCol){showToast('Employee ID column is required','error');return;}
   const nmCol=getCol('empName'),wdCol=getCol('workDays'),ldCol=getCol('leaveDays'),adCol=getCol('absentDays'),otCol=getCol('overtimeHrs');
   const ci=col=>col?attendanceRawHeaders.indexOf(col):-1;
@@ -2281,7 +2281,7 @@ function renderAttendancePreview() {
   const matched=attendanceMapped.filter(r=>r.matched).length;const unmatched=attendanceMapped.length-matched;const totalAbs=attendanceMapped.reduce((s,r)=>s+r.absentDays,0);
   document.getElementById('attSummaryBar').innerHTML=`<div class="att-summary-card"><div class="val" style="color:var(--accent)">${attendanceMapped.length}</div><div class="lbl">Total Rows</div></div><div class="att-summary-card"><div class="val" style="color:var(--success)">${matched}</div><div class="lbl">Matched</div></div><div class="att-summary-card"><div class="val" style="color:var(--danger)">${unmatched}</div><div class="lbl">Not Found</div></div><div class="att-summary-card"><div class="val" style="color:var(--warning)">${totalAbs}</div><div class="lbl">Absent Days</div></div>`;
   const wd=parseFloat(document.getElementById('attWorkingDays')?.value)||26;
-  document.getElementById('attPreviewTable').innerHTML=`<thead><tr><th>Emp ID</th><th>Name</th><th>Match</th><th>Days</th><th>Leave</th><th>Absent</th><th>OT Hrs</th><th>Est. Net Pay</th></tr></thead><tbody>${attendanceMapped.map(r=>{let estNet='';if(r.emp){const daily=r.emp.salary/wd;const gross=r.emp.salary-daily*r.absentDays+(r.emp.salary/wd/8)*r.overtimeHrs*1.5;estNet=`<span class="att-match-ok">LKR ${Math.round(gross*0.92).toLocaleString()}</span>`;}return`<tr><td>${r.rawId}</td><td>${r.rawName||(r.emp?.fullName||'—')}</td><td>${r.matched?`<span class="att-match-ok">✓ ${r.emp.fullName}</span>`:`<span class="att-match-err">✗ Not found</span>`}</td><td>${r.workDays!==null?r.workDays:'—'}</td><td>${r.leaveDays}</td><td>${r.absentDays>0?`<span class="att-match-warn">${r.absentDays}</span>`:r.absentDays}</td><td>${r.overtimeHrs}</td><td>${estNet||'<span style="color:var(--muted)">—</span>'}</td></tr>`;}).join('')}</tbody>`;
+  document.getElementById('attPreviewTable').innerHTML=`<thead><tr><th>Emp ID</th><th>Name</th><th>Match</th><th>Days</th><th>Leave</th><th>Absent</th><th>OT Hrs</th><th>Est. Net Pay</th></tr></thead><tbody>${attendanceMapped.map(r=>{let estNet='';if(r.emp){const daily=r.emp.salary/wd;const gross=r.emp.salary-daily*r.absentDays+(r.emp.salary/wd/8)*r.overtimeHrs*1.5;estNet=`<span class="att-match-ok">LKR ${Math.round(gross*0.92).toLocaleString()}</span>`;}return`<tr><td>${r.rawId}</td><td>${r.rawName||(r.emp?.fullName||'â€”')}</td><td>${r.matched?`<span class="att-match-ok">âœ“ ${r.emp.fullName}</span>`:`<span class="att-match-err">âœ— Not found</span>`}</td><td>${r.workDays!==null?r.workDays:'â€”'}</td><td>${r.leaveDays}</td><td>${r.absentDays>0?`<span class="att-match-warn">${r.absentDays}</span>`:r.absentDays}</td><td>${r.overtimeHrs}</td><td>${estNet||'<span style="color:var(--muted)">â€”</span>'}</td></tr>`;}).join('')}</tbody>`;
   document.getElementById('attPreviewSection').style.display='block';
 }
 async function generatePayrollFromAttendance() {
@@ -2291,14 +2291,14 @@ async function generatePayrollFromAttendance() {
   let created=0,updated=0;
   for(const r of matched){const emp=r.emp;const basic=emp.salary||0;const daily=basic/wd;const absentDed=daily*(r.absentDays||0);const otPay=(basic/wd/8)*1.5*(r.overtimeHrs||0);const gross=basic-absentDed+otPay;const epf=Math.round(basic*0.08);const etf=Math.round(basic*0.03);const net=Math.round(gross-epf);const pd={id:Date.now()+Math.random(),employeeId:emp.id,month,basicSalary:basic,transport:0,meal:0,otherAllow:Math.round(otPay),epf,etf,tax:0,otherDeductions:0,grossEarnings:Math.round(gross),totalDeductions:epf+etf,netSalary:net,absentDays:r.absentDays||0,leaveDays:r.leaveDays||0,overtimeHrs:r.overtimeHrs||0,createdAt:new Date().toISOString()};const xi=DB.payrolls.findIndex(p=>p.employeeId===emp.id&&p.month===month);if(xi!==-1){DB.payrolls[xi]=pd;updated++;}else{DB.payrolls.push(pd);created++;}}
   await saveDB();const skipped=attendanceMapped.length-matched.length;
-  document.getElementById('attGenResult').style.display='block';document.getElementById('attGenResult').innerHTML=`<div style="font-weight:700;font-size:1rem;margin-bottom:8px;color:var(--success);">✅ Payroll Generated Successfully!</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:0.82rem;"><div>📝 <strong>${created}</strong> new payslips</div><div>🔄 <strong>${updated}</strong> updated</div><div>⚠️ <strong>${skipped}</strong> skipped</div></div><div style="margin-top:8px;font-size:0.75rem;color:var(--text2);">Month: <strong>${month}</strong> · EPF 8% + ETF 3% auto-deducted</div>`;
+  document.getElementById('attGenResult').style.display='block';document.getElementById('attGenResult').innerHTML=`<div style="font-weight:700;font-size:1rem;margin-bottom:8px;color:var(--success);">âœ… Payroll Generated Successfully!</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:0.82rem;"><div>ðŸ“ <strong>${created}</strong> new payslips</div><div>ðŸ”„ <strong>${updated}</strong> updated</div><div>âš ï¸ <strong>${skipped}</strong> skipped</div></div><div style="margin-top:8px;font-size:0.75rem;color:var(--text2);">Month: <strong>${month}</strong> Â· EPF 8% + ETF 3% auto-deducted</div>`;
   showToast(`Payroll done! ${created} created, ${updated} updated`,'success');
 }
 function exportAttendanceSummaryPDF() {
   if(!attendanceMapped.length){showToast('No data to export','error');return;}
   const month=document.getElementById('attPayMonth').value||new Date().toISOString().slice(0,7);const wd=parseFloat(document.getElementById('attWorkingDays').value)||26;
-  const rows=attendanceMapped.map(r=>{if(!r.emp)return`<tr style="color:#ef4444"><td>${r.rawId}</td><td>${r.rawName}</td><td>Not Found</td><td>—</td><td>${r.absentDays}</td><td>${r.overtimeHrs}</td><td>—</td></tr>`;const daily=r.emp.salary/wd;const gross=r.emp.salary-daily*r.absentDays+(r.emp.salary/wd/8)*r.overtimeHrs*1.5;const net=Math.round(gross*0.92);return`<tr><td>${r.emp.empId}</td><td>${r.emp.fullName}</td><td>${r.emp.department||'—'}</td><td>${r.workDays??wd-r.absentDays}</td><td>${r.absentDays}</td><td>${r.overtimeHrs}</td><td>LKR ${net.toLocaleString()}</td></tr>`;}).join('');
-  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:30px;color:#1e293b}h1{font-size:20px;color:#3B82F6;margin-bottom:4px}p{font-size:11px;color:#64748b;margin-bottom:16px}table{width:100%;border-collapse:collapse;font-size:10px}th{background:#3B82F6;color:white;padding:7px;text-align:left}td{padding:6px 7px;border-bottom:1px solid #e2e8f0}</style></head><body><h1>Attendance Summary — ${month}</h1><p>Generated: ${new Date().toLocaleString()}</p><table><thead><tr><th>Emp ID</th><th>Name</th><th>Dept</th><th>Days</th><th>Absent</th><th>OT Hrs</th><th>Est. Net</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;
+  const rows=attendanceMapped.map(r=>{if(!r.emp)return`<tr style="color:#ef4444"><td>${r.rawId}</td><td>${r.rawName}</td><td>Not Found</td><td>â€”</td><td>${r.absentDays}</td><td>${r.overtimeHrs}</td><td>â€”</td></tr>`;const daily=r.emp.salary/wd;const gross=r.emp.salary-daily*r.absentDays+(r.emp.salary/wd/8)*r.overtimeHrs*1.5;const net=Math.round(gross*0.92);return`<tr><td>${r.emp.empId}</td><td>${r.emp.fullName}</td><td>${r.emp.department||'â€”'}</td><td>${r.workDays??wd-r.absentDays}</td><td>${r.absentDays}</td><td>${r.overtimeHrs}</td><td>LKR ${net.toLocaleString()}</td></tr>`;}).join('');
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:30px;color:#1e293b}h1{font-size:20px;color:#3B82F6;margin-bottom:4px}p{font-size:11px;color:#64748b;margin-bottom:16px}table{width:100%;border-collapse:collapse;font-size:10px}th{background:#3B82F6;color:white;padding:7px;text-align:left}td{padding:6px 7px;border-bottom:1px solid #e2e8f0}</style></head><body><h1>Attendance Summary â€” ${month}</h1><p>Generated: ${new Date().toLocaleString()}</p><table><thead><tr><th>Emp ID</th><th>Name</th><th>Dept</th><th>Days</th><th>Absent</th><th>OT Hrs</th><th>Est. Net</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;
   const el=document.createElement('div');el.innerHTML=html;document.body.appendChild(el);
   const go=()=>html2pdf().set({margin:[0.4,0.3],filename:`Attendance_${month}.pdf`,image:{type:'jpeg',quality:0.95},html2canvas:{scale:2},jsPDF:{unit:'in',format:'a4',orientation:'landscape'}}).from(el).save().then(()=>{document.body.removeChild(el);showToast('PDF exported!','success');});
   if(window.html2pdf)go();else{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';s.onload=go;document.head.appendChild(s);}
@@ -2308,44 +2308,44 @@ const TRIAL_DAYS=30;const ADMIN_CONTACT='Miracle Data | +94 77 XXX XXXX';
 function generateLicenseKey(seed) { const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let key='';let s=seed||Date.now();for(let i=0;i<16;i++){s=(s*1664525+1013904223)&0xFFFFFFFF;key+=chars[Math.abs(s)%chars.length];if((i+1)%4===0&&i<15)key+='-';}return key; }
 function validateLicenseKey(key) { if(!/^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(key))return false;return DB.licenseKeys&&DB.licenseKeys.some(k=>k.key===key&&k.status==='active'); }
 async function checkTrialStatus() {
-  if(currentUser?.role==='ADMIN'){updateTrialBadge('licensed','👑 Admin');return true;}
+  if(currentUser?.role==='ADMIN'){updateTrialBadge('licensed','ðŸ‘‘ Admin');return true;}
   const now=new Date();
-  if(DB.license&&DB.license.status==='active'){const exp=new Date(DB.license.expiresAt);if(!DB.license.expiresAt||now<exp){updateTrialBadge('licensed','✅ Licensed');return true;}}
+  if(DB.license&&DB.license.status==='active'){const exp=new Date(DB.license.expiresAt);if(!DB.license.expiresAt||now<exp){updateTrialBadge('licensed','âœ… Licensed');return true;}}
   if(!DB.trial){DB.trial={startDate:now.toISOString(),endDate:new Date(now.getTime()+TRIAL_DAYS*86400000).toISOString()};await saveDB();}
   const trialEnd=new Date(DB.trial.endDate);const msLeft=trialEnd-now;const daysLeft=Math.ceil(msLeft/(1000*60*60*24));
   if(msLeft<=0){showLockScreen();return false;}
-  if(daysLeft<=5){updateTrialBadge('warn',`⚠️ ${daysLeft}d left`);showTrialWarningPopup(daysLeft);}
-  else{updateTrialBadge('ok',`⏳ Trial: ${daysLeft}d left`);}
+  if(daysLeft<=5){updateTrialBadge('warn',`âš ï¸ ${daysLeft}d left`);showTrialWarningPopup(daysLeft);}
+  else{updateTrialBadge('ok',`â³ Trial: ${daysLeft}d left`);}
   return true;
 }
 function updateTrialBadge(type,text) { const b=document.getElementById('trialBadge');if(!b)return;b.style.display='inline-flex';b.className=`trial-badge trial-${type==='ok'?'ok':type==='warn'?'warn':'licensed'}`;b.textContent=text; }
 function showLockScreen() { document.getElementById('lockContactInfo').textContent=ADMIN_CONTACT;document.getElementById('lockScreen').style.display='flex'; }
 function hideLockScreen() { document.getElementById('lockScreen').style.display='none'; }
 let warningShown=false;
-function showTrialWarningPopup(daysLeft) { if(warningShown)return;warningShown=true;const p=document.createElement('div');p.className='trial-warning-popup';p.style.position='fixed';p.innerHTML=`<button class="popup-close" onclick="this.parentElement.remove()">✕</button><h4>⚠️ Trial Ending Soon</h4><p>Expires in <strong>${daysLeft} day${daysLeft!==1?'s':''}</strong>. Contact admin to activate a license.</p><p style="margin-top:6px;font-size:0.72rem;color:var(--muted)">${ADMIN_CONTACT}</p>`;document.body.appendChild(p);setTimeout(()=>{if(p.parentElement)p.remove();},10000); }
+function showTrialWarningPopup(daysLeft) { if(warningShown)return;warningShown=true;const p=document.createElement('div');p.className='trial-warning-popup';p.style.position='fixed';p.innerHTML=`<button class="popup-close" onclick="this.parentElement.remove()">âœ•</button><h4>âš ï¸ Trial Ending Soon</h4><p>Expires in <strong>${daysLeft} day${daysLeft!==1?'s':''}</strong>. Contact admin to activate a license.</p><p style="margin-top:6px;font-size:0.72rem;color:var(--muted)">${ADMIN_CONTACT}</p>`;document.body.appendChild(p);setTimeout(()=>{if(p.parentElement)p.remove();},10000); }
 async function activateLicense() {
   const raw=document.getElementById('licenseKeyInput').value.trim().toUpperCase();const errDiv=document.getElementById('licenseError');errDiv.textContent='';
   if(!raw){errDiv.textContent='Please enter a license key';return;}
-  if(validateLicenseKey(raw)){const lic=DB.licenseKeys.find(k=>k.key===raw);if(lic)lic.status='used';DB.license={status:'active',key:raw,activatedAt:new Date().toISOString(),expiresAt:null};await saveDB();hideLockScreen();updateTrialBadge('licensed','✅ Licensed');showToast('License activated! 🎉','success');}
+  if(validateLicenseKey(raw)){const lic=DB.licenseKeys.find(k=>k.key===raw);if(lic)lic.status='used';DB.license={status:'active',key:raw,activatedAt:new Date().toISOString(),expiresAt:null};await saveDB();hideLockScreen();updateTrialBadge('licensed','âœ… Licensed');showToast('License activated! ðŸŽ‰','success');}
   else{errDiv.textContent='Invalid or already used license key';document.getElementById('licenseKeyInput').style.borderColor='var(--danger)';setTimeout(()=>document.getElementById('licenseKeyInput').style.borderColor='',2000);}
 }
 function formatLicenseInput(input) { let val=input.value.replace(/[^A-Z0-9]/gi,'').toUpperCase();let f='';for(let i=0;i<val.length&&i<16;i++){if(i>0&&i%4===0)f+='-';f+=val[i];}input.value=f; }
 function renderLicenseSection() {
   if(currentUser?.role!=='ADMIN')return'';
   const trial=DB.trial;const license=DB.license;const trialStart=trial?new Date(trial.startDate).toLocaleDateString():'Not started';const trialEnd=trial?new Date(trial.endDate).toLocaleDateString():'-';const daysLeft=trial?Math.max(0,Math.ceil((new Date(trial.endDate)-new Date())/86400000)):0;const keys=DB.licenseKeys||[];
-  return`<hr style="margin:20px 0;border:none;border-top:1px solid rgba(255,255,255,0.07);"><div class="license-section"><h4>🔑 License & Trial Management</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;"><div class="info-card"><label>Trial Started</label><span>${trialStart}</span></div><div class="info-card"><label>Trial Ends</label><span>${trialEnd} (${daysLeft}d left)</span></div><div class="info-card"><label>License Status</label><span style="color:${license?.status==='active'?'var(--success)':'var(--warning)'}">${license?.status==='active'?'✅ Licensed':'⏳ Trial'}</span></div><div class="info-card"><label>License Key</label><span style="font-family:'DM Mono',monospace;font-size:0.75rem;">${license?.key||'None'}</span></div></div><div style="margin-bottom:1rem;"><div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Extend Trial</div><div style="display:flex;gap:8px;flex-wrap:wrap;"><select id="extendDays" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:6px 10px;color:var(--text);font-size:0.8rem;"><option value="7">+7 days</option><option value="14">+14 days</option><option value="30" selected>+30 days</option><option value="60">+60 days</option><option value="90">+90 days</option><option value="365">+1 Year</option></select><button class="btn btn-primary btn-sm" onclick="extendTrial()">Extend Trial</button><button class="btn btn-sm" style="background:rgba(20,196,126,0.15);border-color:rgba(20,196,126,0.3);color:var(--success);" onclick="generateNewLicenseKey()">🔑 Generate Key</button></div></div><div><div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Generated Keys (${keys.length})</div>${keys.length>0?keys.map(k=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><div class="license-key-display" style="flex:1;font-size:0.85rem;">${k.key}</div><span style="font-size:0.7rem;padding:3px 8px;border-radius:20px;background:${k.status==='active'?'rgba(20,196,126,0.12)':'rgba(100,100,100,0.12)'};color:${k.status==='active'?'var(--success)':'var(--muted)'};">${k.status}</span><button class="btn btn-sm" onclick="copyToClipboard('${k.key}')" style="padding:4px 8px;">📋</button></div>`).join(''):'<div style="color:var(--muted);font-size:0.8rem;">No keys generated yet</div>'}</div><div id="licenseAdminMsg" style="margin-top:8px;font-size:0.75rem;min-height:1rem;"></div></div>`;
+  return`<hr style="margin:20px 0;border:none;border-top:1px solid rgba(255,255,255,0.07);"><div class="license-section"><h4>ðŸ”‘ License & Trial Management</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;"><div class="info-card"><label>Trial Started</label><span>${trialStart}</span></div><div class="info-card"><label>Trial Ends</label><span>${trialEnd} (${daysLeft}d left)</span></div><div class="info-card"><label>License Status</label><span style="color:${license?.status==='active'?'var(--success)':'var(--warning)'}">${license?.status==='active'?'âœ… Licensed':'â³ Trial'}</span></div><div class="info-card"><label>License Key</label><span style="font-family:'DM Mono',monospace;font-size:0.75rem;">${license?.key||'None'}</span></div></div><div style="margin-bottom:1rem;"><div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Extend Trial</div><div style="display:flex;gap:8px;flex-wrap:wrap;"><select id="extendDays" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:6px 10px;color:var(--text);font-size:0.8rem;"><option value="7">+7 days</option><option value="14">+14 days</option><option value="30" selected>+30 days</option><option value="60">+60 days</option><option value="90">+90 days</option><option value="365">+1 Year</option></select><button class="btn btn-primary btn-sm" onclick="extendTrial()">Extend Trial</button><button class="btn btn-sm" style="background:rgba(20,196,126,0.15);border-color:rgba(20,196,126,0.3);color:var(--success);" onclick="generateNewLicenseKey()">ðŸ”‘ Generate Key</button></div></div><div><div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Generated Keys (${keys.length})</div>${keys.length>0?keys.map(k=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><div class="license-key-display" style="flex:1;font-size:0.85rem;">${k.key}</div><span style="font-size:0.7rem;padding:3px 8px;border-radius:20px;background:${k.status==='active'?'rgba(20,196,126,0.12)':'rgba(100,100,100,0.12)'};color:${k.status==='active'?'var(--success)':'var(--muted)'};">${k.status}</span><button class="btn btn-sm" onclick="copyToClipboard('${k.key}')" style="padding:4px 8px;">ðŸ“‹</button></div>`).join(''):'<div style="color:var(--muted);font-size:0.8rem;">No keys generated yet</div>'}</div><div id="licenseAdminMsg" style="margin-top:8px;font-size:0.75rem;min-height:1rem;"></div></div>`;
 }
 async function extendTrial() {
   const days=parseInt(document.getElementById('extendDays').value);const now=new Date();
   if(!DB.trial){DB.trial={startDate:now.toISOString(),endDate:new Date(now.getTime()+days*86400000).toISOString()};}
   else{const ce=new Date(DB.trial.endDate);const base=ce>now?ce:now;DB.trial.endDate=new Date(base.getTime()+days*86400000).toISOString();}
-  await saveDB();const msg=document.getElementById('licenseAdminMsg');if(msg){msg.style.color='var(--success)';msg.textContent=`✓ Trial extended by ${days} days. New end: ${new Date(DB.trial.endDate).toLocaleDateString()}`;}
+  await saveDB();const msg=document.getElementById('licenseAdminMsg');if(msg){msg.style.color='var(--success)';msg.textContent=`âœ“ Trial extended by ${days} days. New end: ${new Date(DB.trial.endDate).toLocaleDateString()}`;}
   openUserManagement();showToast(`Trial extended by ${days} days`,'success');
 }
 async function generateNewLicenseKey() {
   if(!DB.licenseKeys)DB.licenseKeys=[];const newKey=generateLicenseKey(Date.now()+Math.random()*1e9);DB.licenseKeys.push({key:newKey,status:'active',createdAt:new Date().toISOString()});await saveDB();openUserManagement();showToast('License key generated!','success');
 }
-function copyToClipboard(text) { navigator.clipboard.writeText(text).then(()=>showToast('License key copied! 📋','success')); }
+function copyToClipboard(text) { navigator.clipboard.writeText(text).then(()=>showToast('License key copied! ðŸ“‹','success')); }
 
 document.addEventListener('DOMContentLoaded', async function() {
   document.getElementById('loginBtn').addEventListener('click',handleLogin);
@@ -2358,7 +2358,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   document.getElementById('logoutBtn').addEventListener('click',handleLogout);
   const dz=document.getElementById('attDropZone');if(dz){dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag-over');});dz.addEventListener('dragleave',()=>dz.classList.remove('drag-over'));dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag-over');if(e.dataTransfer.files[0])handleAttFile(e.dataTransfer.files[0]);});}
   const afi=document.getElementById('attFileInput');if(afi)afi.addEventListener('change',function(){if(this.files[0])handleAttFile(this.files[0]);});
-  document.getElementById('addEmployeeBtn').addEventListener('click',()=>{editingEmployeeId=null;document.getElementById('modalTitle').textContent='New Employee';document.querySelectorAll('#empModal input,#empModal select,#empModal textarea').forEach(el=>el.value='');document.getElementById('empGender').value='Male';document.getElementById('empMarital').value='Single';document.getElementById('empType').value='Permanent';document.getElementById('empStatus').value='Active';document.getElementById('empPayMethod').value='Bank Transfer'; currentEmpPhotoData=null; refreshEmpLocationDropdown(); const pzr=document.getElementById('photoUploadZone'); if(pzr){pzr.innerHTML='<span class="upload-icon">📷</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;">✕</button>';} const eiq2=document.getElementById('empIdQuick'); if(eiq2)eiq2.value=''; document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));document.querySelector('.tab-btn[data-tab="0"]').classList.add('active');document.getElementById('tab0').classList.add('active');openModal('empModal');});
+  document.getElementById('addEmployeeBtn').addEventListener('click',()=>{editingEmployeeId=null;document.getElementById('modalTitle').textContent='New Employee';document.querySelectorAll('#empModal input,#empModal select,#empModal textarea').forEach(el=>el.value='');document.getElementById('empGender').value='Male';document.getElementById('empMarital').value='Single';document.getElementById('empType').value='Permanent';document.getElementById('empStatus').value='Active';document.getElementById('empPayMethod').value='Bank Transfer'; currentEmpPhotoData=null; refreshEmpLocationDropdown(); const pzr=document.getElementById('photoUploadZone'); if(pzr){pzr.innerHTML='<span class="upload-icon">ðŸ“·</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;">âœ•</button>';} const eiq2=document.getElementById('empIdQuick'); if(eiq2)eiq2.value=''; document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));document.querySelector('.tab-btn[data-tab="0"]').classList.add('active');document.getElementById('tab0').classList.add('active');openModal('empModal');});
   document.getElementById('saveEmpBtn').addEventListener('click',saveEmployee);
   document.getElementById('refreshListBtn').addEventListener('click',async()=>{showLoading();await loadDB();hideLoading();renderEmployeeList();if(selectedEmployeeId)renderDetail(selectedEmployeeId);showToast('Data refreshed','success');});
   document.getElementById('searchInput').addEventListener('input',renderEmployeeList);
@@ -2388,7 +2388,7 @@ function handleEmpPhotoUpload(event) {
   reader.onload = e => {
     currentEmpPhotoData = e.target.result;
     const zone = document.getElementById('photoUploadZone');
-    zone.innerHTML = `<img src="${currentEmpPhotoData}" style="width:100%;height:100%;object-fit:cover;border-radius:16px;"><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:flex;">✕</button>`;
+    zone.innerHTML = `<img src="${currentEmpPhotoData}" style="width:100%;height:100%;object-fit:cover;border-radius:16px;"><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:flex;">âœ•</button>`;
   };
   reader.readAsDataURL(file);
 }
@@ -2398,7 +2398,7 @@ function removeEmpPhoto(event) {
   currentEmpPhotoData = null;
   const zone = document.getElementById('photoUploadZone');
   if (zone) {
-    zone.innerHTML = `<span class="upload-icon">📷</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;">✕</button>`;
+    zone.innerHTML = `<span class="upload-icon">ðŸ“·</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;">âœ•</button>`;
   }
   document.getElementById('empPhotoInput').value = '';
 }
@@ -2419,10 +2419,10 @@ function openPhotoEditForEmp(id) {
         ${emp.photo ? `<img src="${emp.photo}" style="width:100%;height:100%;object-fit:cover;">` : (emp.fullName?.charAt(0)||'?')}
       </div>
       <label style="display:block;background:linear-gradient(135deg,rgba(79,142,247,0.8),rgba(155,114,248,0.7));border:none;border-radius:10px;padding:0.7rem 1.2rem;color:white;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.85rem;margin-bottom:8px;transition:all 0.2s;">
-        📷 Upload New Photo
+        ðŸ“· Upload New Photo
         <input type="file" accept="image/*" style="display:none;" onchange="applyPhotoToEmp(event, ${id})">
       </label>
-      ${emp.photo ? `<button onclick="clearEmpPhoto(${id})" style="display:block;width:100%;background:rgba(240,82,82,0.15);border:1px solid rgba(240,82,82,0.3);border-radius:10px;padding:0.6rem;color:#F87171;font-size:0.82rem;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:8px;">🗑 Remove Photo</button>` : ''}
+      ${emp.photo ? `<button onclick="clearEmpPhoto(${id})" style="display:block;width:100%;background:rgba(240,82,82,0.15);border:1px solid rgba(240,82,82,0.3);border-radius:10px;padding:0.6rem;color:#F87171;font-size:0.82rem;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:8px;">ðŸ—‘ Remove Photo</button>` : ''}
       <button onclick="document.getElementById('quickPhotoPopup').remove()" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:0.6rem 1.2rem;color:var(--text2);font-size:0.82rem;cursor:pointer;font-family:'DM Sans',sans-serif;">Cancel</button>
     </div>`;
   popup.addEventListener('click', e => { if (e.target === popup) popup.remove(); });
@@ -2464,7 +2464,7 @@ function clearEmpPhoto(id) {
 // ========== COMPANY LOCATIONS ==========
 if (!DB.locations) DB.locations = [];
 
-const LOC_TYPE_ICONS = { HQ:'🏛', Branch:'🏢', Office:'💼', Warehouse:'🏭', Factory:'⚙️' };
+const LOC_TYPE_ICONS = { HQ:'ðŸ›', Branch:'ðŸ¢', Office:'ðŸ’¼', Warehouse:'ðŸ­', Factory:'âš™ï¸' };
 const LOC_TYPE_CSS   = { HQ:'loc-type-hq', Branch:'loc-type-branch', Office:'loc-type-office', Warehouse:'loc-type-warehouse', Factory:'loc-type-factory' };
 
 let activeLocId = null;
@@ -2504,7 +2504,7 @@ function initLocMap() {
     if (leafletMap) { leafletMap.remove(); leafletMap = null; leafletMarkers = []; }
     leafletMap = L.map('locLeafletMap', { zoomControl: true }).setView([7.8731, 80.7718], 7);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors', maxZoom: 18
+      attribution: 'Â© OpenStreetMap contributors', maxZoom: 18
     }).addTo(leafletMap);
     // Show/hide placeholder
     const placeholder = document.getElementById('locMapPlaceholder');
@@ -2558,10 +2558,10 @@ function addMarkerForLocation(loc) {
       const marker = L.marker([parseFloat(lat), parseFloat(lon)], { icon }).addTo(leafletMap);
       marker.bindPopup(`
         <div style="font-family:'DM Sans',sans-serif;min-width:160px;">
-          <div style="font-weight:700;font-size:13px;margin-bottom:4px;">${LOC_TYPE_ICONS[loc.type]||'📍'} ${loc.name}</div>
+          <div style="font-weight:700;font-size:13px;margin-bottom:4px;">${LOC_TYPE_ICONS[loc.type]||'ðŸ“'} ${loc.name}</div>
           <div style="font-size:11px;color:#64748b;margin-bottom:4px;">${loc.address}</div>
-          ${loc.phone ? `<div style="font-size:11px;">📞 ${loc.phone}</div>` : ''}
-          ${loc.manager ? `<div style="font-size:11px;">👔 ${loc.manager}</div>` : ''}
+          ${loc.phone ? `<div style="font-size:11px;">ðŸ“ž ${loc.phone}</div>` : ''}
+          ${loc.manager ? `<div style="font-size:11px;">ðŸ‘” ${loc.manager}</div>` : ''}
         </div>
       `);
       marker.on('click', () => selectLocation(loc.id));
@@ -2591,14 +2591,14 @@ function renderLocList() {
   }
   container.innerHTML = locs.map(loc => {
     const empCount = DB.employees.filter(e => e.location === loc.name).length;
-    const icon = LOC_TYPE_ICONS[loc.type] || '📍';
+    const icon = LOC_TYPE_ICONS[loc.type] || 'ðŸ“';
     return `<div class="loc-item ${activeLocId===loc.id?'active':''}" onclick="selectLocation(${loc.id})">
       <div class="loc-item-icon">${icon}</div>
       <div class="loc-item-info">
         <div class="loc-item-name">${loc.name}</div>
-        <div class="loc-item-type">${loc.type||'Office'} · ${loc.address.split(',')[0]}</div>
+        <div class="loc-item-type">${loc.type||'Office'} Â· ${loc.address.split(',')[0]}</div>
       </div>
-      ${empCount>0?`<span class="loc-emp-count">👤 ${empCount}</span>`:''}
+      ${empCount>0?`<span class="loc-emp-count">ðŸ‘¤ ${empCount}</span>`:''}
     </div>`;
   }).join('');
 }
@@ -2624,10 +2624,10 @@ function selectLocation(id) {
   document.getElementById('locDetailName').textContent = loc.name;
   document.getElementById('locDetailAddr').textContent = loc.address;
   document.getElementById('locDetailTags').innerHTML = `
-    <span class="loc-tag ${LOC_TYPE_CSS[loc.type]||'loc-type-office'}">${LOC_TYPE_ICONS[loc.type]||'📍'} ${loc.type||'Office'}</span>
-    ${empCount>0?`<span class="loc-tag" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:var(--text2);">👤 ${empCount} employee${empCount!==1?'s':''}</span>`:''}
-    ${loc.phone?`<span class="loc-tag" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:var(--text2);">📞 ${loc.phone}</span>`:''}
-    ${loc.manager?`<span class="loc-tag" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:var(--text2);">👔 ${loc.manager}</span>`:''}
+    <span class="loc-tag ${LOC_TYPE_CSS[loc.type]||'loc-type-office'}">${LOC_TYPE_ICONS[loc.type]||'ðŸ“'} ${loc.type||'Office'}</span>
+    ${empCount>0?`<span class="loc-tag" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:var(--text2);">ðŸ‘¤ ${empCount} employee${empCount!==1?'s':''}</span>`:''}
+    ${loc.phone?`<span class="loc-tag" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:var(--text2);">ðŸ“ž ${loc.phone}</span>`:''}
+    ${loc.manager?`<span class="loc-tag" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:var(--text2);">ðŸ‘” ${loc.manager}</span>`:''}
   `;
   // Show/hide delete button based on role
   const delBtn = document.getElementById('locDeleteBtn');
@@ -2697,9 +2697,9 @@ function refreshEmpLocationDropdown() {
   const sel = document.getElementById('empLocation');
   if (sel && DB.locations) {
     const cur = sel.value;
-    sel.innerHTML = '<option value="">— Select Location —</option>' +
+    sel.innerHTML = '<option value="">â€” Select Location â€”</option>' +
       DB.locations.map(l =>
-        `<option value="${l.name}" ${cur===l.name?'selected':''}>${LOC_TYPE_ICONS[l.type]||'📍'} ${l.name} (${l.type||'Office'})</option>`
+        `<option value="${l.name}" ${cur===l.name?'selected':''}>${LOC_TYPE_ICONS[l.type]||'ðŸ“'} ${l.name} (${l.type||'Office'})</option>`
       ).join('');
     if (cur) sel.value = cur;
   }
