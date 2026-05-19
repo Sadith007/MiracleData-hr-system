@@ -1937,7 +1937,14 @@ function showLoading() { if(document.getElementById('loadingOverlay'))return; co
 function hideLoading() { const el=document.getElementById('loadingOverlay'); if(el)el.remove(); }
 function showToast(message,type='success') { const t=document.createElement('div'); t.className=`toast ${type}`; t.textContent=message; document.body.appendChild(t); setTimeout(()=>t.classList.add('show'),10); setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300);},3000); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-function openModal(id) { document.getElementById(id).classList.add('open'); }
+function openModal(id) {
+  const modal = document.getElementById(id);
+  modal.classList.add('open');
+  setTimeout(() => {
+    const firstElement = modal.querySelector('input:not([type="hidden"]), select, textarea, button');
+    if (firstElement) firstElement.focus();
+  }, 300);
+}
 document.addEventListener('click',e=>{ if(e.target.classList.contains('modal')&&e.target.classList.contains('open'))e.target.classList.remove('open'); });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape')document.querySelectorAll('.modal.open').forEach(m=>m.classList.remove('open')); });
 
