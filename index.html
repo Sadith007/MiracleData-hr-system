@@ -57,13 +57,6 @@ body::before {
   pointer-events: none;
   z-index: 0;
 }
-<!-- HR Nexus Chatbot -->
-<div id="hrChatWidget" style="position:fixed;bottom:24px;right:24px;z-index:9998;font-family:'DM Sans',sans-serif;">
-  <div id="hrChatBox" style="display:none;width:380px;height:580px;background:rgba(8,14,26,0.95);border:1px solid rgba(79,142,247,0.2);border-radius:20px;overflow:hidden;backdrop-filter:blur(20px);box-shadow:0 20px 60px rgba(0,0,0,0.5);flex-direction:column;">
-    <!-- Paste the full chatbot HTML here -->
-  </div>
-  <button onclick="document.getElementById('hrChatBox').style.display=document.getElementById('hrChatBox').style.display==='none'?'flex':'none'" style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#4F8EF7,#9B72F8);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(79,142,247,0.4);font-size:1.4rem;margin-top:8px;margin-left:auto;">🤖</button>
-</div>
 
 /* ===== HR NEXUS CHATBOT ===== */
 #hrChatWidget {
@@ -1818,7 +1811,6 @@ select option { background: #0F1628; color: var(--text); }
       </div>
     </div>
   </div>
-</div>
 
 <!-- LOCK SCREEN -->
 <div id="lockScreen" class="lock-overlay" style="display:none;">
@@ -1839,6 +1831,7 @@ select option { background: #0F1628; color: var(--text); }
       <div id="licenseError" class="lock-error"></div>
     </div>
   </div>
+</div>
   
 <!-- ===== HR NEXUS CHATBOT WIDGET ===== -->
 <div id="hrChatWidget">
@@ -1872,7 +1865,6 @@ select option { background: #0F1628; color: var(--text); }
     🤖
     <span class="hc-notif" id="hcNotif" style="display:none;">1</span>
   </button>
-</div>
 </div>
 
 <script>
@@ -1937,7 +1929,14 @@ function showLoading() { if(document.getElementById('loadingOverlay'))return; co
 function hideLoading() { const el=document.getElementById('loadingOverlay'); if(el)el.remove(); }
 function showToast(message,type='success') { const t=document.createElement('div'); t.className=`toast ${type}`; t.textContent=message; document.body.appendChild(t); setTimeout(()=>t.classList.add('show'),10); setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300);},3000); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-function openModal(id) { document.getElementById(id).classList.add('open'); }
+function openModal(id) {
+  const modal = document.getElementById(id);
+  modal.classList.add('open');
+  setTimeout(() => {
+    const firstElement = modal.querySelector('input:not([type="hidden"]), select, textarea, button');
+    if (firstElement) firstElement.focus();
+  }, 300);
+}
 document.addEventListener('click',e=>{ if(e.target.classList.contains('modal')&&e.target.classList.contains('open'))e.target.classList.remove('open'); });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape')document.querySelectorAll('.modal.open').forEach(m=>m.classList.remove('open')); });
 
