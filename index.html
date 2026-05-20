@@ -1969,11 +1969,14 @@ function handleLogin() {
     currentUser=user;
     document.getElementById('loginView').style.display='none';
     const app=document.getElementById('mainApp'); app.style.display='flex'; app.classList.add('visible');
-    setupApp(); renderEmployeeList();
-    showToast('Welcome back, '+username+'!','success');
-    checkTrialStatus();
-    loadDB().then(()=>renderEmployeeList());
-  } else { errorDiv.textContent='Invalid username or password'; }
+    setupApp();
+    showLoading();
+    loadDB().then(() => {
+      hideLoading();
+      renderEmployeeList();
+      showToast('Welcome back, '+username+'!','success');
+      checkTrialStatus();
+    });
 }
 
 function handleRegister() {
