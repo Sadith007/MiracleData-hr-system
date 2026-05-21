@@ -1899,9 +1899,18 @@ async function sbGet(key) {
 async function sbSet(key, value) {
   try { await _db.collection(HR_COLLECTION).doc(key).set({ value, updated_at: new Date().toISOString() }); } catch(e) { console.error(e); }
 }
+let _dbCache = null;
+let _dbCacheTime = 0;
+const DB_CACHE_MS = 30000; // 30 seconds cache
+
 async function loadDB() {
+  const now = Date.now();
+  if (_dbCache && (now - _dbCacheTime) < DB_CACHE_MS) {
+    Object.assign(DB, _dbCache);
+    return;
+  }
   try {
-    const [emp,users,pending,payrolls,trial,license,licenseKeys,leaves,documents,locData] = await Promise.all([sbGet('hr_employees'),sbGet('hr_users'),sbGet('hr_pending'),sbGet('hr_payrolls'),sbGet('hr_trial'),sbGet('hr_license'),sbGet('hr_license_keys'),sbGet('hr_leaves'),sbGet('hr_documents'),sbGet('hr_locations')]);
+    const [emp,users,pending,payrolls,trial,license,licenseKeys,leaves,documents,locData] = await Promise.all([
     DB.employees = emp ? JSON.parse(emp) : DEFAULT_EMPLOYEES;
     DB.users = users ? JSON.parse(users) : DEFAULT_USERS;
     DB.pendingUsers = pending ? JSON.parse(pending) : [];
@@ -1912,6 +1921,8 @@ async function loadDB() {
     DB.leaves = leaves ? JSON.parse(leaves) : [];
     DB.documents = documents ? JSON.parse(documents) : [];
     DB.locations = locData ? JSON.parse(locData) : [];
+_dbCache = { employees: DB.employees, users: DB.users, pendingUsers: DB.pendingUsers, payrolls: DB.payrolls, trial: DB.trial, license: DB.license, licenseKeys: DB.licenseKeys, leaves: DB.leaves, documents: DB.documents, locations: DB.locations };
+    _dbCacheTime = Date.now();
   } catch(e) { console.error('loadDB error',e); }
 }
 async function saveDB() {
