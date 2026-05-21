@@ -1976,7 +1976,7 @@ function handleLogin() {
       renderEmployeeList();
       showToast('Welcome back, '+username+'!','success');
       checkTrialStatus();
-    } else {
+ } else {
       errorDiv.textContent='Invalid username or password';
     }
   });
@@ -3048,7 +3048,7 @@ Format: use numbered lists for steps, bullet points for features. Keep answers u
     try {
       const res = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-api-key': 'YOUR_API_KEY_HERE', 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+        headers: { 'Content-Type': 'application/json', 'x-api-key': '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', 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
         body: JSON.stringify({
           model: 'claude-sonnet-4-20250514',
           max_tokens: 800,
