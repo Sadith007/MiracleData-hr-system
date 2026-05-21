@@ -1975,6 +1975,8 @@ function handleLogin() {
       setupApp(); renderEmployeeList();
       showToast('Welcome back, '+username+'!','success');
       checkTrialStatus();
+  } else { errorDiv.textContent='Invalid username or password'; }
+}
 
 function handleRegister() {
   const username=document.getElementById('regUser').value.trim();
