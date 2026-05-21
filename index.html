@@ -1964,16 +1964,21 @@ function handleLogin() {
   const errorDiv=document.getElementById('loginError');
   if(!username||!password){errorDiv.textContent='Please enter both username and password';return;}
   errorDiv.textContent='';
-  const user=DB.users.find(u=>u.username===username&&u.password===password&&u.status==='active');
-  if(user){
-    currentUser=user;
-    document.getElementById('loginView').style.display='none';
-    const app=document.getElementById('mainApp'); app.style.display='flex'; app.classList.add('visible');
-    setupApp(); renderEmployeeList();
-    showToast('Welcome back, '+username+'!','success');
-    checkTrialStatus();
-    loadDB().then(()=>renderEmployeeList());
-  } else { errorDiv.textContent='Invalid username or password'; }
+  showLoading();
+  loadDB().then(()=>{
+    hideLoading();
+    const user=DB.users.find(u=>u.username===username&&u.password===password&&u.status==='active');
+    if(user){
+      currentUser=user;
+      document.getElementById('loginView').style.display='none';
+      const app=document.getElementById('mainApp'); app.style.display='flex'; app.classList.add('visible');
+      setupApp();
+      renderEmployeeList();
+      showToast('Welcome back, '+username+'!','success');
+      checkTrialStatus();
+    } else {
+      errorDiv.textContent='Invalid username or password';
+    }
 }
 
 function handleRegister() {
