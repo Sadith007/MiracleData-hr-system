@@ -230,7 +230,7 @@ body::before {
 .hc-bubble li { margin: 2px 0; }
 .hc-bubble p { margin: 3px 0; }
 .hc-bubble strong { font-weight: 600; }
-  
+
 body > * { position: relative; z-index: 1; }
 
 /* ===== GLASS MIXIN ===== */
@@ -1839,7 +1839,7 @@ select option { background: #0F1628; color: var(--text); }
       <div id="licenseError" class="lock-error"></div>
     </div>
   </div>
-  
+
 <!-- ===== HR NEXUS CHATBOT WIDGET ===== -->
 <div id="hrChatWidget">
   <div id="hrChatBox">
@@ -2931,11 +2931,11 @@ KEY SYSTEM FEATURES:
 
 Sri Lanka labour law context:
 - EPF: Employees Provident Fund — employee contributes 8%, employer contributes 12% of basic salary monthly
-- ETF: Employees Trust Fund — employer contributes 3% of basic salary monthly  
+- ETF: Employees Trust Fund — employer contributes 3% of basic salary monthly
 - PAYE: Pay As You Earn tax — deducted monthly based on taxable income thresholds
 - Annual leave entitlement: 14 working days per year (after 1 year service)
 - Casual leave: 7 days per year
-- Sick leave: 7 days per year  
+- Sick leave: 7 days per year
 - Maternity leave: 84 working days (12 weeks) — paid
 - Gratuity: payable after 5 years continuous service (½ month salary per year)
 

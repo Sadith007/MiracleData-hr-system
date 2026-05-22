@@ -1,0 +1,3 @@
+## 2026-05-22 - [Accessibility in Monolithic Single-File Applications]
+**Learning:** In monolithic single-file applications with deep nesting of HTML and JavaScript template literals, accessibility attributes (like `aria-label` and `title`) for icon-only buttons are often overlooked both in the static source and the dynamic rendering logic. A comprehensive audit requires searching for both Unicode/Emoji icons and raw DOM manipulation strings.
+**Action:** Always perform a dual-audit of static HTML and JS template strings when implementing accessibility fixes to ensure consistency across the entire user lifecycle.
