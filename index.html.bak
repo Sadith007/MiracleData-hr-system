@@ -57,6 +57,13 @@ body::before {
   pointer-events: none;
   z-index: 0;
 }
+<!-- HR Nexus Chatbot -->
+<div id="hrChatWidget" style="position:fixed;bottom:24px;right:24px;z-index:9998;font-family:'DM Sans',sans-serif;">
+  <div id="hrChatBox" style="display:none;width:380px;height:580px;background:rgba(8,14,26,0.95);border:1px solid rgba(79,142,247,0.2);border-radius:20px;overflow:hidden;backdrop-filter:blur(20px);box-shadow:0 20px 60px rgba(0,0,0,0.5);flex-direction:column;">
+    <!-- Paste the full chatbot HTML here -->
+  </div>
+  <button onclick="document.getElementById('hrChatBox').style.display=document.getElementById('hrChatBox').style.display==='none'?'flex':'none'" style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#4F8EF7,#9B72F8);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(79,142,247,0.4);font-size:1.4rem;margin-top:8px;margin-left:auto;">🤖</button>
+</div>
 
 /* ===== HR NEXUS CHATBOT ===== */
 #hrChatWidget {
@@ -1406,7 +1413,7 @@ select option { background: #0F1628; color: var(--text); }
       <div class="search-box"><input type="text" id="searchInput" placeholder="Search name, ID, dept..."></div>
       <div class="sidebar-actions">
         <button id="addEmployeeBtn" class="btn btn-primary btn-sm" style="flex:1;">+ New Employee</button>
-        <button id="refreshListBtn" class="btn btn-sm" aria-label="Refresh employee list" title="Refresh employee list">↺</button>
+        <button id="refreshListBtn" class="btn btn-sm">↺</button>
       </div>
       <div id="employeeListContainer" class="employee-list"></div>
     </div>
@@ -1419,7 +1426,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- EMPLOYEE MODAL -->
 <div id="empModal" class="modal">
   <div class="modal-card">
-    <div class="modal-header"><h3 id="modalTitle">New Employee</h3><button class="btn btn-sm" onclick="closeModal('empModal')" aria-label="Close modal" title="Close modal">✕</button></div>
+    <div class="modal-header"><h3 id="modalTitle">Employee</h3><button class="btn btn-sm" onclick="closeModal('empModal')">✕</button></div>
     <div class="modal-body">
       <div class="tabs">
         <button class="tab-btn active" data-tab="0">Personal</button>
@@ -1433,7 +1440,7 @@ select option { background: #0F1628; color: var(--text); }
             <div class="photo-upload-zone" id="photoUploadZone" onclick="document.getElementById('empPhotoInput').click()">
               <span class="upload-icon">📷</span>
               <span class="upload-hint">Click to<br>upload</span>
-              <button class="photo-remove" id="photoRemoveBtn" onclick="removeEmpPhoto(event)" style="display:none;" aria-label="Remove photo" title="Remove photo">✕</button>
+              <button class="photo-remove" id="photoRemoveBtn" onclick="removeEmpPhoto(event)" style="display:none;">✕</button>
             </div>
             <input type="file" id="empPhotoInput" accept="image/*" style="display:none;" onchange="handleEmpPhotoUpload(event)">
           </div>
@@ -1494,7 +1501,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- PAYROLL MODAL -->
 <div id="payrollModal" class="modal">
   <div class="modal-card" style="max-width:700px;">
-    <div class="modal-header"><h3>💰 Payroll Management</h3><button class="btn btn-sm" onclick="closeModal('payrollModal')" aria-label="Close modal" title="Close modal">✕</button></div>
+    <div class="modal-header"><h3>💰 Payroll Management</h3><button class="btn btn-sm" onclick="closeModal('payrollModal')">✕</button></div>
     <div class="modal-body">
       <div class="form-row">
         <div class="form-field"><label>Select Employee</label><select id="payrollEmpSelect"></select></div>
@@ -1530,7 +1537,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- ATTENDANCE UPLOAD MODAL -->
 <div id="attendanceModal" class="modal">
   <div class="modal-card" style="max-width:860px;">
-    <div class="modal-header"><h3>📋 Attendance Upload & Payroll Generator</h3><button class="btn btn-sm" onclick="closeModal('attendanceModal')" aria-label="Close modal" title="Close modal">✕</button></div>
+    <div class="modal-header"><h3>📋 Attendance Upload & Payroll Generator</h3><button class="btn btn-sm" onclick="closeModal('attendanceModal')">✕</button></div>
     <div class="modal-body">
       <div id="attStep1">
         <div style="font-size:0.7rem;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Step 1 — Upload Attendance File</div>
@@ -1584,7 +1591,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- REPORTS MODAL -->
 <div id="reportsModal" class="modal">
   <div class="modal-card" style="max-width:900px;">
-    <div class="modal-header"><h3>📊 Payroll Reports & Analytics</h3><button class="btn btn-sm" onclick="closeModal('reportsModal')" aria-label="Close modal" title="Close modal">✕</button></div>
+    <div class="modal-header"><h3>📊 Payroll Reports & Analytics</h3><button class="btn btn-sm" onclick="closeModal('reportsModal')">✕</button></div>
     <div class="modal-body">
       <div class="report-tabs">
         <button class="report-tab active" onclick="switchReport('overview',this)">📈 Overview</button>
@@ -1623,7 +1630,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- LEAVE MODAL -->
 <div id="leaveModal" class="modal">
   <div class="modal-card" style="max-width:820px;">
-    <div class="modal-header"><h3>🏖️ Leave Management</h3><button class="btn btn-sm" onclick="closeModal('leaveModal')" aria-label="Close modal" title="Close modal">✕</button></div>
+    <div class="modal-header"><h3>🏖️ Leave Management</h3><button class="btn btn-sm" onclick="closeModal('leaveModal')">✕</button></div>
     <div class="modal-body">
       <div class="report-tabs">
         <button class="report-tab active" onclick="switchLeaveTab('apply',this)">➕ Apply Leave</button>
@@ -1679,7 +1686,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- ATTENDANCE HISTORY MODAL -->
 <div id="attHistModal" class="modal">
   <div class="modal-card" style="max-width:860px;">
-    <div class="modal-header"><h3>📅 Attendance History & Reports</h3><button class="btn btn-sm" onclick="closeModal('attHistModal')" aria-label="Close modal" title="Close modal">✕</button></div>
+    <div class="modal-header"><h3>📅 Attendance History & Reports</h3><button class="btn btn-sm" onclick="closeModal('attHistModal')">✕</button></div>
     <div class="modal-body">
       <div class="att-hist-filter">
         <select id="ahEmpSel" onchange="renderAttHistory()" style="flex:1;min-width:160px;"></select>
@@ -1697,7 +1704,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- EMPLOYEE DOCUMENTS MODAL -->
 <div id="docsModal" class="modal">
   <div class="modal-card" style="max-width:780px;">
-    <div class="modal-header"><h3>📁 Employee Documents</h3><button class="btn btn-sm" onclick="closeModal('docsModal')" aria-label="Close modal" title="Close modal">✕</button></div>
+    <div class="modal-header"><h3>📁 Employee Documents</h3><button class="btn btn-sm" onclick="closeModal('docsModal')">✕</button></div>
     <div class="modal-body">
       <div style="display:flex;gap:10px;margin-bottom:1rem;align-items:center;flex-wrap:wrap;">
         <select id="docEmpSel" onchange="renderDocList()" style="flex:1;min-width:160px;"></select>
@@ -1722,7 +1729,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- USER MANAGEMENT MODAL -->
 <div id="userModal" class="modal">
   <div class="modal-card" style="max-width:800px;">
-    <div class="modal-header"><h3>👥 User Management</h3><button class="btn btn-sm" onclick="closeModal('userModal')" aria-label="Close modal" title="Close modal">✕</button></div>
+    <div class="modal-header"><h3>👥 User Management</h3><button class="btn btn-sm" onclick="closeModal('userModal')">✕</button></div>
     <div class="modal-body">
       <div id="userListContainer"></div>
       <hr style="margin:20px 0;border:none;border-top:1px solid rgba(255,255,255,0.07);">
@@ -1753,7 +1760,7 @@ select option { background: #0F1628; color: var(--text); }
       <h3>📍 Company Locations</h3>
       <div style="display:flex;gap:8px;align-items:center;">
         <span id="locTotalBadge" style="font-size:0.72rem;color:var(--text2);background:rgba(255,255,255,0.06);padding:3px 10px;border-radius:20px;border:1px solid rgba(255,255,255,0.09);"></span>
-        <button class="btn btn-sm" onclick="closeModal('locationModal')" aria-label="Close modal" title="Close modal">✕</button>
+        <button class="btn btn-sm" onclick="closeModal('locationModal')">✕</button>
       </div>
     </div>
     <div class="modal-body loc-modal-body">
@@ -1832,7 +1839,6 @@ select option { background: #0F1628; color: var(--text); }
       <div id="licenseError" class="lock-error"></div>
     </div>
   </div>
-</div>
 
 <!-- ===== HR NEXUS CHATBOT WIDGET ===== -->
 <div id="hrChatWidget">
@@ -1859,13 +1865,14 @@ select option { background: #0F1628; color: var(--text); }
     </div>
     <div class="hc-input-row">
       <textarea class="hc-textarea" id="hcInput" rows="1" placeholder="Ask anything about HR Nexus..."></textarea>
-      <button class="hc-send" id="hcSendBtn" onclick="hcSend()" aria-label="Send message" title="Send message">➤</button>
+      <button class="hc-send" id="hcSendBtn" onclick="hcSend()">➤</button>
     </div>
   </div>
-  <button id="hrChatToggle" onclick="hcToggle()" aria-label="Open HR Chatbot" title="Open HR Chatbot">
+  <button id="hrChatToggle" onclick="hcToggle()">
     🤖
     <span class="hc-notif" id="hcNotif" style="display:none;">1</span>
   </button>
+</div>
 </div>
 
 <script>
@@ -1877,182 +1884,51 @@ const firebaseConfig = {
   messagingSenderId: "3117790153",
   appId: "1:3117790153:web:0c268334e8378132316e18"
 };
+firebase.initializeApp(firebaseConfig);
+const _db = firebase.firestore();
 const HR_COLLECTION = 'hr_data';
-const LOCAL_DB_KEY = 'hr_nexus_db_v2';
-const CLIENT_ID_KEY = 'hr_nexus_client_id';
-let _db = null;
-let lastCloudSaveOk = false;
-let dbUpdatedAt = 0;
-let cloudSyncUnsubscribe = null;
-
-try {
-  if (window.firebase?.initializeApp && window.firebase?.firestore) {
-    if (!firebase.apps?.length) firebase.initializeApp(firebaseConfig);
-    _db = firebase.firestore();
-  }
-} catch (e) {
-  console.warn('Firebase is unavailable; using local permanent storage.', e);
-}
 
 const DEFAULT_EMPLOYEES = [{"id":1,"fullName":"John Smith","empId":"EMP001","email":"john@company.com","mobile":"0771234567","nic":"123456789V","dob":"1990-05-15","gender":"Male","maritalStatus":"Married","address":"Colombo","emergencyName":"Jane Smith","emergencyPhone":"0777654321","department":"IT","designation":"Senior Developer","doj":"2023-01-10","employmentType":"Permanent","status":"Active","location":"Colombo","salary":150000,"bankAccount":"123456789","bankName":"Commercial Bank","payMethod":"Bank Transfer","remarks":"Excellent performer"},{"id":2,"fullName":"Sarah Johnson","empId":"EMP002","email":"sarah@company.com","mobile":"0771234568","nic":"987654321V","dob":"1988-08-20","gender":"Female","maritalStatus":"Married","address":"Kandy","emergencyName":"Mike Johnson","emergencyPhone":"0777654322","department":"HR","designation":"HR Manager","doj":"2022-06-15","employmentType":"Permanent","status":"Active","location":"Kandy","salary":180000,"bankAccount":"987654321","bankName":"HSBC","payMethod":"Bank Transfer","remarks":"Great leader"}];
 const DEFAULT_USERS = [{"id":"u1","username":"admin","password":"admin123","role":"ADMIN","status":"active"},{"id":"u2","username":"hr","password":"hr123","role":"HR","status":"active"},{"id":"u3","username":"viewer","password":"view123","role":"VIEWER","status":"active"}];
 
-const DEFAULT_DB = { employees: DEFAULT_EMPLOYEES, users: DEFAULT_USERS, pendingUsers: [], payrolls: [], leaves: [], documents: [], locations: [], trial: null, license: null, licenseKeys: [] };
-let DB = normalizeDB();
-
-function parseJSONSafe(value, fallback) {
-  if (!value) return fallback;
-  try { return JSON.parse(value); } catch (e) { return fallback; }
-}
-function normalizeDB(data = {}) {
-  return {
-    employees: Array.isArray(data.employees) ? data.employees : [...DEFAULT_EMPLOYEES],
-    users: Array.isArray(data.users) ? data.users : [...DEFAULT_USERS],
-    pendingUsers: Array.isArray(data.pendingUsers) ? data.pendingUsers : [],
-    payrolls: Array.isArray(data.payrolls) ? data.payrolls : [],
-    leaves: Array.isArray(data.leaves) ? data.leaves : [],
-    documents: Array.isArray(data.documents) ? data.documents : [],
-    locations: Array.isArray(data.locations) ? data.locations : [],
-    trial: data.trial ?? null,
-    license: data.license ?? null,
-    licenseKeys: Array.isArray(data.licenseKeys) ? data.licenseKeys : []
-  };
-}
-function getClientId() {
-  let id = localStorage.getItem(CLIENT_ID_KEY);
-  if (!id) {
-    id = 'client_' + Date.now() + '_' + Math.random().toString(36).slice(2);
-    localStorage.setItem(CLIENT_ID_KEY, id);
-  }
-  return id;
-}
-function loadLocalRecord() {
-  const raw = localStorage.getItem(LOCAL_DB_KEY);
-  if (!raw) return { data: normalizeDB(), updatedAt: 0, exists: false };
-  const parsed = parseJSONSafe(raw, null);
-  if (parsed?.data) return { data: normalizeDB(parsed.data), updatedAt: Number(parsed.updatedAt || 0), exists: true };
-  return { data: normalizeDB(parsed || DEFAULT_DB), updatedAt: 0, exists: true };
-}
-function saveLocalDB() {
-  localStorage.setItem(LOCAL_DB_KEY, JSON.stringify({ data: DB, updatedAt: dbUpdatedAt, clientId: getClientId() }));
-}
-function cloudPayloadFrom(parts, meta) {
-  return {
-    data: normalizeDB({
-      employees: parseJSONSafe(parts.emp, DB.employees),
-      users: parseJSONSafe(parts.users, DB.users),
-      pendingUsers: parseJSONSafe(parts.pending, DB.pendingUsers),
-      payrolls: parseJSONSafe(parts.payrolls, DB.payrolls),
-      trial: parseJSONSafe(parts.trial, DB.trial),
-      license: parseJSONSafe(parts.license, DB.license),
-      licenseKeys: parseJSONSafe(parts.licenseKeys, DB.licenseKeys),
-      leaves: parseJSONSafe(parts.leaves, DB.leaves),
-      documents: parseJSONSafe(parts.documents, DB.documents),
-      locations: parseJSONSafe(parts.locData, DB.locations)
-    }),
-    updatedAt: Number(meta?.updatedAt || 1),
-    hasData: Object.values(parts).some(v => v !== null && v !== undefined)
-  };
-}
+let DB = { employees: DEFAULT_EMPLOYEES, users: DEFAULT_USERS, pendingUsers: [], payrolls: [], leaves: [], documents: [], locations: [], trial: null, license: null, licenseKeys: [] };
 
 async function sbGet(key) {
-  if (!_db) return null;
-  const d = await _db.collection(HR_COLLECTION).doc(key).get();
-  return d.exists ? d.data().value : null;
+  try { const d = await _db.collection(HR_COLLECTION).doc(key).get(); return d.exists ? d.data().value : null; } catch(e) { return null; }
 }
 async function sbSet(key, value) {
-  if (!_db) return;
-  await _db.collection(HR_COLLECTION).doc(key).set({ value, updated_at: new Date().toISOString() });
+  try { await _db.collection(HR_COLLECTION).doc(key).set({ value, updated_at: new Date().toISOString() }); } catch(e) { console.error(e); }
 }
-async function syncCloudDB() {
-  if (!_db) return false;
-  await Promise.all([
-    sbSet('hr_meta', JSON.stringify({ updatedAt: dbUpdatedAt, clientId: getClientId() })),
-    sbSet('hr_employees', JSON.stringify(DB.employees)),
-    sbSet('hr_users', JSON.stringify(DB.users)),
-    sbSet('hr_pending', JSON.stringify(DB.pendingUsers)),
-    sbSet('hr_payrolls', JSON.stringify(DB.payrolls)),
-    sbSet('hr_trial', JSON.stringify(DB.trial)),
-    sbSet('hr_license', JSON.stringify(DB.license)),
-    sbSet('hr_license_keys', JSON.stringify(DB.licenseKeys||[])),
-    sbSet('hr_leaves', JSON.stringify(DB.leaves||[])),
-    sbSet('hr_documents', JSON.stringify((DB.documents||[]).map(d=>({...d,data:d.data?.substring(0,50000)||d.data})))),
-    sbSet('hr_locations', JSON.stringify(DB.locations||[])),
-  ]);
-  return true;
-}
-async function loadDB(forceCloud = false) {
-  const local = loadLocalRecord();
-  DB = local.data;
-  dbUpdatedAt = local.updatedAt;
-  if (!_db) return;
+async function loadDB() {
   try {
-    const [metaRaw,emp,users,pending,payrolls,trial,license,licenseKeys,leaves,documents,locData] = await Promise.all([sbGet('hr_meta'),sbGet('hr_employees'),sbGet('hr_users'),sbGet('hr_pending'),sbGet('hr_payrolls'),sbGet('hr_trial'),sbGet('hr_license'),sbGet('hr_license_keys'),sbGet('hr_leaves'),sbGet('hr_documents'),sbGet('hr_locations')]);
-    const cloud = cloudPayloadFrom({ emp, users, pending, payrolls, trial, license, licenseKeys, leaves, documents, locData }, parseJSONSafe(metaRaw, null));
-    if (cloud.hasData && (!local.exists || cloud.updatedAt >= dbUpdatedAt)) {
-      DB = cloud.data;
-      dbUpdatedAt = cloud.updatedAt;
-      saveLocalDB();
-      lastCloudSaveOk = true;
-    } else if (local.exists && dbUpdatedAt > cloud.updatedAt && !forceCloud) {
-      await syncCloudDB();
-      lastCloudSaveOk = true;
-    }
-  } catch(e) {
-    lastCloudSaveOk = false;
-    console.error('Cloud load failed; using local saved data.', e);
-  }
+    const [emp,users,pending,payrolls,trial,license,licenseKeys,leaves,documents,locData] = await Promise.all([sbGet('hr_employees'),sbGet('hr_users'),sbGet('hr_pending'),sbGet('hr_payrolls'),sbGet('hr_trial'),sbGet('hr_license'),sbGet('hr_license_keys'),sbGet('hr_leaves'),sbGet('hr_documents'),sbGet('hr_locations')]);
+    DB.employees = emp ? JSON.parse(emp) : DEFAULT_EMPLOYEES;
+    DB.users = users ? JSON.parse(users) : DEFAULT_USERS;
+    DB.pendingUsers = pending ? JSON.parse(pending) : [];
+    DB.payrolls = payrolls ? JSON.parse(payrolls) : [];
+    DB.trial = trial ? JSON.parse(trial) : null;
+    DB.license = license ? JSON.parse(license) : null;
+    DB.licenseKeys = licenseKeys ? JSON.parse(licenseKeys) : [];
+    DB.leaves = leaves ? JSON.parse(leaves) : [];
+    DB.documents = documents ? JSON.parse(documents) : [];
+    DB.locations = locData ? JSON.parse(locData) : [];
+  } catch(e) { console.error('loadDB error',e); }
 }
 async function saveDB() {
-  dbUpdatedAt = Date.now();
   try {
-    saveLocalDB();
-  } catch(e) {
-    console.error('Local save failed', e);
-    showToast?.('Local save failed. Browser storage may be full.', 'error');
-    return false;
-  }
-  if (!_db) {
-    lastCloudSaveOk = false;
-    showToast?.('Saved on this computer. Cloud sync is not connected.', 'error');
-    return true;
-  }
-  try {
-    await syncCloudDB();
-    lastCloudSaveOk = true;
-  } catch(e) {
-    lastCloudSaveOk = false;
-    console.error('Cloud save failed; data remains saved locally in this browser.', e);
-    showToast?.('Saved on this computer, but cloud sync failed.', 'error');
-  }
-  return true;
-}
-function refreshVisibleData() {
-  if (!currentUser) return;
-  renderEmployeeList();
-  if (selectedEmployeeId) renderDetail(selectedEmployeeId);
-  const userModal = document.getElementById('userModal');
-  if (userModal?.classList.contains('open')) openUserManagement();
-  const leaveModal = document.getElementById('leaveModal');
-  if (leaveModal?.classList.contains('open')) renderLeaveList();
-  const docModal = document.getElementById('docModal');
-  if (docModal?.classList.contains('open')) renderDocList();
-  const locModal = document.getElementById('locationModal');
-  if (locModal?.classList.contains('open')) renderLocList();
-}
-function startCloudLiveSync() {
-  if (!_db || cloudSyncUnsubscribe) return;
-  cloudSyncUnsubscribe = _db.collection(HR_COLLECTION).doc('hr_meta').onSnapshot(async snap => {
-    if (!snap.exists || !currentUser) return;
-    const meta = parseJSONSafe(snap.data()?.value, null);
-    if (!meta || meta.clientId === getClientId() || Number(meta.updatedAt || 0) <= dbUpdatedAt) return;
-    await loadDB(true);
-    refreshVisibleData();
-    showToast?.('Shared data updated', 'success');
-  }, e => {
-    lastCloudSaveOk = false;
-    console.error('Live cloud sync failed', e);
-  });
+    await Promise.all([
+      sbSet('hr_employees', JSON.stringify(DB.employees)),
+      sbSet('hr_users', JSON.stringify(DB.users)),
+      sbSet('hr_pending', JSON.stringify(DB.pendingUsers)),
+      sbSet('hr_payrolls', JSON.stringify(DB.payrolls)),
+      sbSet('hr_trial', JSON.stringify(DB.trial)),
+      sbSet('hr_license', JSON.stringify(DB.license)),
+      sbSet('hr_license_keys', JSON.stringify(DB.licenseKeys||[])),
+      sbSet('hr_leaves', JSON.stringify(DB.leaves||[])),
+      sbSet('hr_documents', JSON.stringify((DB.documents||[]).map(d=>({...d,data:d.data?.substring(0,50000)||d.data})))),
+      sbSet('hr_locations', JSON.stringify(DB.locations||[])),
+    ]);
+  } catch(e) { console.error('saveDB error',e); }
 }
 
 let currentUser = null, selectedEmployeeId = null, editingEmployeeId = null;
@@ -2082,22 +1958,21 @@ function exportPayrollPDF(emp,payrollData,month) {
   if(window.html2pdf){html2pdf().set(opt).from(el).save().then(()=>{document.body.removeChild(el);showToast('Payslip exported!','success');});}else{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';s.onload=()=>{html2pdf().set(opt).from(el).save().then(()=>{document.body.removeChild(el);showToast('Payslip exported!','success');});};document.head.appendChild(s);}
 }
 
-async function handleLogin() {
+function handleLogin() {
   const username=document.getElementById('loginUsername').value.trim();
   const password=document.getElementById('loginPassword').value;
   const errorDiv=document.getElementById('loginError');
   if(!username||!password){errorDiv.textContent='Please enter both username and password';return;}
   errorDiv.textContent='';
-  await loadDB(true);
   const user=DB.users.find(u=>u.username===username&&u.password===password&&u.status==='active');
   if(user){
     currentUser=user;
     document.getElementById('loginView').style.display='none';
     const app=document.getElementById('mainApp'); app.style.display='flex'; app.classList.add('visible');
     setupApp(); renderEmployeeList();
-    startCloudLiveSync();
     showToast('Welcome back, '+username+'!','success');
     checkTrialStatus();
+    loadDB().then(()=>renderEmployeeList());
   } else { errorDiv.textContent='Invalid username or password'; }
 }
 
@@ -2124,7 +1999,6 @@ function showRegisterForm(show) {
 }
 
 function handleLogout() {
-  if (cloudSyncUnsubscribe) { cloudSyncUnsubscribe(); cloudSyncUnsubscribe = null; }
   currentUser=null; selectedEmployeeId=null;
   document.getElementById('mainApp').style.display='none';
   document.getElementById('mainApp').classList.remove('visible');
@@ -2152,6 +2026,7 @@ function setupApp() {
 function renderEmployeeList() {
   const search=document.getElementById('searchInput')?.value.toLowerCase()||'';
   let emps=DB.employees;
+  if(currentUser?.role==='DEPT_VIEWER') emps=DB.employees.filter(e=>e.department===currentUser.department);
   const filtered=emps.filter(e=>(e.fullName?.toLowerCase().includes(search)||e.empId?.toLowerCase().includes(search)||e.department?.toLowerCase().includes(search)));
   const container=document.getElementById('employeeListContainer');
   if(!container)return;
@@ -2179,7 +2054,7 @@ function renderDetail(id) {
         <button class="btn btn-success btn-sm" onclick='exportProfilePDF(${JSON.stringify(emp).replace(/"/g,"&quot;")})'>📄 Export PDF</button>
         <button class="btn btn-sm" onclick="openDocsForEmp(${emp.id})" style="background:rgba(155,114,248,0.15);border-color:rgba(155,114,248,0.3);color:var(--accent2);">📁 Docs</button>
         <button class="btn btn-sm" onclick="openLeaveForEmp(${emp.id})" style="background:rgba(248,184,78,0.12);border-color:rgba(248,184,78,0.3);color:var(--warning);">🏖️ Leave</button>
-        ${canEdit?`<button class="btn btn-sm" onclick="editEmployee(${emp.id})">✏ Edit</button><button class="btn btn-sm btn-danger" onclick="deleteEmployeeConfirm(${emp.id})" aria-label="Delete employee" title="Delete employee">🗑 Delete</button>`:''}
+        ${canEdit?`<button class="btn btn-sm" onclick="editEmployee(${emp.id})">✏ Edit</button><button class="btn btn-sm btn-danger" onclick="deleteEmployeeConfirm(${emp.id})">🗑 Delete</button>`:''}
       </div>
     </div>
     <div class="section-title">Personal Details</div>
@@ -2234,9 +2109,9 @@ function editEmployee(id) {
   const pz = document.getElementById('photoUploadZone');
   if (pz) {
     if (emp.photo) {
-      pz.innerHTML = `<img src="${emp.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:16px;"><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:flex;" aria-label="Remove photo" title="Remove photo">✕</button>`;
+      pz.innerHTML = `<img src="${emp.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:16px;"><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:flex;">✕</button>`;
     } else {
-      pz.innerHTML = '<span class="upload-icon">📷</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;" aria-label="Remove photo" title="Remove photo">✕</button>';
+      pz.innerHTML = '<span class="upload-icon">📷</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;">✕</button>';
     }
   }
   // Sync empIdQuick
@@ -2255,7 +2130,7 @@ function deleteEmployeeConfirm(id) {
   }
 }
 
-async function saveEmployee() {
+function saveEmployee() {
   const empData={
     fullName:document.getElementById('empFullName').value,
     email:document.getElementById('empEmail').value,
@@ -2282,11 +2157,9 @@ async function saveEmployee() {
   };
   if(currentEmpPhotoData!==null){empData.photo=currentEmpPhotoData;} if(editingEmployeeId){const idx=DB.employees.findIndex(e=>e.id==editingEmployeeId);if(idx!==-1){empData.id=editingEmployeeId;DB.employees[idx]={...DB.employees[idx],...empData};}}
   else{empData.id=Date.now();DB.employees.push(empData);}
-  const saved = await saveDB();
-  if(!saved) return;
-  closeModal('empModal'); renderEmployeeList();
+  saveDB(); closeModal('empModal'); renderEmployeeList();
   if(selectedEmployeeId)renderDetail(selectedEmployeeId);
-  showToast(lastCloudSaveOk ? 'Employee saved for all users' : 'Employee saved on this browser only', lastCloudSaveOk ? 'success' : 'error'); editingEmployeeId=null;
+  showToast('Employee saved successfully','success'); editingEmployeeId=null;
 }
 
 function openPayroll() {
@@ -2490,7 +2363,7 @@ function renderLeaveList() {
   c.innerHTML=list.map(l=>{
     const emp=DB.employees.find(e=>e.id===l.employeeId);
     const sc=l.status==='Approved'?'leave-approved':l.status==='Rejected'?'leave-rejected':'leave-pending';
-    return`<div class="leave-card"><div style="font-size:1.6rem;">${l.type==='Sick'?'🤒':l.type==='Annual'?'🌴':l.type==='Casual'?'😊':l.type==='Maternity'?'👶':l.type==='Nopay'?'⛔':'📋'}</div><div class="leave-card-info"><strong>${emp?.fullName||'Unknown'} <span class="doc-type-badge">${l.type}</span></strong><small>${l.from} → ${l.to} · ${l.days} day${l.days!==1?'s':''} · ${l.reason||'No reason'}</small></div><span class="leave-status-pill ${sc}">${l.status}</span>${currentUser?.role==='ADMIN'||currentUser?.role==='HR'?`<div style="display:flex;gap:4px;"><button class="btn btn-sm btn-success" style="padding:3px 8px;" onclick="updateLeaveStatus(${l.id},'Approved')" aria-label="Approve leave" title="Approve leave">✓</button><button class="btn btn-sm btn-danger" style="padding:3px 8px;" onclick="updateLeaveStatus(${l.id},'Rejected')" aria-label="Reject leave" title="Reject leave">✗</button><button class="btn btn-sm btn-danger" style="padding:3px 8px;" onclick="deleteLeave(${l.id})" aria-label="Delete leave" title="Delete leave">🗑</button></div>`:''}</div>`;
+    return`<div class="leave-card"><div style="font-size:1.6rem;">${l.type==='Sick'?'🤒':l.type==='Annual'?'🌴':l.type==='Casual'?'😊':l.type==='Maternity'?'👶':l.type==='Nopay'?'⛔':'📋'}</div><div class="leave-card-info"><strong>${emp?.fullName||'Unknown'} <span class="doc-type-badge">${l.type}</span></strong><small>${l.from} → ${l.to} · ${l.days} day${l.days!==1?'s':''} · ${l.reason||'No reason'}</small></div><span class="leave-status-pill ${sc}">${l.status}</span>${currentUser?.role==='ADMIN'||currentUser?.role==='HR'?`<div style="display:flex;gap:4px;"><button class="btn btn-sm btn-success" style="padding:3px 8px;" onclick="updateLeaveStatus(${l.id},'Approved')">✓</button><button class="btn btn-sm btn-danger" style="padding:3px 8px;" onclick="updateLeaveStatus(${l.id},'Rejected')">✗</button><button class="btn btn-sm btn-danger" style="padding:3px 8px;" onclick="deleteLeave(${l.id})">🗑</button></div>`:''}</div>`;
   }).join('');
 }
 function updateLeaveStatus(id,status) { const l=DB.leaves.find(x=>x.id===id);if(l){l.status=status;saveDB();renderLeaveList();showToast(`Leave ${status.toLowerCase()}`,'success');} }
@@ -2563,7 +2436,7 @@ function renderDocList() {
   const empId=parseInt(document.getElementById('docEmpSel')?.value);const docs=DB.documents.filter(d=>d.employeeId===empId).sort((a,b)=>b.uploadedAt.localeCompare(a.uploadedAt));
   const c=document.getElementById('docListContainer');
   if(!docs.length){c.innerHTML='<div style="text-align:center;color:var(--muted);padding:1.5rem;">No documents uploaded for this employee</div>';return;}
-  c.innerHTML=docs.map(d=>{const icon=d.type?.includes('pdf')?'📄':d.type?.includes('image')?'🖼️':d.type?.includes('word')||d.name.endsWith('.doc')?'📝':'📎';const size=d.size>1024*1024?(d.size/1024/1024).toFixed(1)+'MB':Math.round(d.size/1024)+'KB';return`<div class="doc-item"><div class="doc-icon">${icon}</div><div class="doc-info"><strong>${d.name}<span class="doc-type-badge">${d.category}</span></strong><small>${size} · Uploaded ${new Date(d.uploadedAt).toLocaleDateString()} by ${d.uploadedBy}</small></div><button class="btn btn-sm" onclick="downloadDoc(${d.id})">⬇ Download</button><button class="btn btn-sm btn-danger" onclick="deleteDoc(${d.id})" style="padding:5px 8px;" aria-label="Delete document" title="Delete document">🗑</button></div>`;}).join('');
+  c.innerHTML=docs.map(d=>{const icon=d.type?.includes('pdf')?'📄':d.type?.includes('image')?'🖼️':d.type?.includes('word')||d.name.endsWith('.doc')?'📝':'📎';const size=d.size>1024*1024?(d.size/1024/1024).toFixed(1)+'MB':Math.round(d.size/1024)+'KB';return`<div class="doc-item"><div class="doc-icon">${icon}</div><div class="doc-info"><strong>${d.name}<span class="doc-type-badge">${d.category}</span></strong><small>${size} · Uploaded ${new Date(d.uploadedAt).toLocaleDateString()} by ${d.uploadedBy}</small></div><button class="btn btn-sm" onclick="downloadDoc(${d.id})">⬇ Download</button><button class="btn btn-sm btn-danger" onclick="deleteDoc(${d.id})" style="padding:5px 8px;">🗑</button></div>`;}).join('');
 }
 function downloadDoc(id) { const doc=DB.documents?.find(d=>d.id===id);if(!doc){showToast('Not found','error');return;}const a=document.createElement('a');a.href=doc.data;a.download=doc.name;a.click();showToast('Downloading...','success'); }
 function deleteDoc(id) { if(!confirm('Delete this document?'))return;DB.documents=DB.documents.filter(d=>d.id!==id);saveDB();renderDocList();showToast('Deleted','success'); }
@@ -2656,7 +2529,7 @@ function updateTrialBadge(type,text) { const b=document.getElementById('trialBad
 function showLockScreen() { document.getElementById('lockContactInfo').textContent=ADMIN_CONTACT;document.getElementById('lockScreen').style.display='flex'; }
 function hideLockScreen() { document.getElementById('lockScreen').style.display='none'; }
 let warningShown=false;
-function showTrialWarningPopup(daysLeft) { if(warningShown)return;warningShown=true;const p=document.createElement('div');p.className='trial-warning-popup';p.style.position='fixed';p.innerHTML=`<button class="popup-close" onclick="this.parentElement.remove()" aria-label="Close popup" title="Close popup">✕</button><h4>⚠️ Trial Ending Soon</h4><p>Expires in <strong>${daysLeft} day${daysLeft!==1?'s':''}</strong>. Contact admin to activate a license.</p><p style="margin-top:6px;font-size:0.72rem;color:var(--muted)">${ADMIN_CONTACT}</p>`;document.body.appendChild(p);setTimeout(()=>{if(p.parentElement)p.remove();},10000); }
+function showTrialWarningPopup(daysLeft) { if(warningShown)return;warningShown=true;const p=document.createElement('div');p.className='trial-warning-popup';p.style.position='fixed';p.innerHTML=`<button class="popup-close" onclick="this.parentElement.remove()">✕</button><h4>⚠️ Trial Ending Soon</h4><p>Expires in <strong>${daysLeft} day${daysLeft!==1?'s':''}</strong>. Contact admin to activate a license.</p><p style="margin-top:6px;font-size:0.72rem;color:var(--muted)">${ADMIN_CONTACT}</p>`;document.body.appendChild(p);setTimeout(()=>{if(p.parentElement)p.remove();},10000); }
 async function activateLicense() {
   const raw=document.getElementById('licenseKeyInput').value.trim().toUpperCase();const errDiv=document.getElementById('licenseError');errDiv.textContent='';
   if(!raw){errDiv.textContent='Please enter a license key';return;}
@@ -2682,7 +2555,6 @@ async function generateNewLicenseKey() {
 function copyToClipboard(text) { navigator.clipboard.writeText(text).then(()=>showToast('License key copied! 📋','success')); }
 
 document.addEventListener('DOMContentLoaded', async function() {
-  await loadDB();
   document.getElementById('loginBtn').addEventListener('click',handleLogin);
   document.getElementById('loginUsername').addEventListener('keypress',e=>{if(e.key==='Enter')handleLogin();});
   document.getElementById('loginPassword').addEventListener('keypress',e=>{if(e.key==='Enter')handleLogin();});
@@ -2693,9 +2565,9 @@ document.addEventListener('DOMContentLoaded', async function() {
   document.getElementById('logoutBtn').addEventListener('click',handleLogout);
   const dz=document.getElementById('attDropZone');if(dz){dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag-over');});dz.addEventListener('dragleave',()=>dz.classList.remove('drag-over'));dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag-over');if(e.dataTransfer.files[0])handleAttFile(e.dataTransfer.files[0]);});}
   const afi=document.getElementById('attFileInput');if(afi)afi.addEventListener('change',function(){if(this.files[0])handleAttFile(this.files[0]);});
-  document.getElementById('addEmployeeBtn').addEventListener('click',()=>{editingEmployeeId=null;document.getElementById('modalTitle').textContent='New Employee';document.querySelectorAll('#empModal input,#empModal select,#empModal textarea').forEach(el=>el.value='');document.getElementById('empGender').value='Male';document.getElementById('empMarital').value='Single';document.getElementById('empType').value='Permanent';document.getElementById('empStatus').value='Active';document.getElementById('empPayMethod').value='Bank Transfer'; currentEmpPhotoData=null; refreshEmpLocationDropdown(); const pzr=document.getElementById('photoUploadZone'); if(pzr){pzr.innerHTML='<span class="upload-icon">📷</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;" aria-label="Remove photo" title="Remove photo">✕</button>';} const eiq2=document.getElementById('empIdQuick'); if(eiq2)eiq2.value=''; document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));document.querySelector('.tab-btn[data-tab="0"]').classList.add('active');document.getElementById('tab0').classList.add('active');openModal('empModal');});
+  document.getElementById('addEmployeeBtn').addEventListener('click',()=>{editingEmployeeId=null;document.getElementById('modalTitle').textContent='New Employee';document.querySelectorAll('#empModal input,#empModal select,#empModal textarea').forEach(el=>el.value='');document.getElementById('empGender').value='Male';document.getElementById('empMarital').value='Single';document.getElementById('empType').value='Permanent';document.getElementById('empStatus').value='Active';document.getElementById('empPayMethod').value='Bank Transfer'; currentEmpPhotoData=null; refreshEmpLocationDropdown(); const pzr=document.getElementById('photoUploadZone'); if(pzr){pzr.innerHTML='<span class="upload-icon">📷</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;">✕</button>';} const eiq2=document.getElementById('empIdQuick'); if(eiq2)eiq2.value=''; document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));document.querySelector('.tab-btn[data-tab="0"]').classList.add('active');document.getElementById('tab0').classList.add('active');openModal('empModal');});
   document.getElementById('saveEmpBtn').addEventListener('click',saveEmployee);
-  document.getElementById('refreshListBtn').addEventListener('click',async()=>{showLoading();await loadDB(true);hideLoading();renderEmployeeList();if(selectedEmployeeId)renderDetail(selectedEmployeeId);showToast('Cloud data refreshed','success');});
+  document.getElementById('refreshListBtn').addEventListener('click',async()=>{showLoading();await loadDB();hideLoading();renderEmployeeList();if(selectedEmployeeId)renderDetail(selectedEmployeeId);showToast('Data refreshed','success');});
   document.getElementById('searchInput').addEventListener('input',renderEmployeeList);
   document.getElementById('attendanceBtn').addEventListener('click',openAttendance);
   document.getElementById('attHistBtn').addEventListener('click',openAttHistory);
@@ -2723,7 +2595,7 @@ function handleEmpPhotoUpload(event) {
   reader.onload = e => {
     currentEmpPhotoData = e.target.result;
     const zone = document.getElementById('photoUploadZone');
-    zone.innerHTML = `<img src="${currentEmpPhotoData}" style="width:100%;height:100%;object-fit:cover;border-radius:16px;"><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:flex;" aria-label="Remove photo" title="Remove photo">✕</button>`;
+    zone.innerHTML = `<img src="${currentEmpPhotoData}" style="width:100%;height:100%;object-fit:cover;border-radius:16px;"><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:flex;">✕</button>`;
   };
   reader.readAsDataURL(file);
 }
@@ -2733,7 +2605,7 @@ function removeEmpPhoto(event) {
   currentEmpPhotoData = null;
   const zone = document.getElementById('photoUploadZone');
   if (zone) {
-    zone.innerHTML = `<span class="upload-icon">📷</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;" aria-label="Remove photo" title="Remove photo">✕</button>`;
+    zone.innerHTML = `<span class="upload-icon">📷</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;">✕</button>`;
   }
   document.getElementById('empPhotoInput').value = '';
 }
@@ -3087,8 +2959,6 @@ Format: use numbered lists for steps, bullet points for features. Keep answers u
     box.style.display = hcOpen ? 'flex' : 'none';
     notif.style.display = 'none';
     toggle.textContent = hcOpen ? '✕' : '🤖';
-    toggle.setAttribute('aria-label', hcOpen ? 'Close HR Chatbot' : 'Open HR Chatbot');
-    toggle.setAttribute('title', hcOpen ? 'Close HR Chatbot' : 'Open HR Chatbot');
     if (hcOpen && document.getElementById('hcMessages').children.length === 0) {
       hcAddMsg('bot', 'Hello! I am your <strong>HR Nexus Assistant</strong>. I can help you with:<br><ul><li>Managing employees & payroll</li><li>Leave & attendance tracking</li><li>Reports and analytics</li><li>System navigation & features</li></ul>What would you like help with?', true);
     }

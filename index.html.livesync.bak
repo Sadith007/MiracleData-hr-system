@@ -1406,7 +1406,7 @@ select option { background: #0F1628; color: var(--text); }
       <div class="search-box"><input type="text" id="searchInput" placeholder="Search name, ID, dept..."></div>
       <div class="sidebar-actions">
         <button id="addEmployeeBtn" class="btn btn-primary btn-sm" style="flex:1;">+ New Employee</button>
-        <button id="refreshListBtn" class="btn btn-sm" aria-label="Refresh employee list" title="Refresh employee list">↺</button>
+        <button id="refreshListBtn" class="btn btn-sm">↺</button>
       </div>
       <div id="employeeListContainer" class="employee-list"></div>
     </div>
@@ -1419,7 +1419,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- EMPLOYEE MODAL -->
 <div id="empModal" class="modal">
   <div class="modal-card">
-    <div class="modal-header"><h3 id="modalTitle">New Employee</h3><button class="btn btn-sm" onclick="closeModal('empModal')" aria-label="Close modal" title="Close modal">✕</button></div>
+    <div class="modal-header"><h3 id="modalTitle">Employee</h3><button class="btn btn-sm" onclick="closeModal('empModal')">✕</button></div>
     <div class="modal-body">
       <div class="tabs">
         <button class="tab-btn active" data-tab="0">Personal</button>
@@ -1433,7 +1433,7 @@ select option { background: #0F1628; color: var(--text); }
             <div class="photo-upload-zone" id="photoUploadZone" onclick="document.getElementById('empPhotoInput').click()">
               <span class="upload-icon">📷</span>
               <span class="upload-hint">Click to<br>upload</span>
-              <button class="photo-remove" id="photoRemoveBtn" onclick="removeEmpPhoto(event)" style="display:none;" aria-label="Remove photo" title="Remove photo">✕</button>
+              <button class="photo-remove" id="photoRemoveBtn" onclick="removeEmpPhoto(event)" style="display:none;">✕</button>
             </div>
             <input type="file" id="empPhotoInput" accept="image/*" style="display:none;" onchange="handleEmpPhotoUpload(event)">
           </div>
@@ -1494,7 +1494,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- PAYROLL MODAL -->
 <div id="payrollModal" class="modal">
   <div class="modal-card" style="max-width:700px;">
-    <div class="modal-header"><h3>💰 Payroll Management</h3><button class="btn btn-sm" onclick="closeModal('payrollModal')" aria-label="Close modal" title="Close modal">✕</button></div>
+    <div class="modal-header"><h3>💰 Payroll Management</h3><button class="btn btn-sm" onclick="closeModal('payrollModal')">✕</button></div>
     <div class="modal-body">
       <div class="form-row">
         <div class="form-field"><label>Select Employee</label><select id="payrollEmpSelect"></select></div>
@@ -1530,7 +1530,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- ATTENDANCE UPLOAD MODAL -->
 <div id="attendanceModal" class="modal">
   <div class="modal-card" style="max-width:860px;">
-    <div class="modal-header"><h3>📋 Attendance Upload & Payroll Generator</h3><button class="btn btn-sm" onclick="closeModal('attendanceModal')" aria-label="Close modal" title="Close modal">✕</button></div>
+    <div class="modal-header"><h3>📋 Attendance Upload & Payroll Generator</h3><button class="btn btn-sm" onclick="closeModal('attendanceModal')">✕</button></div>
     <div class="modal-body">
       <div id="attStep1">
         <div style="font-size:0.7rem;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Step 1 — Upload Attendance File</div>
@@ -1584,7 +1584,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- REPORTS MODAL -->
 <div id="reportsModal" class="modal">
   <div class="modal-card" style="max-width:900px;">
-    <div class="modal-header"><h3>📊 Payroll Reports & Analytics</h3><button class="btn btn-sm" onclick="closeModal('reportsModal')" aria-label="Close modal" title="Close modal">✕</button></div>
+    <div class="modal-header"><h3>📊 Payroll Reports & Analytics</h3><button class="btn btn-sm" onclick="closeModal('reportsModal')">✕</button></div>
     <div class="modal-body">
       <div class="report-tabs">
         <button class="report-tab active" onclick="switchReport('overview',this)">📈 Overview</button>
@@ -1623,7 +1623,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- LEAVE MODAL -->
 <div id="leaveModal" class="modal">
   <div class="modal-card" style="max-width:820px;">
-    <div class="modal-header"><h3>🏖️ Leave Management</h3><button class="btn btn-sm" onclick="closeModal('leaveModal')" aria-label="Close modal" title="Close modal">✕</button></div>
+    <div class="modal-header"><h3>🏖️ Leave Management</h3><button class="btn btn-sm" onclick="closeModal('leaveModal')">✕</button></div>
     <div class="modal-body">
       <div class="report-tabs">
         <button class="report-tab active" onclick="switchLeaveTab('apply',this)">➕ Apply Leave</button>
@@ -1679,7 +1679,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- ATTENDANCE HISTORY MODAL -->
 <div id="attHistModal" class="modal">
   <div class="modal-card" style="max-width:860px;">
-    <div class="modal-header"><h3>📅 Attendance History & Reports</h3><button class="btn btn-sm" onclick="closeModal('attHistModal')" aria-label="Close modal" title="Close modal">✕</button></div>
+    <div class="modal-header"><h3>📅 Attendance History & Reports</h3><button class="btn btn-sm" onclick="closeModal('attHistModal')">✕</button></div>
     <div class="modal-body">
       <div class="att-hist-filter">
         <select id="ahEmpSel" onchange="renderAttHistory()" style="flex:1;min-width:160px;"></select>
@@ -1697,7 +1697,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- EMPLOYEE DOCUMENTS MODAL -->
 <div id="docsModal" class="modal">
   <div class="modal-card" style="max-width:780px;">
-    <div class="modal-header"><h3>📁 Employee Documents</h3><button class="btn btn-sm" onclick="closeModal('docsModal')" aria-label="Close modal" title="Close modal">✕</button></div>
+    <div class="modal-header"><h3>📁 Employee Documents</h3><button class="btn btn-sm" onclick="closeModal('docsModal')">✕</button></div>
     <div class="modal-body">
       <div style="display:flex;gap:10px;margin-bottom:1rem;align-items:center;flex-wrap:wrap;">
         <select id="docEmpSel" onchange="renderDocList()" style="flex:1;min-width:160px;"></select>
@@ -1722,7 +1722,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- USER MANAGEMENT MODAL -->
 <div id="userModal" class="modal">
   <div class="modal-card" style="max-width:800px;">
-    <div class="modal-header"><h3>👥 User Management</h3><button class="btn btn-sm" onclick="closeModal('userModal')" aria-label="Close modal" title="Close modal">✕</button></div>
+    <div class="modal-header"><h3>👥 User Management</h3><button class="btn btn-sm" onclick="closeModal('userModal')">✕</button></div>
     <div class="modal-body">
       <div id="userListContainer"></div>
       <hr style="margin:20px 0;border:none;border-top:1px solid rgba(255,255,255,0.07);">
@@ -1753,7 +1753,7 @@ select option { background: #0F1628; color: var(--text); }
       <h3>📍 Company Locations</h3>
       <div style="display:flex;gap:8px;align-items:center;">
         <span id="locTotalBadge" style="font-size:0.72rem;color:var(--text2);background:rgba(255,255,255,0.06);padding:3px 10px;border-radius:20px;border:1px solid rgba(255,255,255,0.09);"></span>
-        <button class="btn btn-sm" onclick="closeModal('locationModal')" aria-label="Close modal" title="Close modal">✕</button>
+        <button class="btn btn-sm" onclick="closeModal('locationModal')">✕</button>
       </div>
     </div>
     <div class="modal-body loc-modal-body">
@@ -1859,10 +1859,10 @@ select option { background: #0F1628; color: var(--text); }
     </div>
     <div class="hc-input-row">
       <textarea class="hc-textarea" id="hcInput" rows="1" placeholder="Ask anything about HR Nexus..."></textarea>
-      <button class="hc-send" id="hcSendBtn" onclick="hcSend()" aria-label="Send message" title="Send message">➤</button>
+      <button class="hc-send" id="hcSendBtn" onclick="hcSend()">➤</button>
     </div>
   </div>
-  <button id="hrChatToggle" onclick="hcToggle()" aria-label="Open HR Chatbot" title="Open HR Chatbot">
+  <button id="hrChatToggle" onclick="hcToggle()">
     🤖
     <span class="hc-notif" id="hcNotif" style="display:none;">1</span>
   </button>
@@ -1879,11 +1879,8 @@ const firebaseConfig = {
 };
 const HR_COLLECTION = 'hr_data';
 const LOCAL_DB_KEY = 'hr_nexus_db_v2';
-const CLIENT_ID_KEY = 'hr_nexus_client_id';
 let _db = null;
 let lastCloudSaveOk = false;
-let dbUpdatedAt = 0;
-let cloudSyncUnsubscribe = null;
 
 try {
   if (window.firebase?.initializeApp && window.firebase?.firestore) {
@@ -2027,33 +2024,6 @@ async function saveDB() {
   }
   return true;
 }
-function refreshVisibleData() {
-  if (!currentUser) return;
-  renderEmployeeList();
-  if (selectedEmployeeId) renderDetail(selectedEmployeeId);
-  const userModal = document.getElementById('userModal');
-  if (userModal?.classList.contains('open')) openUserManagement();
-  const leaveModal = document.getElementById('leaveModal');
-  if (leaveModal?.classList.contains('open')) renderLeaveList();
-  const docModal = document.getElementById('docModal');
-  if (docModal?.classList.contains('open')) renderDocList();
-  const locModal = document.getElementById('locationModal');
-  if (locModal?.classList.contains('open')) renderLocList();
-}
-function startCloudLiveSync() {
-  if (!_db || cloudSyncUnsubscribe) return;
-  cloudSyncUnsubscribe = _db.collection(HR_COLLECTION).doc('hr_meta').onSnapshot(async snap => {
-    if (!snap.exists || !currentUser) return;
-    const meta = parseJSONSafe(snap.data()?.value, null);
-    if (!meta || meta.clientId === getClientId() || Number(meta.updatedAt || 0) <= dbUpdatedAt) return;
-    await loadDB(true);
-    refreshVisibleData();
-    showToast?.('Shared data updated', 'success');
-  }, e => {
-    lastCloudSaveOk = false;
-    console.error('Live cloud sync failed', e);
-  });
-}
 
 let currentUser = null, selectedEmployeeId = null, editingEmployeeId = null;
 
@@ -2082,20 +2052,18 @@ function exportPayrollPDF(emp,payrollData,month) {
   if(window.html2pdf){html2pdf().set(opt).from(el).save().then(()=>{document.body.removeChild(el);showToast('Payslip exported!','success');});}else{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';s.onload=()=>{html2pdf().set(opt).from(el).save().then(()=>{document.body.removeChild(el);showToast('Payslip exported!','success');});};document.head.appendChild(s);}
 }
 
-async function handleLogin() {
+function handleLogin() {
   const username=document.getElementById('loginUsername').value.trim();
   const password=document.getElementById('loginPassword').value;
   const errorDiv=document.getElementById('loginError');
   if(!username||!password){errorDiv.textContent='Please enter both username and password';return;}
   errorDiv.textContent='';
-  await loadDB(true);
   const user=DB.users.find(u=>u.username===username&&u.password===password&&u.status==='active');
   if(user){
     currentUser=user;
     document.getElementById('loginView').style.display='none';
     const app=document.getElementById('mainApp'); app.style.display='flex'; app.classList.add('visible');
     setupApp(); renderEmployeeList();
-    startCloudLiveSync();
     showToast('Welcome back, '+username+'!','success');
     checkTrialStatus();
   } else { errorDiv.textContent='Invalid username or password'; }
@@ -2124,7 +2092,6 @@ function showRegisterForm(show) {
 }
 
 function handleLogout() {
-  if (cloudSyncUnsubscribe) { cloudSyncUnsubscribe(); cloudSyncUnsubscribe = null; }
   currentUser=null; selectedEmployeeId=null;
   document.getElementById('mainApp').style.display='none';
   document.getElementById('mainApp').classList.remove('visible');
@@ -2152,6 +2119,7 @@ function setupApp() {
 function renderEmployeeList() {
   const search=document.getElementById('searchInput')?.value.toLowerCase()||'';
   let emps=DB.employees;
+  if(currentUser?.role==='DEPT_VIEWER') emps=DB.employees.filter(e=>e.department===currentUser.department);
   const filtered=emps.filter(e=>(e.fullName?.toLowerCase().includes(search)||e.empId?.toLowerCase().includes(search)||e.department?.toLowerCase().includes(search)));
   const container=document.getElementById('employeeListContainer');
   if(!container)return;
@@ -2179,7 +2147,7 @@ function renderDetail(id) {
         <button class="btn btn-success btn-sm" onclick='exportProfilePDF(${JSON.stringify(emp).replace(/"/g,"&quot;")})'>📄 Export PDF</button>
         <button class="btn btn-sm" onclick="openDocsForEmp(${emp.id})" style="background:rgba(155,114,248,0.15);border-color:rgba(155,114,248,0.3);color:var(--accent2);">📁 Docs</button>
         <button class="btn btn-sm" onclick="openLeaveForEmp(${emp.id})" style="background:rgba(248,184,78,0.12);border-color:rgba(248,184,78,0.3);color:var(--warning);">🏖️ Leave</button>
-        ${canEdit?`<button class="btn btn-sm" onclick="editEmployee(${emp.id})">✏ Edit</button><button class="btn btn-sm btn-danger" onclick="deleteEmployeeConfirm(${emp.id})" aria-label="Delete employee" title="Delete employee">🗑 Delete</button>`:''}
+        ${canEdit?`<button class="btn btn-sm" onclick="editEmployee(${emp.id})">✏ Edit</button><button class="btn btn-sm btn-danger" onclick="deleteEmployeeConfirm(${emp.id})">🗑 Delete</button>`:''}
       </div>
     </div>
     <div class="section-title">Personal Details</div>
@@ -2234,9 +2202,9 @@ function editEmployee(id) {
   const pz = document.getElementById('photoUploadZone');
   if (pz) {
     if (emp.photo) {
-      pz.innerHTML = `<img src="${emp.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:16px;"><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:flex;" aria-label="Remove photo" title="Remove photo">✕</button>`;
+      pz.innerHTML = `<img src="${emp.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:16px;"><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:flex;">✕</button>`;
     } else {
-      pz.innerHTML = '<span class="upload-icon">📷</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;" aria-label="Remove photo" title="Remove photo">✕</button>';
+      pz.innerHTML = '<span class="upload-icon">📷</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;">✕</button>';
     }
   }
   // Sync empIdQuick
@@ -2255,7 +2223,7 @@ function deleteEmployeeConfirm(id) {
   }
 }
 
-async function saveEmployee() {
+function saveEmployee() {
   const empData={
     fullName:document.getElementById('empFullName').value,
     email:document.getElementById('empEmail').value,
@@ -2282,11 +2250,9 @@ async function saveEmployee() {
   };
   if(currentEmpPhotoData!==null){empData.photo=currentEmpPhotoData;} if(editingEmployeeId){const idx=DB.employees.findIndex(e=>e.id==editingEmployeeId);if(idx!==-1){empData.id=editingEmployeeId;DB.employees[idx]={...DB.employees[idx],...empData};}}
   else{empData.id=Date.now();DB.employees.push(empData);}
-  const saved = await saveDB();
-  if(!saved) return;
-  closeModal('empModal'); renderEmployeeList();
+  saveDB(); closeModal('empModal'); renderEmployeeList();
   if(selectedEmployeeId)renderDetail(selectedEmployeeId);
-  showToast(lastCloudSaveOk ? 'Employee saved for all users' : 'Employee saved on this browser only', lastCloudSaveOk ? 'success' : 'error'); editingEmployeeId=null;
+  showToast('Employee saved successfully','success'); editingEmployeeId=null;
 }
 
 function openPayroll() {
@@ -2490,7 +2456,7 @@ function renderLeaveList() {
   c.innerHTML=list.map(l=>{
     const emp=DB.employees.find(e=>e.id===l.employeeId);
     const sc=l.status==='Approved'?'leave-approved':l.status==='Rejected'?'leave-rejected':'leave-pending';
-    return`<div class="leave-card"><div style="font-size:1.6rem;">${l.type==='Sick'?'🤒':l.type==='Annual'?'🌴':l.type==='Casual'?'😊':l.type==='Maternity'?'👶':l.type==='Nopay'?'⛔':'📋'}</div><div class="leave-card-info"><strong>${emp?.fullName||'Unknown'} <span class="doc-type-badge">${l.type}</span></strong><small>${l.from} → ${l.to} · ${l.days} day${l.days!==1?'s':''} · ${l.reason||'No reason'}</small></div><span class="leave-status-pill ${sc}">${l.status}</span>${currentUser?.role==='ADMIN'||currentUser?.role==='HR'?`<div style="display:flex;gap:4px;"><button class="btn btn-sm btn-success" style="padding:3px 8px;" onclick="updateLeaveStatus(${l.id},'Approved')" aria-label="Approve leave" title="Approve leave">✓</button><button class="btn btn-sm btn-danger" style="padding:3px 8px;" onclick="updateLeaveStatus(${l.id},'Rejected')" aria-label="Reject leave" title="Reject leave">✗</button><button class="btn btn-sm btn-danger" style="padding:3px 8px;" onclick="deleteLeave(${l.id})" aria-label="Delete leave" title="Delete leave">🗑</button></div>`:''}</div>`;
+    return`<div class="leave-card"><div style="font-size:1.6rem;">${l.type==='Sick'?'🤒':l.type==='Annual'?'🌴':l.type==='Casual'?'😊':l.type==='Maternity'?'👶':l.type==='Nopay'?'⛔':'📋'}</div><div class="leave-card-info"><strong>${emp?.fullName||'Unknown'} <span class="doc-type-badge">${l.type}</span></strong><small>${l.from} → ${l.to} · ${l.days} day${l.days!==1?'s':''} · ${l.reason||'No reason'}</small></div><span class="leave-status-pill ${sc}">${l.status}</span>${currentUser?.role==='ADMIN'||currentUser?.role==='HR'?`<div style="display:flex;gap:4px;"><button class="btn btn-sm btn-success" style="padding:3px 8px;" onclick="updateLeaveStatus(${l.id},'Approved')">✓</button><button class="btn btn-sm btn-danger" style="padding:3px 8px;" onclick="updateLeaveStatus(${l.id},'Rejected')">✗</button><button class="btn btn-sm btn-danger" style="padding:3px 8px;" onclick="deleteLeave(${l.id})">🗑</button></div>`:''}</div>`;
   }).join('');
 }
 function updateLeaveStatus(id,status) { const l=DB.leaves.find(x=>x.id===id);if(l){l.status=status;saveDB();renderLeaveList();showToast(`Leave ${status.toLowerCase()}`,'success');} }
@@ -2563,7 +2529,7 @@ function renderDocList() {
   const empId=parseInt(document.getElementById('docEmpSel')?.value);const docs=DB.documents.filter(d=>d.employeeId===empId).sort((a,b)=>b.uploadedAt.localeCompare(a.uploadedAt));
   const c=document.getElementById('docListContainer');
   if(!docs.length){c.innerHTML='<div style="text-align:center;color:var(--muted);padding:1.5rem;">No documents uploaded for this employee</div>';return;}
-  c.innerHTML=docs.map(d=>{const icon=d.type?.includes('pdf')?'📄':d.type?.includes('image')?'🖼️':d.type?.includes('word')||d.name.endsWith('.doc')?'📝':'📎';const size=d.size>1024*1024?(d.size/1024/1024).toFixed(1)+'MB':Math.round(d.size/1024)+'KB';return`<div class="doc-item"><div class="doc-icon">${icon}</div><div class="doc-info"><strong>${d.name}<span class="doc-type-badge">${d.category}</span></strong><small>${size} · Uploaded ${new Date(d.uploadedAt).toLocaleDateString()} by ${d.uploadedBy}</small></div><button class="btn btn-sm" onclick="downloadDoc(${d.id})">⬇ Download</button><button class="btn btn-sm btn-danger" onclick="deleteDoc(${d.id})" style="padding:5px 8px;" aria-label="Delete document" title="Delete document">🗑</button></div>`;}).join('');
+  c.innerHTML=docs.map(d=>{const icon=d.type?.includes('pdf')?'📄':d.type?.includes('image')?'🖼️':d.type?.includes('word')||d.name.endsWith('.doc')?'📝':'📎';const size=d.size>1024*1024?(d.size/1024/1024).toFixed(1)+'MB':Math.round(d.size/1024)+'KB';return`<div class="doc-item"><div class="doc-icon">${icon}</div><div class="doc-info"><strong>${d.name}<span class="doc-type-badge">${d.category}</span></strong><small>${size} · Uploaded ${new Date(d.uploadedAt).toLocaleDateString()} by ${d.uploadedBy}</small></div><button class="btn btn-sm" onclick="downloadDoc(${d.id})">⬇ Download</button><button class="btn btn-sm btn-danger" onclick="deleteDoc(${d.id})" style="padding:5px 8px;">🗑</button></div>`;}).join('');
 }
 function downloadDoc(id) { const doc=DB.documents?.find(d=>d.id===id);if(!doc){showToast('Not found','error');return;}const a=document.createElement('a');a.href=doc.data;a.download=doc.name;a.click();showToast('Downloading...','success'); }
 function deleteDoc(id) { if(!confirm('Delete this document?'))return;DB.documents=DB.documents.filter(d=>d.id!==id);saveDB();renderDocList();showToast('Deleted','success'); }
@@ -2656,7 +2622,7 @@ function updateTrialBadge(type,text) { const b=document.getElementById('trialBad
 function showLockScreen() { document.getElementById('lockContactInfo').textContent=ADMIN_CONTACT;document.getElementById('lockScreen').style.display='flex'; }
 function hideLockScreen() { document.getElementById('lockScreen').style.display='none'; }
 let warningShown=false;
-function showTrialWarningPopup(daysLeft) { if(warningShown)return;warningShown=true;const p=document.createElement('div');p.className='trial-warning-popup';p.style.position='fixed';p.innerHTML=`<button class="popup-close" onclick="this.parentElement.remove()" aria-label="Close popup" title="Close popup">✕</button><h4>⚠️ Trial Ending Soon</h4><p>Expires in <strong>${daysLeft} day${daysLeft!==1?'s':''}</strong>. Contact admin to activate a license.</p><p style="margin-top:6px;font-size:0.72rem;color:var(--muted)">${ADMIN_CONTACT}</p>`;document.body.appendChild(p);setTimeout(()=>{if(p.parentElement)p.remove();},10000); }
+function showTrialWarningPopup(daysLeft) { if(warningShown)return;warningShown=true;const p=document.createElement('div');p.className='trial-warning-popup';p.style.position='fixed';p.innerHTML=`<button class="popup-close" onclick="this.parentElement.remove()">✕</button><h4>⚠️ Trial Ending Soon</h4><p>Expires in <strong>${daysLeft} day${daysLeft!==1?'s':''}</strong>. Contact admin to activate a license.</p><p style="margin-top:6px;font-size:0.72rem;color:var(--muted)">${ADMIN_CONTACT}</p>`;document.body.appendChild(p);setTimeout(()=>{if(p.parentElement)p.remove();},10000); }
 async function activateLicense() {
   const raw=document.getElementById('licenseKeyInput').value.trim().toUpperCase();const errDiv=document.getElementById('licenseError');errDiv.textContent='';
   if(!raw){errDiv.textContent='Please enter a license key';return;}
@@ -2693,7 +2659,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   document.getElementById('logoutBtn').addEventListener('click',handleLogout);
   const dz=document.getElementById('attDropZone');if(dz){dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag-over');});dz.addEventListener('dragleave',()=>dz.classList.remove('drag-over'));dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag-over');if(e.dataTransfer.files[0])handleAttFile(e.dataTransfer.files[0]);});}
   const afi=document.getElementById('attFileInput');if(afi)afi.addEventListener('change',function(){if(this.files[0])handleAttFile(this.files[0]);});
-  document.getElementById('addEmployeeBtn').addEventListener('click',()=>{editingEmployeeId=null;document.getElementById('modalTitle').textContent='New Employee';document.querySelectorAll('#empModal input,#empModal select,#empModal textarea').forEach(el=>el.value='');document.getElementById('empGender').value='Male';document.getElementById('empMarital').value='Single';document.getElementById('empType').value='Permanent';document.getElementById('empStatus').value='Active';document.getElementById('empPayMethod').value='Bank Transfer'; currentEmpPhotoData=null; refreshEmpLocationDropdown(); const pzr=document.getElementById('photoUploadZone'); if(pzr){pzr.innerHTML='<span class="upload-icon">📷</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;" aria-label="Remove photo" title="Remove photo">✕</button>';} const eiq2=document.getElementById('empIdQuick'); if(eiq2)eiq2.value=''; document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));document.querySelector('.tab-btn[data-tab="0"]').classList.add('active');document.getElementById('tab0').classList.add('active');openModal('empModal');});
+  document.getElementById('addEmployeeBtn').addEventListener('click',()=>{editingEmployeeId=null;document.getElementById('modalTitle').textContent='New Employee';document.querySelectorAll('#empModal input,#empModal select,#empModal textarea').forEach(el=>el.value='');document.getElementById('empGender').value='Male';document.getElementById('empMarital').value='Single';document.getElementById('empType').value='Permanent';document.getElementById('empStatus').value='Active';document.getElementById('empPayMethod').value='Bank Transfer'; currentEmpPhotoData=null; refreshEmpLocationDropdown(); const pzr=document.getElementById('photoUploadZone'); if(pzr){pzr.innerHTML='<span class="upload-icon">📷</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;">✕</button>';} const eiq2=document.getElementById('empIdQuick'); if(eiq2)eiq2.value=''; document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));document.querySelector('.tab-btn[data-tab="0"]').classList.add('active');document.getElementById('tab0').classList.add('active');openModal('empModal');});
   document.getElementById('saveEmpBtn').addEventListener('click',saveEmployee);
   document.getElementById('refreshListBtn').addEventListener('click',async()=>{showLoading();await loadDB(true);hideLoading();renderEmployeeList();if(selectedEmployeeId)renderDetail(selectedEmployeeId);showToast('Cloud data refreshed','success');});
   document.getElementById('searchInput').addEventListener('input',renderEmployeeList);
@@ -2723,7 +2689,7 @@ function handleEmpPhotoUpload(event) {
   reader.onload = e => {
     currentEmpPhotoData = e.target.result;
     const zone = document.getElementById('photoUploadZone');
-    zone.innerHTML = `<img src="${currentEmpPhotoData}" style="width:100%;height:100%;object-fit:cover;border-radius:16px;"><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:flex;" aria-label="Remove photo" title="Remove photo">✕</button>`;
+    zone.innerHTML = `<img src="${currentEmpPhotoData}" style="width:100%;height:100%;object-fit:cover;border-radius:16px;"><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:flex;">✕</button>`;
   };
   reader.readAsDataURL(file);
 }
@@ -2733,7 +2699,7 @@ function removeEmpPhoto(event) {
   currentEmpPhotoData = null;
   const zone = document.getElementById('photoUploadZone');
   if (zone) {
-    zone.innerHTML = `<span class="upload-icon">📷</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;" aria-label="Remove photo" title="Remove photo">✕</button>`;
+    zone.innerHTML = `<span class="upload-icon">📷</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;">✕</button>`;
   }
   document.getElementById('empPhotoInput').value = '';
 }
@@ -3087,8 +3053,6 @@ Format: use numbered lists for steps, bullet points for features. Keep answers u
     box.style.display = hcOpen ? 'flex' : 'none';
     notif.style.display = 'none';
     toggle.textContent = hcOpen ? '✕' : '🤖';
-    toggle.setAttribute('aria-label', hcOpen ? 'Close HR Chatbot' : 'Open HR Chatbot');
-    toggle.setAttribute('title', hcOpen ? 'Close HR Chatbot' : 'Open HR Chatbot');
     if (hcOpen && document.getElementById('hcMessages').children.length === 0) {
       hcAddMsg('bot', 'Hello! I am your <strong>HR Nexus Assistant</strong>. I can help you with:<br><ul><li>Managing employees & payroll</li><li>Leave & attendance tracking</li><li>Reports and analytics</li><li>System navigation & features</li></ul>What would you like help with?', true);
     }
