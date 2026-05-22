@@ -1879,8 +1879,11 @@ const firebaseConfig = {
 };
 const HR_COLLECTION = 'hr_data';
 const LOCAL_DB_KEY = 'hr_nexus_db_v2';
+const CLIENT_ID_KEY = 'hr_nexus_client_id';
 let _db = null;
 let lastCloudSaveOk = false;
+let dbUpdatedAt = 0;
+let cloudSyncUnsubscribe = null;
 
 try {
   if (window.firebase?.initializeApp && window.firebase?.firestore) {
@@ -2252,7 +2255,7 @@ function deleteEmployeeConfirm(id) {
   }
 }
 
-function saveEmployee() {
+async function saveEmployee() {
   const empData={
     fullName:document.getElementById('empFullName').value,
     email:document.getElementById('empEmail').value,
@@ -2279,9 +2282,11 @@ function saveEmployee() {
   };
   if(currentEmpPhotoData!==null){empData.photo=currentEmpPhotoData;} if(editingEmployeeId){const idx=DB.employees.findIndex(e=>e.id==editingEmployeeId);if(idx!==-1){empData.id=editingEmployeeId;DB.employees[idx]={...DB.employees[idx],...empData};}}
   else{empData.id=Date.now();DB.employees.push(empData);}
-  saveDB(); closeModal('empModal'); renderEmployeeList();
+  const saved = await saveDB();
+  if(!saved) return;
+  closeModal('empModal'); renderEmployeeList();
   if(selectedEmployeeId)renderDetail(selectedEmployeeId);
-  showToast('Employee saved successfully','success'); editingEmployeeId=null;
+  showToast(lastCloudSaveOk ? 'Employee saved for all users' : 'Employee saved on this browser only', lastCloudSaveOk ? 'success' : 'error'); editingEmployeeId=null;
 }
 
 function openPayroll() {
