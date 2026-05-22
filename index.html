@@ -1877,51 +1877,152 @@ const firebaseConfig = {
   messagingSenderId: "3117790153",
   appId: "1:3117790153:web:0c268334e8378132316e18"
 };
-firebase.initializeApp(firebaseConfig);
-const _db = firebase.firestore();
 const HR_COLLECTION = 'hr_data';
+const LOCAL_DB_KEY = 'hr_nexus_db_v2';
+let _db = null;
+let lastCloudSaveOk = false;
+
+try {
+  if (window.firebase?.initializeApp && window.firebase?.firestore) {
+    if (!firebase.apps?.length) firebase.initializeApp(firebaseConfig);
+    _db = firebase.firestore();
+  }
+} catch (e) {
+  console.warn('Firebase is unavailable; using local permanent storage.', e);
+}
 
 const DEFAULT_EMPLOYEES = [{"id":1,"fullName":"John Smith","empId":"EMP001","email":"john@company.com","mobile":"0771234567","nic":"123456789V","dob":"1990-05-15","gender":"Male","maritalStatus":"Married","address":"Colombo","emergencyName":"Jane Smith","emergencyPhone":"0777654321","department":"IT","designation":"Senior Developer","doj":"2023-01-10","employmentType":"Permanent","status":"Active","location":"Colombo","salary":150000,"bankAccount":"123456789","bankName":"Commercial Bank","payMethod":"Bank Transfer","remarks":"Excellent performer"},{"id":2,"fullName":"Sarah Johnson","empId":"EMP002","email":"sarah@company.com","mobile":"0771234568","nic":"987654321V","dob":"1988-08-20","gender":"Female","maritalStatus":"Married","address":"Kandy","emergencyName":"Mike Johnson","emergencyPhone":"0777654322","department":"HR","designation":"HR Manager","doj":"2022-06-15","employmentType":"Permanent","status":"Active","location":"Kandy","salary":180000,"bankAccount":"987654321","bankName":"HSBC","payMethod":"Bank Transfer","remarks":"Great leader"}];
 const DEFAULT_USERS = [{"id":"u1","username":"admin","password":"admin123","role":"ADMIN","status":"active"},{"id":"u2","username":"hr","password":"hr123","role":"HR","status":"active"},{"id":"u3","username":"viewer","password":"view123","role":"VIEWER","status":"active"}];
 
-let DB = { employees: DEFAULT_EMPLOYEES, users: DEFAULT_USERS, pendingUsers: [], payrolls: [], leaves: [], documents: [], locations: [], trial: null, license: null, licenseKeys: [] };
+const DEFAULT_DB = { employees: DEFAULT_EMPLOYEES, users: DEFAULT_USERS, pendingUsers: [], payrolls: [], leaves: [], documents: [], locations: [], trial: null, license: null, licenseKeys: [] };
+let DB = normalizeDB();
+
+function parseJSONSafe(value, fallback) {
+  if (!value) return fallback;
+  try { return JSON.parse(value); } catch (e) { return fallback; }
+}
+function normalizeDB(data = {}) {
+  return {
+    employees: Array.isArray(data.employees) ? data.employees : [...DEFAULT_EMPLOYEES],
+    users: Array.isArray(data.users) ? data.users : [...DEFAULT_USERS],
+    pendingUsers: Array.isArray(data.pendingUsers) ? data.pendingUsers : [],
+    payrolls: Array.isArray(data.payrolls) ? data.payrolls : [],
+    leaves: Array.isArray(data.leaves) ? data.leaves : [],
+    documents: Array.isArray(data.documents) ? data.documents : [],
+    locations: Array.isArray(data.locations) ? data.locations : [],
+    trial: data.trial ?? null,
+    license: data.license ?? null,
+    licenseKeys: Array.isArray(data.licenseKeys) ? data.licenseKeys : []
+  };
+}
+function getClientId() {
+  let id = localStorage.getItem(CLIENT_ID_KEY);
+  if (!id) {
+    id = 'client_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+    localStorage.setItem(CLIENT_ID_KEY, id);
+  }
+  return id;
+}
+function loadLocalRecord() {
+  const raw = localStorage.getItem(LOCAL_DB_KEY);
+  if (!raw) return { data: normalizeDB(), updatedAt: 0, exists: false };
+  const parsed = parseJSONSafe(raw, null);
+  if (parsed?.data) return { data: normalizeDB(parsed.data), updatedAt: Number(parsed.updatedAt || 0), exists: true };
+  return { data: normalizeDB(parsed || DEFAULT_DB), updatedAt: 0, exists: true };
+}
+function saveLocalDB() {
+  localStorage.setItem(LOCAL_DB_KEY, JSON.stringify({ data: DB, updatedAt: dbUpdatedAt, clientId: getClientId() }));
+}
+function cloudPayloadFrom(parts, meta) {
+  return {
+    data: normalizeDB({
+      employees: parseJSONSafe(parts.emp, DB.employees),
+      users: parseJSONSafe(parts.users, DB.users),
+      pendingUsers: parseJSONSafe(parts.pending, DB.pendingUsers),
+      payrolls: parseJSONSafe(parts.payrolls, DB.payrolls),
+      trial: parseJSONSafe(parts.trial, DB.trial),
+      license: parseJSONSafe(parts.license, DB.license),
+      licenseKeys: parseJSONSafe(parts.licenseKeys, DB.licenseKeys),
+      leaves: parseJSONSafe(parts.leaves, DB.leaves),
+      documents: parseJSONSafe(parts.documents, DB.documents),
+      locations: parseJSONSafe(parts.locData, DB.locations)
+    }),
+    updatedAt: Number(meta?.updatedAt || 1),
+    hasData: Object.values(parts).some(v => v !== null && v !== undefined)
+  };
+}
 
 async function sbGet(key) {
-  try { const d = await _db.collection(HR_COLLECTION).doc(key).get(); return d.exists ? d.data().value : null; } catch(e) { return null; }
+  if (!_db) return null;
+  const d = await _db.collection(HR_COLLECTION).doc(key).get();
+  return d.exists ? d.data().value : null;
 }
 async function sbSet(key, value) {
-  try { await _db.collection(HR_COLLECTION).doc(key).set({ value, updated_at: new Date().toISOString() }); } catch(e) { console.error(e); }
+  if (!_db) return;
+  await _db.collection(HR_COLLECTION).doc(key).set({ value, updated_at: new Date().toISOString() });
 }
-async function loadDB() {
+async function syncCloudDB() {
+  if (!_db) return false;
+  await Promise.all([
+    sbSet('hr_meta', JSON.stringify({ updatedAt: dbUpdatedAt, clientId: getClientId() })),
+    sbSet('hr_employees', JSON.stringify(DB.employees)),
+    sbSet('hr_users', JSON.stringify(DB.users)),
+    sbSet('hr_pending', JSON.stringify(DB.pendingUsers)),
+    sbSet('hr_payrolls', JSON.stringify(DB.payrolls)),
+    sbSet('hr_trial', JSON.stringify(DB.trial)),
+    sbSet('hr_license', JSON.stringify(DB.license)),
+    sbSet('hr_license_keys', JSON.stringify(DB.licenseKeys||[])),
+    sbSet('hr_leaves', JSON.stringify(DB.leaves||[])),
+    sbSet('hr_documents', JSON.stringify((DB.documents||[]).map(d=>({...d,data:d.data?.substring(0,50000)||d.data})))),
+    sbSet('hr_locations', JSON.stringify(DB.locations||[])),
+  ]);
+  return true;
+}
+async function loadDB(forceCloud = false) {
+  const local = loadLocalRecord();
+  DB = local.data;
+  dbUpdatedAt = local.updatedAt;
+  if (!_db) return;
   try {
-    const [emp,users,pending,payrolls,trial,license,licenseKeys,leaves,documents,locData] = await Promise.all([sbGet('hr_employees'),sbGet('hr_users'),sbGet('hr_pending'),sbGet('hr_payrolls'),sbGet('hr_trial'),sbGet('hr_license'),sbGet('hr_license_keys'),sbGet('hr_leaves'),sbGet('hr_documents'),sbGet('hr_locations')]);
-    DB.employees = emp ? JSON.parse(emp) : DEFAULT_EMPLOYEES;
-    DB.users = users ? JSON.parse(users) : DEFAULT_USERS;
-    DB.pendingUsers = pending ? JSON.parse(pending) : [];
-    DB.payrolls = payrolls ? JSON.parse(payrolls) : [];
-    DB.trial = trial ? JSON.parse(trial) : null;
-    DB.license = license ? JSON.parse(license) : null;
-    DB.licenseKeys = licenseKeys ? JSON.parse(licenseKeys) : [];
-    DB.leaves = leaves ? JSON.parse(leaves) : [];
-    DB.documents = documents ? JSON.parse(documents) : [];
-    DB.locations = locData ? JSON.parse(locData) : [];
-  } catch(e) { console.error('loadDB error',e); }
+    const [metaRaw,emp,users,pending,payrolls,trial,license,licenseKeys,leaves,documents,locData] = await Promise.all([sbGet('hr_meta'),sbGet('hr_employees'),sbGet('hr_users'),sbGet('hr_pending'),sbGet('hr_payrolls'),sbGet('hr_trial'),sbGet('hr_license'),sbGet('hr_license_keys'),sbGet('hr_leaves'),sbGet('hr_documents'),sbGet('hr_locations')]);
+    const cloud = cloudPayloadFrom({ emp, users, pending, payrolls, trial, license, licenseKeys, leaves, documents, locData }, parseJSONSafe(metaRaw, null));
+    if (cloud.hasData && (!local.exists || cloud.updatedAt >= dbUpdatedAt)) {
+      DB = cloud.data;
+      dbUpdatedAt = cloud.updatedAt;
+      saveLocalDB();
+      lastCloudSaveOk = true;
+    } else if (local.exists && dbUpdatedAt > cloud.updatedAt && !forceCloud) {
+      await syncCloudDB();
+      lastCloudSaveOk = true;
+    }
+  } catch(e) {
+    lastCloudSaveOk = false;
+    console.error('Cloud load failed; using local saved data.', e);
+  }
 }
 async function saveDB() {
+  dbUpdatedAt = Date.now();
   try {
-    await Promise.all([
-      sbSet('hr_employees', JSON.stringify(DB.employees)),
-      sbSet('hr_users', JSON.stringify(DB.users)),
-      sbSet('hr_pending', JSON.stringify(DB.pendingUsers)),
-      sbSet('hr_payrolls', JSON.stringify(DB.payrolls)),
-      sbSet('hr_trial', JSON.stringify(DB.trial)),
-      sbSet('hr_license', JSON.stringify(DB.license)),
-      sbSet('hr_license_keys', JSON.stringify(DB.licenseKeys||[])),
-      sbSet('hr_leaves', JSON.stringify(DB.leaves||[])),
-      sbSet('hr_documents', JSON.stringify((DB.documents||[]).map(d=>({...d,data:d.data?.substring(0,50000)||d.data})))),
-      sbSet('hr_locations', JSON.stringify(DB.locations||[])),
-    ]);
-  } catch(e) { console.error('saveDB error',e); }
+    saveLocalDB();
+  } catch(e) {
+    console.error('Local save failed', e);
+    showToast?.('Local save failed. Browser storage may be full.', 'error');
+    return false;
+  }
+  if (!_db) {
+    lastCloudSaveOk = false;
+    showToast?.('Saved on this computer. Cloud sync is not connected.', 'error');
+    return true;
+  }
+  try {
+    await syncCloudDB();
+    lastCloudSaveOk = true;
+  } catch(e) {
+    lastCloudSaveOk = false;
+    console.error('Cloud save failed; data remains saved locally in this browser.', e);
+    showToast?.('Saved on this computer, but cloud sync failed.', 'error');
+  }
+  return true;
 }
 
 let currentUser = null, selectedEmployeeId = null, editingEmployeeId = null;
@@ -1965,7 +2066,6 @@ function handleLogin() {
     setupApp(); renderEmployeeList();
     showToast('Welcome back, '+username+'!','success');
     checkTrialStatus();
-    loadDB().then(()=>renderEmployeeList());
   } else { errorDiv.textContent='Invalid username or password'; }
 }
 
@@ -2548,6 +2648,7 @@ async function generateNewLicenseKey() {
 function copyToClipboard(text) { navigator.clipboard.writeText(text).then(()=>showToast('License key copied! 📋','success')); }
 
 document.addEventListener('DOMContentLoaded', async function() {
+  await loadDB();
   document.getElementById('loginBtn').addEventListener('click',handleLogin);
   document.getElementById('loginUsername').addEventListener('keypress',e=>{if(e.key==='Enter')handleLogin();});
   document.getElementById('loginPassword').addEventListener('keypress',e=>{if(e.key==='Enter')handleLogin();});
@@ -2560,7 +2661,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   const afi=document.getElementById('attFileInput');if(afi)afi.addEventListener('change',function(){if(this.files[0])handleAttFile(this.files[0]);});
   document.getElementById('addEmployeeBtn').addEventListener('click',()=>{editingEmployeeId=null;document.getElementById('modalTitle').textContent='New Employee';document.querySelectorAll('#empModal input,#empModal select,#empModal textarea').forEach(el=>el.value='');document.getElementById('empGender').value='Male';document.getElementById('empMarital').value='Single';document.getElementById('empType').value='Permanent';document.getElementById('empStatus').value='Active';document.getElementById('empPayMethod').value='Bank Transfer'; currentEmpPhotoData=null; refreshEmpLocationDropdown(); const pzr=document.getElementById('photoUploadZone'); if(pzr){pzr.innerHTML='<span class="upload-icon">📷</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;">✕</button>';} const eiq2=document.getElementById('empIdQuick'); if(eiq2)eiq2.value=''; document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));document.querySelector('.tab-btn[data-tab="0"]').classList.add('active');document.getElementById('tab0').classList.add('active');openModal('empModal');});
   document.getElementById('saveEmpBtn').addEventListener('click',saveEmployee);
-  document.getElementById('refreshListBtn').addEventListener('click',async()=>{showLoading();await loadDB();hideLoading();renderEmployeeList();if(selectedEmployeeId)renderDetail(selectedEmployeeId);showToast('Data refreshed','success');});
+  document.getElementById('refreshListBtn').addEventListener('click',async()=>{showLoading();await loadDB(true);hideLoading();renderEmployeeList();if(selectedEmployeeId)renderDetail(selectedEmployeeId);showToast('Cloud data refreshed','success');});
   document.getElementById('searchInput').addEventListener('input',renderEmployeeList);
   document.getElementById('attendanceBtn').addEventListener('click',openAttendance);
   document.getElementById('attHistBtn').addEventListener('click',openAttHistory);
