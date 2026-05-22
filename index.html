@@ -57,13 +57,6 @@ body::before {
   pointer-events: none;
   z-index: 0;
 }
-<!-- HR Nexus Chatbot -->
-<div id="hrChatWidget" style="position:fixed;bottom:24px;right:24px;z-index:9998;font-family:'DM Sans',sans-serif;">
-  <div id="hrChatBox" style="display:none;width:380px;height:580px;background:rgba(8,14,26,0.95);border:1px solid rgba(79,142,247,0.2);border-radius:20px;overflow:hidden;backdrop-filter:blur(20px);box-shadow:0 20px 60px rgba(0,0,0,0.5);flex-direction:column;">
-    <!-- Paste the full chatbot HTML here -->
-  </div>
-  <button onclick="document.getElementById('hrChatBox').style.display=document.getElementById('hrChatBox').style.display==='none'?'flex':'none'" style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#4F8EF7,#9B72F8);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(79,142,247,0.4);font-size:1.4rem;margin-top:8px;margin-left:auto;">🤖</button>
-</div>
 
 /* ===== HR NEXUS CHATBOT ===== */
 #hrChatWidget {
@@ -1839,6 +1832,7 @@ select option { background: #0F1628; color: var(--text); }
       <div id="licenseError" class="lock-error"></div>
     </div>
   </div>
+</div>
   
 <!-- ===== HR NEXUS CHATBOT WIDGET ===== -->
 <div id="hrChatWidget">
@@ -1873,7 +1867,6 @@ select option { background: #0F1628; color: var(--text); }
     <span class="hc-notif" id="hcNotif" style="display:none;">1</span>
   </button>
 </div>
-</div>
 
 <script>
 const firebaseConfig = {
@@ -1899,18 +1892,9 @@ async function sbGet(key) {
 async function sbSet(key, value) {
   try { await _db.collection(HR_COLLECTION).doc(key).set({ value, updated_at: new Date().toISOString() }); } catch(e) { console.error(e); }
 }
-let _dbCache = null;
-let _dbCacheTime = 0;
-const DB_CACHE_MS = 30000; // 30 seconds cache
-
 async function loadDB() {
-  const now = Date.now();
-  if (_dbCache && (now - _dbCacheTime) < DB_CACHE_MS) {
-    Object.assign(DB, _dbCache);
-    return;
-  }
   try {
-    const [emp,users,pending,payrolls,trial,license,licenseKeys,leaves,documents,locData] = await Promise.all([
+    const [emp,users,pending,payrolls,trial,license,licenseKeys,leaves,documents,locData] = await Promise.all([sbGet('hr_employees'),sbGet('hr_users'),sbGet('hr_pending'),sbGet('hr_payrolls'),sbGet('hr_trial'),sbGet('hr_license'),sbGet('hr_license_keys'),sbGet('hr_leaves'),sbGet('hr_documents'),sbGet('hr_locations')]);
     DB.employees = emp ? JSON.parse(emp) : DEFAULT_EMPLOYEES;
     DB.users = users ? JSON.parse(users) : DEFAULT_USERS;
     DB.pendingUsers = pending ? JSON.parse(pending) : [];
@@ -1921,8 +1905,6 @@ async function loadDB() {
     DB.leaves = leaves ? JSON.parse(leaves) : [];
     DB.documents = documents ? JSON.parse(documents) : [];
     DB.locations = locData ? JSON.parse(locData) : [];
-_dbCache = { employees: DB.employees, users: DB.users, pendingUsers: DB.pendingUsers, payrolls: DB.payrolls, trial: DB.trial, license: DB.license, licenseKeys: DB.licenseKeys, leaves: DB.leaves, documents: DB.documents, locations: DB.locations };
-    _dbCacheTime = Date.now();
   } catch(e) { console.error('loadDB error',e); }
 }
 async function saveDB() {
@@ -1975,22 +1957,16 @@ function handleLogin() {
   const errorDiv=document.getElementById('loginError');
   if(!username||!password){errorDiv.textContent='Please enter both username and password';return;}
   errorDiv.textContent='';
-  showLoading();
-  loadDB().then(()=>{
-    hideLoading();
-    const user=DB.users.find(u=>u.username===username&&u.password===password&&u.status==='active');
-    if(user){
-      currentUser=user;
-      document.getElementById('loginView').style.display='none';
-      const app=document.getElementById('mainApp'); app.style.display='flex'; app.classList.add('visible');
-      setupApp();
-      renderEmployeeList();
-      showToast('Welcome back, '+username+'!','success');
-      checkTrialStatus();
- } else {
-      errorDiv.textContent='Invalid username or password';
-    }
-  });
+  const user=DB.users.find(u=>u.username===username&&u.password===password&&u.status==='active');
+  if(user){
+    currentUser=user;
+    document.getElementById('loginView').style.display='none';
+    const app=document.getElementById('mainApp'); app.style.display='flex'; app.classList.add('visible');
+    setupApp(); renderEmployeeList();
+    showToast('Welcome back, '+username+'!','success');
+    checkTrialStatus();
+    loadDB().then(()=>renderEmployeeList());
+  } else { errorDiv.textContent='Invalid username or password'; }
 }
 
 function handleRegister() {
@@ -3059,7 +3035,7 @@ Format: use numbered lists for steps, bullet points for features. Keep answers u
     try {
       const res = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-api-key': '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', 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           model: 'claude-sonnet-4-20250514',
           max_tokens: 800,
