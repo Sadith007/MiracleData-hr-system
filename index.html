@@ -1325,6 +1325,166 @@ select option { background: #0F1628; color: var(--text); }
   padding:3px 8px; border-radius:20px;
   border:1px solid rgba(255,255,255,0.08);
 }
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media (max-width: 768px) {
+
+  /* --- TOPBAR --- */
+  .topbar {
+    height: auto;
+    padding: 0.6rem 1rem;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .brand h1 { font-size: 0.88rem; }
+  .brand-icon { width: 30px; height: 30px; font-size: 1rem; }
+  .top-actions {
+    width: 100%;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 2px;
+    gap: 4px;
+    scrollbar-width: none;
+  }
+  .top-actions::-webkit-scrollbar { display: none; }
+  .top-actions .btn-sm {
+    font-size: 0.65rem;
+    padding: 4px 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* --- BODY LAYOUT: stack sidebar above detail --- */
+  .body-layout {
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  /* --- SIDEBAR --- */
+  .sidebar {
+    width: 100%;
+    max-height: 220px;
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    flex-shrink: 0;
+  }
+  .employee-list { max-height: 130px; }
+  .search-box { padding: 0.6rem; }
+  .sidebar-actions { padding: 0 0.6rem 0.6rem; }
+
+  /* --- DETAIL PANEL --- */
+  .detail-panel {
+    padding: 1rem;
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  /* --- PROFILE HEADER --- */
+  .profile-header {
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px;
+  }
+  .profile-avatar { width: 60px; height: 60px; font-size: 1.4rem; }
+  .profile-info h2 { font-size: 1.1rem; }
+
+  /* --- INFO GRID --- */
+  .info-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+
+  /* --- FORM --- */
+  .form-row { grid-template-columns: 1fr; gap: 8px; }
+
+  /* --- MODAL --- */
+  .modal { align-items: flex-end; }
+  .modal-card {
+    width: 100%;
+    max-width: 100%;
+    max-height: 92vh;
+    border-radius: 20px 20px 0 0;
+  }
+  .modal-body { padding: 1rem; }
+  .modal-header { padding: 0.9rem 1rem; }
+  .modal-footer { padding: 0.75rem 1rem; }
+
+  /* --- AUTH CARD --- */
+  .auth-card {
+    padding: 2rem 1.5rem;
+    border-radius: 1.5rem;
+    max-width: 100%;
+  }
+  .auth-card h2 { font-size: 1.6rem; }
+
+  /* --- ATTENDANCE SUMMARY --- */
+  .att-summary-bar { grid-template-columns: repeat(2, 1fr); }
+  .att-col-map { grid-template-columns: 1fr; }
+
+  /* --- REPORTS & KPI --- */
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .report-tabs { gap: 4px; }
+  .report-tab { font-size: 0.7rem; padding: 5px 10px; }
+
+  /* --- LEAVE --- */
+  .leave-balance-grid { grid-template-columns: repeat(2, 1fr); }
+  .leave-card { flex-direction: column; align-items: flex-start; gap: 8px; }
+
+  /* --- CHART --- */
+  .chart-container canvas { max-height: 200px; }
+
+  /* --- LOCATIONS MODAL --- */
+  .loc-layout {
+    flex-direction: column;
+    height: auto;
+  }
+  .loc-sidebar {
+    width: 100%;
+    max-height: 200px;
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .loc-map-wrap { min-height: 220px; }
+
+  /* --- CHATBOT --- */
+  #hrChatWidget { bottom: 16px; right: 16px; }
+  #hrChatBox {
+    width: calc(100vw - 32px);
+    height: 70vh;
+    right: 0;
+    bottom: 65px;
+  }
+
+  /* --- TOAST --- */
+  .toast { right: 12px; left: 12px; font-size: 0.78rem; }
+
+  /* --- TRIAL WARNING POPUP --- */
+  .trial-warning-popup {
+    top: auto;
+    bottom: 90px;
+    right: 12px;
+    left: 12px;
+    max-width: 100%;
+  }
+
+  /* --- USER TABLE scroll --- */
+  .user-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  /* --- ATTENDANCE TABLE scroll --- */
+  .att-table-wrap { overflow-x: auto; }
+  .att-table { min-width: 500px; }
+
+  /* --- TABS --- */
+  .tabs { overflow-x: auto; flex-wrap: nowrap; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab-btn { white-space: nowrap; font-size: 0.75rem; padding: 6px 12px; }
+}
+
+@media (max-width: 420px) {
+  .info-grid { grid-template-columns: 1fr; }
+  .att-summary-bar { grid-template-columns: repeat(2, 1fr); }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .leave-balance-grid { grid-template-columns: repeat(2, 1fr); }
+  .brand h1 { display: none; }
+}
 </style>
 
 </head>
@@ -1551,7 +1711,7 @@ select option { background: #0F1628; color: var(--text); }
         <div style="font-size:0.7rem;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Step 2 — Map Columns</div>
         <div class="att-col-map" id="attColMap"></div>
         <div style="display:flex;gap:8px;margin-bottom:1rem;">
-          <button class="btn btn-primary btn-sm" onclick="processAttendanceMapping()">Apply Mapping →</button>
+          <button class="btn btn-primary btn-sm" onclick="processAttendanceMapping()">Apply Mapping & Generate →</button>
           <button class="btn btn-sm" onclick="resetAttendance()">← Back</button>
         </div>
         <div id="attPreviewSection" style="display:none;">
@@ -2569,7 +2729,12 @@ function downloadDoc(id) { const doc=DB.documents?.find(d=>d.id===id);if(!doc){s
 function deleteDoc(id) { if(!confirm('Delete this document?'))return;DB.documents=DB.documents.filter(d=>d.id!==id);saveDB();renderDocList();showToast('Deleted','success'); }
 
 let attendanceRawHeaders=[],attendanceRawRows=[],attendanceMapped=[];
-function openAttendance() { resetAttendance();document.getElementById('attPayMonth').value=new Date().toISOString().slice(0,7);openModal('attendanceModal'); }
+function openAttendance() {
+  resetAttendance();
+  document.getElementById('attPayMonth').value=new Date().toISOString().slice(0,7);
+  document.getElementById('attWorkingDays').value='26';
+  openModal('attendanceModal');
+}
 function resetAttendance() {
   attendanceRawHeaders=[];attendanceRawRows=[];attendanceMapped=[];
   document.getElementById('attStep1').style.display='block';document.getElementById('attStep2').style.display='none';document.getElementById('attPreviewSection').style.display='none';document.getElementById('attGenResult').style.display='none';
@@ -2583,7 +2748,7 @@ async function handleAttFile(file) {
 }
 function parseAttExcel(file) {
   const loadXLSX=cb=>{if(window.XLSX){cb();return;}const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';s.onload=cb;document.head.appendChild(s);};
-  loadXLSX(()=>{const reader=new FileReader();reader.onload=e=>{try{const wb=XLSX.read(e.target.result,{type:'array'});const ws=wb.Sheets[wb.SheetNames[0]];const data=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});if(data.length<2){showToast('File appears empty','error');return;}attendanceRawHeaders=data[0].map(String);attendanceRawRows=data.slice(1).filter(r=>r.some(c=>c!==''));showColumnMapper();}catch(err){showToast('Error reading Excel: '+err.message,'error');}};reader.readAsArrayBuffer(file);});
+  loadXLSX(()=>{const reader=new FileReader();reader.onload=e=>{try{const wb=XLSX.read(e.target.result,{type:'array'});const ws=wb.Sheets[wb.SheetNames[0]];const data=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});if(data.length<2){showToast('File appears empty','error');return;}attendanceRawHeaders=data[0].map(String);attendanceRawRows=data.slice(1).filter(r=>r.some(c=>c!==''));showColumnMapper(true);}catch(err){showToast('Error reading Excel: '+err.message,'error');}};reader.readAsArrayBuffer(file);});
 }
 function parseAttCSVText(text) {
   const lines=text.trim().split(/\r?\n/).filter(l=>l.trim());if(lines.length<2){showToast('File has no data rows','error');return;}
@@ -2594,14 +2759,40 @@ function detectAttDelimiter(line) { const c={',': (line.match(/,/g)||[]).length,
 function parseAttCSVLine(line,delim) { const r=[];let cur='',inQ=false;for(let i=0;i<line.length;i++){if(line[i]==='"'){inQ=!inQ;continue;}if(line[i]===delim&&!inQ){r.push(cur.trim());cur='';continue;}cur+=line[i];}r.push(cur.trim());return r; }
 function parseAttendanceInput() { const text=document.getElementById('attManualInput').value.trim();if(!text){showToast('Please upload or paste data','error');return;}parseAttCSVText(text); }
 function loadSampleAttendance() { const s=`EmpID,EmployeeName,WorkingDays,LeaveDays,AbsentDays,OvertimeHours\n`+DB.employees.slice(0,5).map(e=>`${e.empId},${e.fullName},26,1,0,4`).join('\n');document.getElementById('attManualInput').value=s;showToast('Sample data loaded!','success'); }
-function showColumnMapper() {
+function calcAttendanceSalary(emp,row,workingDays) {
+  const basic=Number(emp?.salary)||0;
+  const wd=Math.max(Number(workingDays)||26,1);
+  const daily=basic/wd;
+  const hourly=daily/8;
+  const absentDays=Math.max(Number(row?.absentDays)||0,0);
+  const leaveDays=Math.max(Number(row?.leaveDays)||0,0);
+  const overtimeHrs=Math.max(Number(row?.overtimeHrs)||0,0);
+  const unpaidDeduction=daily*absentDays;
+  const overtimePay=hourly*1.5*overtimeHrs;
+  const gross=basic-unpaidDeduction+overtimePay;
+  const epf=Math.round(basic*0.08);
+  const etf=Math.round(basic*0.03);
+  const totalDeductions=epf+etf;
+  const net=Math.round(gross-totalDeductions);
+  return{basicSalary:basic,transport:0,meal:0,otherAllow:Math.round(overtimePay),epf,etf,tax:0,otherDeductions:0,grossEarnings:Math.round(gross),totalDeductions,netSalary:net,absentDays,leaveDays,overtimeHrs,unpaidDeduction:Math.round(unpaidDeduction),overtimePay:Math.round(overtimePay)};
+}
+function showColumnMapper(autoGenerate=false) {
   document.getElementById('attStep1').style.display='block';document.getElementById('attStep2').style.display='block';document.getElementById('attPreviewSection').style.display='none';
   const fds=[{key:'empId',label:'Employee ID / Code',required:true},{key:'empName',label:'Employee Name',required:false},{key:'workDays',label:'Working Days Present',required:false},{key:'leaveDays',label:'Leave Days',required:false},{key:'absentDays',label:'Absent / Unpaid Leave',required:false},{key:'overtimeHrs',label:'Overtime Hours',required:false}];
   const autoMatch=label=>{const l=label.toLowerCase();return attendanceRawHeaders.findIndex(h=>{const h2=h.toLowerCase().replace(/[\s_-]/g,'');if(l.includes('id')||l.includes('code'))return h2.includes('id')||h2.includes('code')||h2.includes('emp');if(l.includes('name'))return h2.includes('name');if(l.includes('working')||l.includes('present'))return h2.includes('work')||h2.includes('present');if(l.includes('leave'))return h2.includes('leave');if(l.includes('absent'))return h2.includes('absent')||h2.includes('unpaid');if(l.includes('overtime'))return h2.includes('ot')||h2.includes('overtime');return false;});};
   const opts=['— Not in file —',...attendanceRawHeaders];
   document.getElementById('attColMap').innerHTML=fds.map(fd=>{const ai=autoMatch(fd.label);const sv=ai>=0?attendanceRawHeaders[ai]:'';return`<div><label>${fd.label}${fd.required?' <span style="color:var(--danger)">*</span>':''}</label><select id="map_${fd.key}">${opts.map(o=>`<option value="${o}" ${o===sv?'selected':''}>${o}</option>`).join('')}</select></div>`;}).join('');
+  if(autoGenerate){
+    const empIdMap=document.getElementById('map_empId')?.value;
+    if(empIdMap&&empIdMap!=='— Not in file —'){
+      showToast('Excel uploaded. Auto generating salary...','success');
+      setTimeout(()=>processAttendanceMapping(),100);
+    }else{
+      showToast('Excel uploaded. Please select Employee ID column to generate salary','error');
+    }
+  }
 }
-function processAttendanceMapping() {
+async function processAttendanceMapping() {
   const getCol=key=>{const v=document.getElementById('map_'+key)?.value;return(v&&v!=='— Not in file —')?v:null;};
   const idCol=getCol('empId');if(!idCol){showToast('Employee ID column is required','error');return;}
   const nmCol=getCol('empName'),wdCol=getCol('workDays'),ldCol=getCol('leaveDays'),adCol=getCol('absentDays'),otCol=getCol('overtimeHrs');
@@ -2609,13 +2800,14 @@ function processAttendanceMapping() {
   const idIdx=ci(idCol),nmIdx=ci(nmCol),wdIdx=ci(wdCol),ldIdx=ci(ldCol),adIdx=ci(adCol),otIdx=ci(otCol);
   attendanceMapped=attendanceRawRows.map(row=>{const empId=(row[idIdx]||'').toString().trim();const emp=DB.employees.find(e=>e.empId?.toLowerCase()===empId.toLowerCase()||e.fullName?.toLowerCase()===empId.toLowerCase());return{rawId:empId,rawName:nmIdx>=0?(row[nmIdx]||'').toString().trim():'',workDays:wdIdx>=0?parseFloat(row[wdIdx])||0:null,leaveDays:ldIdx>=0?parseFloat(row[ldIdx])||0:0,absentDays:adIdx>=0?parseFloat(row[adIdx])||0:0,overtimeHrs:otIdx>=0?parseFloat(row[otIdx])||0:0,emp:emp||null,matched:!!emp};}).filter(r=>r.rawId);
   renderAttendancePreview();
+  await generatePayrollFromAttendance();
 }
 function renderAttendancePreview() {
   if(!attendanceMapped.length){showToast('No rows to display','error');return;}
   const matched=attendanceMapped.filter(r=>r.matched).length;const unmatched=attendanceMapped.length-matched;const totalAbs=attendanceMapped.reduce((s,r)=>s+r.absentDays,0);
   document.getElementById('attSummaryBar').innerHTML=`<div class="att-summary-card"><div class="val" style="color:var(--accent)">${attendanceMapped.length}</div><div class="lbl">Total Rows</div></div><div class="att-summary-card"><div class="val" style="color:var(--success)">${matched}</div><div class="lbl">Matched</div></div><div class="att-summary-card"><div class="val" style="color:var(--danger)">${unmatched}</div><div class="lbl">Not Found</div></div><div class="att-summary-card"><div class="val" style="color:var(--warning)">${totalAbs}</div><div class="lbl">Absent Days</div></div>`;
   const wd=parseFloat(document.getElementById('attWorkingDays')?.value)||26;
-  document.getElementById('attPreviewTable').innerHTML=`<thead><tr><th>Emp ID</th><th>Name</th><th>Match</th><th>Days</th><th>Leave</th><th>Absent</th><th>OT Hrs</th><th>Est. Net Pay</th></tr></thead><tbody>${attendanceMapped.map(r=>{let estNet='';if(r.emp){const daily=r.emp.salary/wd;const gross=r.emp.salary-daily*r.absentDays+(r.emp.salary/wd/8)*r.overtimeHrs*1.5;estNet=`<span class="att-match-ok">LKR ${Math.round(gross*0.92).toLocaleString()}</span>`;}return`<tr><td>${r.rawId}</td><td>${r.rawName||(r.emp?.fullName||'—')}</td><td>${r.matched?`<span class="att-match-ok">✓ ${r.emp.fullName}</span>`:`<span class="att-match-err">✗ Not found</span>`}</td><td>${r.workDays!==null?r.workDays:'—'}</td><td>${r.leaveDays}</td><td>${r.absentDays>0?`<span class="att-match-warn">${r.absentDays}</span>`:r.absentDays}</td><td>${r.overtimeHrs}</td><td>${estNet||'<span style="color:var(--muted)">—</span>'}</td></tr>`;}).join('')}</tbody>`;
+  document.getElementById('attPreviewTable').innerHTML=`<thead><tr><th>Emp ID</th><th>Name</th><th>Match</th><th>Days</th><th>Leave</th><th>Absent</th><th>OT Hrs</th><th>Auto Net Salary</th></tr></thead><tbody>${attendanceMapped.map(r=>{let estNet='';if(r.emp){const pay=calcAttendanceSalary(r.emp,r,wd);estNet=`<span class="att-match-ok">LKR ${pay.netSalary.toLocaleString()}</span>`;}return`<tr><td>${r.rawId}</td><td>${r.rawName||(r.emp?.fullName||'—')}</td><td>${r.matched?`<span class="att-match-ok">✓ ${r.emp.fullName}</span>`:`<span class="att-match-err">✗ Not found</span>`}</td><td>${r.workDays!==null?r.workDays:'—'}</td><td>${r.leaveDays}</td><td>${r.absentDays>0?`<span class="att-match-warn">${r.absentDays}</span>`:r.absentDays}</td><td>${r.overtimeHrs}</td><td>${estNet||'<span style="color:var(--muted)">—</span>'}</td></tr>`;}).join('')}</tbody>`;
   document.getElementById('attPreviewSection').style.display='block';
 }
 async function generatePayrollFromAttendance() {
@@ -2623,15 +2815,16 @@ async function generatePayrollFromAttendance() {
   if(!month){showToast('Please select payroll month','error');return;}
   const matched=attendanceMapped.filter(r=>r.matched);if(!matched.length){showToast('No matched employees','error');return;}
   let created=0,updated=0;
-  for(const r of matched){const emp=r.emp;const basic=emp.salary||0;const daily=basic/wd;const absentDed=daily*(r.absentDays||0);const otPay=(basic/wd/8)*1.5*(r.overtimeHrs||0);const gross=basic-absentDed+otPay;const epf=Math.round(basic*0.08);const etf=Math.round(basic*0.03);const net=Math.round(gross-epf);const pd={id:Date.now()+Math.random(),employeeId:emp.id,month,basicSalary:basic,transport:0,meal:0,otherAllow:Math.round(otPay),epf,etf,tax:0,otherDeductions:0,grossEarnings:Math.round(gross),totalDeductions:epf+etf,netSalary:net,absentDays:r.absentDays||0,leaveDays:r.leaveDays||0,overtimeHrs:r.overtimeHrs||0,createdAt:new Date().toISOString()};const xi=DB.payrolls.findIndex(p=>p.employeeId===emp.id&&p.month===month);if(xi!==-1){DB.payrolls[xi]=pd;updated++;}else{DB.payrolls.push(pd);created++;}}
+  for(const r of matched){const emp=r.emp;const pay=calcAttendanceSalary(emp,r,wd);const xi=DB.payrolls.findIndex(p=>p.employeeId===emp.id&&p.month===month);const pd={id:xi!==-1?DB.payrolls[xi].id:Date.now()+Math.random(),employeeId:emp.id,month,...pay,attendanceSource:'upload',workingDays:wd,createdAt:xi!==-1?(DB.payrolls[xi].createdAt||new Date().toISOString()):new Date().toISOString(),updatedAt:new Date().toISOString()};if(xi!==-1){DB.payrolls[xi]=pd;updated++;}else{DB.payrolls.push(pd);created++;}}
   await saveDB();const skipped=attendanceMapped.length-matched.length;
-  document.getElementById('attGenResult').style.display='block';document.getElementById('attGenResult').innerHTML=`<div style="font-weight:700;font-size:1rem;margin-bottom:8px;color:var(--success);">✅ Payroll Generated Successfully!</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:0.82rem;"><div>📝 <strong>${created}</strong> new payslips</div><div>🔄 <strong>${updated}</strong> updated</div><div>⚠️ <strong>${skipped}</strong> skipped</div></div><div style="margin-top:8px;font-size:0.75rem;color:var(--text2);">Month: <strong>${month}</strong> · EPF 8% + ETF 3% auto-deducted</div>`;
+  document.getElementById('attGenResult').style.display='block';document.getElementById('attGenResult').innerHTML=`<div style="font-weight:700;font-size:1rem;margin-bottom:8px;color:var(--success);">✅ Salary Generated Successfully!</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:0.82rem;"><div>📝 <strong>${created}</strong> new payslips</div><div>🔄 <strong>${updated}</strong> updated</div><div>⚠️ <strong>${skipped}</strong> skipped</div></div><div style="margin-top:8px;font-size:0.75rem;color:var(--text2);">Month: <strong>${month}</strong> · Basic salary, absent deductions, OT, and EPF 8% calculated automatically</div>`;
+  if(selectedEmployeeId)renderDetail(selectedEmployeeId);
   showToast(`Payroll done! ${created} created, ${updated} updated`,'success');
 }
 function exportAttendanceSummaryPDF() {
   if(!attendanceMapped.length){showToast('No data to export','error');return;}
   const month=document.getElementById('attPayMonth').value||new Date().toISOString().slice(0,7);const wd=parseFloat(document.getElementById('attWorkingDays').value)||26;
-  const rows=attendanceMapped.map(r=>{if(!r.emp)return`<tr style="color:#ef4444"><td>${r.rawId}</td><td>${r.rawName}</td><td>Not Found</td><td>—</td><td>${r.absentDays}</td><td>${r.overtimeHrs}</td><td>—</td></tr>`;const daily=r.emp.salary/wd;const gross=r.emp.salary-daily*r.absentDays+(r.emp.salary/wd/8)*r.overtimeHrs*1.5;const net=Math.round(gross*0.92);return`<tr><td>${r.emp.empId}</td><td>${r.emp.fullName}</td><td>${r.emp.department||'—'}</td><td>${r.workDays??wd-r.absentDays}</td><td>${r.absentDays}</td><td>${r.overtimeHrs}</td><td>LKR ${net.toLocaleString()}</td></tr>`;}).join('');
+  const rows=attendanceMapped.map(r=>{if(!r.emp)return`<tr style="color:#ef4444"><td>${r.rawId}</td><td>${r.rawName}</td><td>Not Found</td><td>—</td><td>${r.absentDays}</td><td>${r.overtimeHrs}</td><td>—</td></tr>`;const pay=calcAttendanceSalary(r.emp,r,wd);return`<tr><td>${r.emp.empId}</td><td>${r.emp.fullName}</td><td>${r.emp.department||'—'}</td><td>${r.workDays??wd-r.absentDays}</td><td>${r.absentDays}</td><td>${r.overtimeHrs}</td><td>LKR ${pay.netSalary.toLocaleString()}</td></tr>`;}).join('');
   const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:30px;color:#1e293b}h1{font-size:20px;color:#3B82F6;margin-bottom:4px}p{font-size:11px;color:#64748b;margin-bottom:16px}table{width:100%;border-collapse:collapse;font-size:10px}th{background:#3B82F6;color:white;padding:7px;text-align:left}td{padding:6px 7px;border-bottom:1px solid #e2e8f0}</style></head><body><h1>Attendance Summary — ${month}</h1><p>Generated: ${new Date().toLocaleString()}</p><table><thead><tr><th>Emp ID</th><th>Name</th><th>Dept</th><th>Days</th><th>Absent</th><th>OT Hrs</th><th>Est. Net</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;
   const el=document.createElement('div');el.innerHTML=html;document.body.appendChild(el);
   const go=()=>html2pdf().set({margin:[0.4,0.3],filename:`Attendance_${month}.pdf`,image:{type:'jpeg',quality:0.95},html2canvas:{scale:2},jsPDF:{unit:'in',format:'a4',orientation:'landscape'}}).from(el).save().then(()=>{document.body.removeChild(el);showToast('PDF exported!','success');});
@@ -2693,6 +2886,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   document.getElementById('logoutBtn').addEventListener('click',handleLogout);
   const dz=document.getElementById('attDropZone');if(dz){dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag-over');});dz.addEventListener('dragleave',()=>dz.classList.remove('drag-over'));dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag-over');if(e.dataTransfer.files[0])handleAttFile(e.dataTransfer.files[0]);});}
   const afi=document.getElementById('attFileInput');if(afi)afi.addEventListener('change',function(){if(this.files[0])handleAttFile(this.files[0]);});
+  const awd=document.getElementById('attWorkingDays');if(awd)awd.addEventListener('input',()=>{if(attendanceMapped.length)renderAttendancePreview();});
   document.getElementById('addEmployeeBtn').addEventListener('click',()=>{editingEmployeeId=null;document.getElementById('modalTitle').textContent='New Employee';document.querySelectorAll('#empModal input,#empModal select,#empModal textarea').forEach(el=>el.value='');document.getElementById('empGender').value='Male';document.getElementById('empMarital').value='Single';document.getElementById('empType').value='Permanent';document.getElementById('empStatus').value='Active';document.getElementById('empPayMethod').value='Bank Transfer'; currentEmpPhotoData=null; refreshEmpLocationDropdown(); const pzr=document.getElementById('photoUploadZone'); if(pzr){pzr.innerHTML='<span class="upload-icon">📷</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;">✕</button>';} const eiq2=document.getElementById('empIdQuick'); if(eiq2)eiq2.value=''; document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));document.querySelector('.tab-btn[data-tab="0"]').classList.add('active');document.getElementById('tab0').classList.add('active');openModal('empModal');});
   document.getElementById('saveEmpBtn').addEventListener('click',saveEmployee);
   document.getElementById('refreshListBtn').addEventListener('click',async()=>{showLoading();await loadDB(true);hideLoading();renderEmployeeList();if(selectedEmployeeId)renderDetail(selectedEmployeeId);showToast('Cloud data refreshed','success');});
