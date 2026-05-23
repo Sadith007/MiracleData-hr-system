@@ -1863,7 +1863,7 @@ select option { background: #0F1628; color: var(--text); }
     </div>
   </div>
   <button id="hrChatToggle" onclick="hcToggle()" aria-label="Open HR Assistant" title="Open HR Assistant">
-    🤖
+    <span id="hcToggleIcon">🤖</span>
     <span class="hc-notif" id="hcNotif" style="display:none;">1</span>
   </button>
 </div>
@@ -3086,7 +3086,8 @@ Format: use numbered lists for steps, bullet points for features. Keep answers u
     const toggle = document.getElementById('hrChatToggle');
     box.style.display = hcOpen ? 'flex' : 'none';
     notif.style.display = 'none';
-    toggle.textContent = hcOpen ? '✕' : '🤖';
+    const iconEl = document.getElementById('hcToggleIcon');
+    if (iconEl) iconEl.textContent = hcOpen ? '✕' : '🤖';
     const label = hcOpen ? 'Close HR Assistant' : 'Open HR Assistant';
     toggle.setAttribute('aria-label', label);
     toggle.setAttribute('title', label);
