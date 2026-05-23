@@ -1403,10 +1403,10 @@ select option { background: #0F1628; color: var(--text); }
   </div>
   <div class="body-layout">
     <div class="sidebar">
-      <div class="search-box"><input type="text" id="searchInput" placeholder="Search name, ID, dept..."></div>
+      <div class="search-box"><input type="search" id="searchInput" aria-label="Search employees" placeholder="Search name, ID, dept..."></div>
       <div class="sidebar-actions">
         <button id="addEmployeeBtn" class="btn btn-primary btn-sm" style="flex:1;">+ New Employee</button>
-        <button id="refreshListBtn" class="btn btn-sm">↺</button>
+        <button id="refreshListBtn" class="btn btn-sm" aria-label="Refresh employee list" title="Refresh employee list">↺</button>
       </div>
       <div id="employeeListContainer" class="employee-list"></div>
     </div>
@@ -1859,11 +1859,11 @@ select option { background: #0F1628; color: var(--text); }
     </div>
     <div class="hc-input-row">
       <textarea class="hc-textarea" id="hcInput" rows="1" placeholder="Ask anything about HR Nexus..."></textarea>
-      <button class="hc-send" id="hcSendBtn" onclick="hcSend()">➤</button>
+      <button class="hc-send" id="hcSendBtn" onclick="hcSend()" aria-label="Send message" title="Send message">➤</button>
     </div>
   </div>
-  <button id="hrChatToggle" onclick="hcToggle()">
-    🤖
+  <button id="hrChatToggle" onclick="hcToggle()" aria-label="Open HR Assistant" title="Open HR Assistant">
+    <span id="hcToggleIcon">🤖</span>
     <span class="hc-notif" id="hcNotif" style="display:none;">1</span>
   </button>
 </div>
@@ -3086,7 +3086,11 @@ Format: use numbered lists for steps, bullet points for features. Keep answers u
     const toggle = document.getElementById('hrChatToggle');
     box.style.display = hcOpen ? 'flex' : 'none';
     notif.style.display = 'none';
-    toggle.textContent = hcOpen ? '✕' : '🤖';
+    const iconEl = document.getElementById('hcToggleIcon');
+    if (iconEl) iconEl.textContent = hcOpen ? '✕' : '🤖';
+    const label = hcOpen ? 'Close HR Assistant' : 'Open HR Assistant';
+    toggle.setAttribute('aria-label', label);
+    toggle.setAttribute('title', label);
     if (hcOpen && document.getElementById('hcMessages').children.length === 0) {
       hcAddMsg('bot', 'Hello! I am your <strong>HR Nexus Assistant</strong>. I can help you with:<br><ul><li>Managing employees & payroll</li><li>Leave & attendance tracking</li><li>Reports and analytics</li><li>System navigation & features</li></ul>What would you like help with?', true);
     }
