@@ -1326,35 +1326,133 @@ select option { background: #0F1628; color: var(--text); }
   border:1px solid rgba(255,255,255,0.08);
 }
 
+/* ===== HAMBURGER + DRAWER + BOTTOM NAV ===== */
+.hamburger-btn {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 8px;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+.hamburger-btn:hover { background: rgba(255,255,255,0.07); }
+.hamburger-btn span {
+  display: block;
+  width: 20px; height: 2px;
+  background: var(--text2);
+  border-radius: 2px;
+  transition: all 0.25s;
+}
+
+.drawer-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text2);
+  transition: all 0.15s;
+  margin-bottom: 2px;
+}
+.drawer-item:hover {
+  background: rgba(79,142,247,0.1);
+  color: var(--text);
+}
+.drawer-logout {
+  color: #F87171;
+}
+.drawer-logout:hover {
+  background: rgba(240,82,82,0.1);
+  color: var(--danger);
+}
+
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 62px;
+  background: rgba(8,14,26,0.95);
+  border-top: 1px solid rgba(79,142,247,0.15);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  z-index: 900;
+  padding: 0 4px;
+  box-shadow: 0 -4px 24px rgba(0,0,0,0.4);
+}
+.bnav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 4px;
+  border-radius: 12px;
+  transition: all 0.18s;
+  color: var(--muted);
+  min-width: 0;
+}
+.bnav-item.active {
+  color: var(--accent);
+}
+.bnav-item.active .bnav-icon {
+  background: rgba(79,142,247,0.14);
+  border-color: rgba(79,142,247,0.25);
+}
+.bnav-icon {
+  font-size: 1.15rem;
+  width: 34px; height: 34px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  transition: all 0.18s;
+}
+.bnav-label {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
 /* ===== MOBILE RESPONSIVE ===== */
 @media (max-width: 768px) {
 
+  /* --- HAMBURGER visible on mobile --- */
+  .hamburger-btn { display: flex; }
+
+  /* --- Hide desktop nav buttons on mobile --- */
+  .top-actions .btn-sm:not(#logoutBtn) { display: none !important; }
+  .top-actions #logoutBtn { display: none !important; }
+  .top-actions #userRoleBadge { display: none !important; }
+  .top-actions #trialBadge { display: none !important; }
+  .top-actions { display: none; }
+
+  /* --- Show bottom nav --- */
+  .bottom-nav { display: flex; }
+
+  /* --- Push body up above bottom nav --- */
+  .app { padding-bottom: 62px; }
+
   /* --- TOPBAR --- */
   .topbar {
-    height: auto;
-    padding: 0.6rem 1rem;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-  .brand h1 { font-size: 0.88rem; }
-  .brand-icon { width: 30px; height: 30px; font-size: 1rem; }
-  .top-actions {
-    width: 100%;
-    overflow-x: auto;
+    height: 56px;
+    padding: 0 1rem;
     flex-wrap: nowrap;
-    padding-bottom: 2px;
-    gap: 4px;
-    scrollbar-width: none;
   }
-  .top-actions::-webkit-scrollbar { display: none; }
-  .top-actions .btn-sm {
-    font-size: 0.65rem;
-    padding: 4px 8px;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
+  .brand h1 { font-size: 0.9rem; }
+  .brand-icon { width: 30px; height: 30px; font-size: 1rem; }
 
-  /* --- BODY LAYOUT: stack sidebar above detail --- */
+  /* --- BODY LAYOUT: stack --- */
   .body-layout {
     flex-direction: column;
     overflow-y: auto;
@@ -1364,28 +1462,20 @@ select option { background: #0F1628; color: var(--text); }
   /* --- SIDEBAR --- */
   .sidebar {
     width: 100%;
-    max-height: 220px;
+    max-height: 200px;
     border-right: none;
     border-bottom: 1px solid rgba(255,255,255,0.07);
     flex-shrink: 0;
   }
-  .employee-list { max-height: 130px; }
+  .employee-list { max-height: 115px; }
   .search-box { padding: 0.6rem; }
   .sidebar-actions { padding: 0 0.6rem 0.6rem; }
 
   /* --- DETAIL PANEL --- */
-  .detail-panel {
-    padding: 1rem;
-    overflow-y: auto;
-    flex: 1;
-  }
+  .detail-panel { padding: 1rem; overflow-y: auto; flex: 1; }
 
   /* --- PROFILE HEADER --- */
-  .profile-header {
-    flex-direction: column;
-    gap: 12px;
-    padding: 14px;
-  }
+  .profile-header { flex-direction: column; gap: 12px; padding: 14px; }
   .profile-avatar { width: 60px; height: 60px; font-size: 1.4rem; }
   .profile-info h2 { font-size: 1.1rem; }
 
@@ -1398,8 +1488,7 @@ select option { background: #0F1628; color: var(--text); }
   /* --- MODAL --- */
   .modal { align-items: flex-end; }
   .modal-card {
-    width: 100%;
-    max-width: 100%;
+    width: 100%; max-width: 100%;
     max-height: 92vh;
     border-radius: 20px 20px 0 0;
   }
@@ -1408,11 +1497,7 @@ select option { background: #0F1628; color: var(--text); }
   .modal-footer { padding: 0.75rem 1rem; }
 
   /* --- AUTH CARD --- */
-  .auth-card {
-    padding: 2rem 1.5rem;
-    border-radius: 1.5rem;
-    max-width: 100%;
-  }
+  .auth-card { padding: 2rem 1.5rem; border-radius: 1.5rem; max-width: 100%; }
   .auth-card h2 { font-size: 1.6rem; }
 
   /* --- ATTENDANCE SUMMARY --- */
@@ -1432,38 +1517,24 @@ select option { background: #0F1628; color: var(--text); }
   .chart-container canvas { max-height: 200px; }
 
   /* --- LOCATIONS MODAL --- */
-  .loc-layout {
-    flex-direction: column;
-    height: auto;
-  }
-  .loc-sidebar {
-    width: 100%;
-    max-height: 200px;
-    border-right: none;
-    border-bottom: 1px solid rgba(255,255,255,0.07);
-  }
+  .loc-layout { flex-direction: column; height: auto; }
+  .loc-sidebar { width: 100%; max-height: 200px; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); }
   .loc-map-wrap { min-height: 220px; }
 
   /* --- CHATBOT --- */
-  #hrChatWidget { bottom: 16px; right: 16px; }
+  #hrChatWidget { bottom: 74px; right: 16px; }
   #hrChatBox {
     width: calc(100vw - 32px);
-    height: 70vh;
+    height: 65vh;
     right: 0;
     bottom: 65px;
   }
 
   /* --- TOAST --- */
-  .toast { right: 12px; left: 12px; font-size: 0.78rem; }
+  .toast { right: 12px; left: 12px; font-size: 0.78rem; bottom: 74px; }
 
   /* --- TRIAL WARNING POPUP --- */
-  .trial-warning-popup {
-    top: auto;
-    bottom: 90px;
-    right: 12px;
-    left: 12px;
-    max-width: 100%;
-  }
+  .trial-warning-popup { top: auto; bottom: 140px; right: 12px; left: 12px; max-width: 100%; }
 
   /* --- USER TABLE scroll --- */
   .user-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -1540,10 +1611,43 @@ select option { background: #0F1628; color: var(--text); }
   </div>
 </div>
 
+<!-- MOBILE DRAWER OVERLAY -->
+<div id="mobileDrawerOverlay" onclick="closeMobileDrawer()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:1998;backdrop-filter:blur(4px);"></div>
+
+<!-- MOBILE SIDE DRAWER -->
+<div id="mobileDrawer" style="display:none;position:fixed;top:0;left:0;bottom:0;width:82vw;max-width:300px;background:rgba(8,14,26,0.97);border-right:1px solid rgba(79,142,247,0.18);z-index:1999;flex-direction:column;transform:translateX(-100%);transition:transform 0.3s cubic-bezier(0.16,1,0.3,1);backdrop-filter:blur(40px);">
+  <div style="padding:1.2rem 1rem 0.8rem;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;gap:10px;">
+    <div class="brand-icon">🏢</div>
+    <div>
+      <div style="font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:700;background:linear-gradient(135deg,#EEF2FF,#A5B4FC);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">HR Nexus</div>
+      <div id="drawerUserBadge" style="font-size:0.65rem;color:var(--muted);margin-top:1px;"></div>
+    </div>
+    <button onclick="closeMobileDrawer()" style="margin-left:auto;background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;padding:4px;">✕</button>
+  </div>
+  <div id="drawerTrialBadgeWrap" style="padding:0.6rem 1rem 0;"></div>
+  <nav style="flex:1;overflow-y:auto;padding:0.6rem 0.6rem;">
+    <div id="drawerAttendanceItem" class="drawer-item" style="display:none;" onclick="document.getElementById('attendanceBtn').click();closeMobileDrawer()">📋 <span>Attendance</span></div>
+    <div id="drawerAttHistItem" class="drawer-item" style="display:none;" onclick="document.getElementById('attHistBtn').click();closeMobileDrawer()">📅 <span>History</span></div>
+    <div id="drawerLeaveItem" class="drawer-item" style="display:none;" onclick="document.getElementById('leaveBtn').click();closeMobileDrawer()">🏖️ <span>Leave</span></div>
+    <div id="drawerDocsItem" class="drawer-item" style="display:none;" onclick="document.getElementById('docsBtn').click();closeMobileDrawer()">📁 <span>Documents</span></div>
+    <div id="drawerReportsItem" class="drawer-item" style="display:none;" onclick="document.getElementById('reportsBtn').click();closeMobileDrawer()">📊 <span>Reports</span></div>
+    <div id="drawerPayrollItem" class="drawer-item" style="display:none;" onclick="document.getElementById('payrollBtn').click();closeMobileDrawer()">💰 <span>Payroll</span></div>
+    <div id="drawerUsersItem" class="drawer-item" style="display:none;" onclick="document.getElementById('userMgmtBtn').click();closeMobileDrawer()">👥 <span>Users</span></div>
+    <div id="drawerLocationItem" class="drawer-item" style="display:none;" onclick="document.getElementById('locationBtn').click();closeMobileDrawer()">📍 <span>Locations</span></div>
+  </nav>
+  <div style="padding:0.8rem 0.6rem;border-top:1px solid rgba(255,255,255,0.07);">
+    <div class="drawer-item drawer-logout" onclick="document.getElementById('logoutBtn').click();closeMobileDrawer()">⏻ <span>Logout</span></div>
+  </div>
+</div>
+
 <!-- MAIN APP -->
 <div id="mainApp" class="app">
   <div class="topbar">
     <div class="brand">
+      <!-- Mobile hamburger -->
+      <button id="mobileMenuBtn" class="hamburger-btn" onclick="openMobileDrawer()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
       <div class="brand-icon">🏢</div>
       <h1>HR Management System</h1>
     </div>
@@ -1561,6 +1665,31 @@ select option { background: #0F1628; color: var(--text); }
       <button id="logoutBtn" class="btn btn-sm">⏻ Logout</button>
     </div>
   </div>
+
+  <!-- BOTTOM NAV (mobile only) -->
+  <nav class="bottom-nav" id="bottomNav">
+    <button class="bnav-item active" id="bnavEmployees" onclick="bnavSelect('employees')">
+      <span class="bnav-icon">👤</span>
+      <span class="bnav-label">Employees</span>
+    </button>
+    <button class="bnav-item" id="bnavPayroll" onclick="bnavSelect('payroll')" style="display:none;">
+      <span class="bnav-icon">💰</span>
+      <span class="bnav-label">Payroll</span>
+    </button>
+    <button class="bnav-item" id="bnavLeave" onclick="bnavSelect('leave')" style="display:none;">
+      <span class="bnav-icon">🏖️</span>
+      <span class="bnav-label">Leave</span>
+    </button>
+    <button class="bnav-item" id="bnavReports" onclick="bnavSelect('reports')" style="display:none;">
+      <span class="bnav-icon">📊</span>
+      <span class="bnav-label">Reports</span>
+    </button>
+    <button class="bnav-item" id="bnavMore" onclick="openMobileDrawer()">
+      <span class="bnav-icon">☰</span>
+      <span class="bnav-label">More</span>
+    </button>
+  </nav>
+
   <div class="body-layout">
     <div class="sidebar">
       <div class="search-box"><input type="text" id="searchInput" placeholder="Search name, ID, dept..."></div>
@@ -3415,6 +3544,103 @@ Format: use numbered lists for steps, bullet points for features. Keep answers u
     }, 3000);
   });
 })();
+
+// ===== MOBILE DRAWER =====
+function openMobileDrawer() {
+  const drawer = document.getElementById('mobileDrawer');
+  const overlay = document.getElementById('mobileDrawerOverlay');
+  drawer.style.display = 'flex';
+  overlay.style.display = 'block';
+  requestAnimationFrame(() => {
+    drawer.style.transform = 'translateX(0)';
+  });
+  // Sync drawer badge
+  const roleBadge = document.getElementById('userRoleBadge');
+  const drawerBadge = document.getElementById('drawerUserBadge');
+  if (roleBadge && drawerBadge) drawerBadge.textContent = roleBadge.textContent;
+  // Sync trial badge
+  const trialBadge = document.getElementById('trialBadge');
+  const drawerTrialWrap = document.getElementById('drawerTrialBadgeWrap');
+  if (trialBadge && drawerTrialWrap) {
+    drawerTrialWrap.innerHTML = trialBadge.style.display !== 'none'
+      ? `<span style="font-size:0.72rem;color:var(--warning);">${trialBadge.textContent}</span>`
+      : '';
+  }
+  // Sync visible drawer items with visible topbar buttons
+  const map = {
+    'attendanceBtn': 'drawerAttendanceItem',
+    'attHistBtn': 'drawerAttHistItem',
+    'leaveBtn': 'drawerLeaveItem',
+    'docsBtn': 'drawerDocsItem',
+    'reportsBtn': 'drawerReportsItem',
+    'payrollBtn': 'drawerPayrollItem',
+    'userMgmtBtn': 'drawerUsersItem',
+    'locationBtn': 'drawerLocationItem',
+  };
+  for (const [btnId, itemId] of Object.entries(map)) {
+    const btn = document.getElementById(btnId);
+    const item = document.getElementById(itemId);
+    if (btn && item) item.style.display = btn.style.display !== 'none' ? 'flex' : 'none';
+  }
+}
+
+function closeMobileDrawer() {
+  const drawer = document.getElementById('mobileDrawer');
+  const overlay = document.getElementById('mobileDrawerOverlay');
+  drawer.style.transform = 'translateX(-100%)';
+  overlay.style.display = 'none';
+  setTimeout(() => { drawer.style.display = 'none'; }, 300);
+}
+window.openMobileDrawer = openMobileDrawer;
+window.closeMobileDrawer = closeMobileDrawer;
+
+// ===== BOTTOM NAV =====
+function bnavSelect(section) {
+  document.querySelectorAll('.bnav-item').forEach(b => b.classList.remove('active'));
+  const map = {
+    'employees': 'bnavEmployees',
+    'payroll': 'bnavPayroll',
+    'leave': 'bnavLeave',
+    'reports': 'bnavReports',
+  };
+  const active = document.getElementById(map[section]);
+  if (active) active.classList.add('active');
+
+  if (section === 'payroll') {
+    const btn = document.getElementById('payrollBtn');
+    if (btn && btn.style.display !== 'none') btn.click();
+  } else if (section === 'leave') {
+    const btn = document.getElementById('leaveBtn');
+    if (btn && btn.style.display !== 'none') btn.click();
+  } else if (section === 'reports') {
+    const btn = document.getElementById('reportsBtn');
+    if (btn && btn.style.display !== 'none') btn.click();
+  }
+}
+window.bnavSelect = bnavSelect;
+
+// Show bottom nav items based on role (called after login renders buttons)
+function syncBottomNav() {
+  const payrollBtn = document.getElementById('payrollBtn');
+  const leaveBtn = document.getElementById('leaveBtn');
+  const reportsBtn = document.getElementById('reportsBtn');
+  const bnavPayroll = document.getElementById('bnavPayroll');
+  const bnavLeave = document.getElementById('bnavLeave');
+  const bnavReports = document.getElementById('bnavReports');
+  if (bnavPayroll) bnavPayroll.style.display = (payrollBtn && payrollBtn.style.display !== 'none') ? 'flex' : 'none';
+  if (bnavLeave) bnavLeave.style.display = (leaveBtn && leaveBtn.style.display !== 'none') ? 'flex' : 'none';
+  if (bnavReports) bnavReports.style.display = (reportsBtn && reportsBtn.style.display !== 'none') ? 'flex' : 'none';
+}
+window.syncBottomNav = syncBottomNav;
+
+// Auto-sync bottom nav after app shows (observe button visibility changes)
+const _bnavObserver = new MutationObserver(() => syncBottomNav());
+document.addEventListener('DOMContentLoaded', () => {
+  ['payrollBtn','leaveBtn','reportsBtn'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) _bnavObserver.observe(el, { attributes: true, attributeFilter: ['style'] });
+  });
+});
 
 </script>
 </body>
