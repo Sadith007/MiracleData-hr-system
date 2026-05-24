@@ -1603,7 +1603,7 @@ select option { background: #0F1628; color: var(--text); }
     <div class="input-group"><label>Password (min 4)</label><input type="password" id="regPass" placeholder="••••••••"></div>
     <div class="input-group"><label>Confirm Password</label><input type="password" id="regPass2" placeholder="••••••••"></div>
     <div class="input-group"><label>Role Request</label>
-      <select id="regRole"><option>VIEWER</option><option>HR</option><option>DEPT_VIEWER</option><option>HEAD_VIEWER</option></select>
+      <select id="regRole"><option>VIEWER</option><option>HR</option><option>DEPT_VIEWER</option><option>HEAD_VIEWER</option><option>LOC_HEAD</option></select>
     </div>
     <div class="input-group" id="deptFieldReg" style="display:none;"><label>Department / Branch</label><input type="text" id="regDept" placeholder="e.g., IT, HR, Kandy Branch"></div>
     <button class="auth-btn" id="registerSubmitBtn">Submit Request</button>
@@ -2025,7 +2025,7 @@ select option { background: #0F1628; color: var(--text); }
         <div class="form-field"><label>Username</label><input id="newUsername" placeholder="Username"></div>
         <div class="form-field"><label>Password</label><input id="newPassword" type="password" placeholder="Password"></div>
         <div class="form-field"><label>Role</label>
-          <select id="newRole"><option>VIEWER</option><option>HR</option><option>ADMIN</option><option>DEPT_VIEWER</option><option>HEAD_VIEWER</option></select>
+          <select id="newRole"><option>VIEWER</option><option>HR</option><option>ADMIN</option><option>DEPT_VIEWER</option><option>HEAD_VIEWER</option><option>LOC_HEAD</option></select>
         </div>
       </div>
       <div class="form-field" id="newDeptField" style="display:none;"><label>Department / Branch</label><input id="newDept" placeholder="e.g. Kandy Branch, IT Dept"></div>
@@ -2408,6 +2408,7 @@ function handleRegister() {
   if(password!==password2){msgDiv.textContent='Passwords do not match';return;}
   if(role==='DEPT_VIEWER'&&!dept){msgDiv.textContent='Department required for DEPT_VIEWER';return;}
   if(role==='HEAD_VIEWER'&&!dept){msgDiv.textContent='Branch required for HEAD_VIEWER';return;}
+  if(role==='LOC_HEAD'&&!dept){msgDiv.textContent='Location required for LOC_HEAD';return;}
   if(DB.users.find(u=>u.username===username)){msgDiv.textContent='Username already exists';return;}
   DB.pendingUsers.push({id:Date.now(),username,password_hash:password,role,department:dept,requested_at:new Date().toISOString()});
   saveDB(); msgDiv.style.color='var(--success)'; msgDiv.textContent='✓ Request submitted! Admin will approve.';
@@ -2435,18 +2436,22 @@ function setupApp() {
   rb.textContent=`${currentUser.username.toUpperCase()} · ${currentUser.role}`;
   const canEdit=currentUser.role==='ADMIN'||currentUser.role==='HR';
   const isHeadViewer=currentUser.role==='HEAD_VIEWER';
-  document.getElementById('addEmployeeBtn').style.display=canEdit?'flex':'none';
+  const isLocHead=currentUser.role==='LOC_HEAD';
+  const isDeptViewer=currentUser.role==='DEPT_VIEWER';
+  // LOC_HEAD: can add employees in their location, approve leave, view attendance history
+  // DEPT_VIEWER: can only view their dept employees and submit leave requests
+  document.getElementById('addEmployeeBtn').style.display=(canEdit||isLocHead)?'flex':'none';
   document.getElementById('attendanceBtn').style.display=canEdit?'inline-flex':'none';
-  document.getElementById('attHistBtn').style.display=isHeadViewer?'none':'inline-flex';
+  document.getElementById('attHistBtn').style.display=(isHeadViewer||isDeptViewer)?'none':'inline-flex';
   document.getElementById('leaveBtn').style.display=isHeadViewer?'none':'inline-flex';
-  document.getElementById('docsBtn').style.display=isHeadViewer?'none':'inline-flex';
+  document.getElementById('docsBtn').style.display=(isHeadViewer||isDeptViewer)?'none':'inline-flex';
   document.getElementById('reportsBtn').style.display=canEdit?'inline-flex':'none';
   document.getElementById('payrollBtn').style.display=canEdit?'inline-flex':'none';
   document.getElementById('userMgmtBtn').style.display=currentUser.role==='ADMIN'?'inline-flex':'none';
-  document.getElementById('locationBtn').style.display=isHeadViewer?'none':'inline-flex';
-  // Branch filter: show for admin/hr, hide for others
+  document.getElementById('locationBtn').style.display=(isHeadViewer||isDeptViewer)?'none':'inline-flex';
+  // Branch filter: show for admin/hr/loc_head, hide for others
   const branchWrap=document.getElementById('branchFilterWrap');
-  if(canEdit){
+  if(canEdit||isLocHead){
     branchWrap.style.display='block';
     populateBranchFilter();
   } else {
@@ -2471,7 +2476,17 @@ function renderEmployeeList() {
     const userBranch=(currentUser.branch||currentUser.department||'').toLowerCase().trim();
     emps=emps.filter(e=>(e.location||'').toLowerCase().trim()===userBranch);
   }
-  // Admin/HR: apply branch filter dropdown
+  // LOC_HEAD: show only their location
+  if(currentUser?.role==='LOC_HEAD'){
+    const userLoc=(currentUser.branch||currentUser.department||'').toLowerCase().trim();
+    emps=emps.filter(e=>(e.location||'').toLowerCase().trim()===userLoc);
+  }
+  // DEPT_VIEWER: show only their department
+  if(currentUser?.role==='DEPT_VIEWER'){
+    const userDept=(currentUser.department||'').toLowerCase().trim();
+    emps=emps.filter(e=>(e.department||'').toLowerCase().trim()===userDept);
+  }
+  // Admin/HR/LOC_HEAD: apply branch filter dropdown
   const branchSel=document.getElementById('branchFilterSel');
   if(branchSel&&branchSel.value){
     emps=emps.filter(e=>e.location===branchSel.value);
@@ -2489,7 +2504,7 @@ function renderDetail(id) {
   const emp=DB.employees.find(e=>e.id==id);
   const container=document.getElementById('detailContainer');
   if(!emp){container.innerHTML='<div class="empty-state"><span>👤</span><p>Select an employee to view profile</p></div>';return;}
-  const canEdit=currentUser?.role==='ADMIN'||currentUser?.role==='HR';
+  const canEdit=currentUser?.role==='ADMIN'||currentUser?.role==='HR'||(currentUser?.role==='LOC_HEAD'&&(emp.location||'').toLowerCase().trim()===(currentUser.branch||currentUser.department||'').toLowerCase().trim());
   const empPayrolls=DB.payrolls.filter(p=>p.employeeId==id).sort((a,b)=>b.month.localeCompare(a.month));
   container.innerHTML=`
     <div class="profile-header">
@@ -2605,7 +2620,10 @@ async function saveEmployee() {
     remarks:document.getElementById('empRemarks').value
   };
   if(currentEmpPhotoData!==null){empData.photo=currentEmpPhotoData;} if(editingEmployeeId){const idx=DB.employees.findIndex(e=>e.id==editingEmployeeId);if(idx!==-1){empData.id=editingEmployeeId;DB.employees[idx]={...DB.employees[idx],...empData};}}
-  else{empData.id=Date.now();DB.employees.push(empData);}
+  else{empData.id=Date.now();
+    // LOC_HEAD: auto-assign their location if not set
+    if(currentUser?.role==='LOC_HEAD'&&!empData.location){empData.location=currentUser.branch||currentUser.department||'';}
+    DB.employees.push(empData);}
   const saved = await saveDB();
   if(!saved) return;
   closeModal('empModal'); renderEmployeeList();
@@ -2685,7 +2703,7 @@ function openUserManagement() {
 }
 
 function renderUserList() {
-  document.getElementById('userListContainer').innerHTML=`<h4 style="margin-bottom:15px;font-family:'Syne',sans-serif;">System Users</h4><table class="user-table"><thead><tr><th>Username</th><th>Role</th><th>Branch/Dept</th><th>Status</th><th>Actions</th></tr></thead><tbody>${DB.users.map(u=>`<tr><td>${u.username}${u.username===currentUser?.username?' (You)':''}</td><td><span class="badge-status" style="background:${u.role==='ADMIN'?'rgba(240,82,82,0.15)':u.role==='HEAD_VIEWER'?'rgba(248,184,78,0.15)':'rgba(20,196,126,0.12)'};color:${u.role==='ADMIN'?'var(--danger)':u.role==='HEAD_VIEWER'?'var(--warning)':'var(--success)'};border:1px solid ${u.role==='ADMIN'?'rgba(240,82,82,0.3)':u.role==='HEAD_VIEWER'?'rgba(248,184,78,0.3)':'rgba(20,196,126,0.3)'};">${u.role}</span></td><td style="color:var(--text2);font-size:0.78rem;">${u.branch||u.department||'—'}</td><td style="color:${u.status==='active'?'var(--success)':'var(--danger)'}">${u.status}</td><td>${u.username!==currentUser?.username?`<button class="btn btn-sm btn-danger" onclick="deleteUser('${u.id}')">Delete</button>`:''}<button class="btn btn-sm" onclick="resetPassword('${u.id}')">Reset PW</button></td></tr>`).join('')}</tbody></table>`;
+  document.getElementById('userListContainer').innerHTML=`<h4 style="margin-bottom:15px;font-family:'Syne',sans-serif;">System Users</h4><table class="user-table"><thead><tr><th>Username</th><th>Role</th><th>Branch/Dept</th><th>Status</th><th>Actions</th></tr></thead><tbody>${DB.users.map(u=>`<tr><td>${u.username}${u.username===currentUser?.username?' (You)':''}</td><td><span class="badge-status" style="background:${u.role==='ADMIN'?'rgba(240,82,82,0.15)':u.role==='HEAD_VIEWER'?'rgba(248,184,78,0.15)':u.role==='LOC_HEAD'?'rgba(79,142,247,0.15)':'rgba(20,196,126,0.12)'};color:${u.role==='ADMIN'?'var(--danger)':u.role==='HEAD_VIEWER'?'var(--warning)':u.role==='LOC_HEAD'?'var(--accent)':'var(--success)'};border:1px solid ${u.role==='ADMIN'?'rgba(240,82,82,0.3)':u.role==='HEAD_VIEWER'?'rgba(248,184,78,0.3)':u.role==='LOC_HEAD'?'rgba(79,142,247,0.3)':'rgba(20,196,126,0.3)'};">${u.role}</span></td><td style="color:var(--text2);font-size:0.78rem;">${u.branch||u.department||'—'}</td><td style="color:${u.status==='active'?'var(--success)':'var(--danger)'}">${u.status}</td><td>${u.username!==currentUser?.username?`<button class="btn btn-sm btn-danger" onclick="deleteUser('${u.id}')">Delete</button>`:''}<button class="btn btn-sm" onclick="resetPassword('${u.id}')">Reset PW</button></td></tr>`).join('')}</tbody></table>`;
 }
 
 function renderPendingList() {
@@ -2702,9 +2720,9 @@ function addUser() {
   const msgDiv=document.getElementById('userMsg');
   if(!username||!password){msgDiv.textContent='Username and password required';return;}
   if(password.length<4){msgDiv.textContent='Password must be at least 4 characters';return;}
-  if((role==='DEPT_VIEWER'||role==='HEAD_VIEWER')&&!dept){msgDiv.textContent=role==='HEAD_VIEWER'?'Branch is required for HEAD_VIEWER':'Department required for DEPT_VIEWER';return;}
+  if((role==='DEPT_VIEWER'||role==='HEAD_VIEWER'||role==='LOC_HEAD')&&!dept){msgDiv.textContent=role==='HEAD_VIEWER'?'Branch is required for HEAD_VIEWER':role==='LOC_HEAD'?'Location is required for LOC_HEAD':'Department required for DEPT_VIEWER';return;}
   if(DB.users.find(u=>u.username===username)){msgDiv.textContent='Username already exists';return;}
-  DB.users.push({id:'u'+Date.now(),username,password,role,department:role==='DEPT_VIEWER'?dept:null,branch:role==='HEAD_VIEWER'?dept:null,status:'active'});
+  DB.users.push({id:'u'+Date.now(),username,password,role,department:role==='DEPT_VIEWER'?dept:null,branch:(role==='HEAD_VIEWER'||role==='LOC_HEAD')?dept:null,status:'active'});
   saveDB();
   document.getElementById('newUsername').value='';document.getElementById('newPassword').value='';document.getElementById('newDept').value='';
   msgDiv.style.color='var(--success)';msgDiv.textContent='✓ User added successfully';
@@ -2713,7 +2731,7 @@ function addUser() {
 
 function deleteUser(id) { if(confirm('Delete this user?')){DB.users=DB.users.filter(u=>u.id!==id);saveDB();renderUserList();showToast('User deleted','success');} }
 function resetPassword(id) { const p=prompt('Enter new password (min 4):');if(p&&p.length>=4){const u=DB.users.find(x=>x.id===id);if(u){u.password=p;saveDB();showToast('Password reset','success');}}else if(p){showToast('Password must be at least 4 chars','error');} }
-function approveUser(pid) { const p=DB.pendingUsers.find(x=>x.id===pid);if(p){DB.users.push({id:'u'+Date.now(),username:p.username,password:p.password_hash,role:p.role,department:p.department,branch:p.role==='HEAD_VIEWER'?p.department:null,status:'active'});DB.pendingUsers=DB.pendingUsers.filter(x=>x.id!==pid);saveDB();renderPendingList();renderUserList();showToast(`User ${p.username} approved`,'success');} }
+function approveUser(pid) { const p=DB.pendingUsers.find(x=>x.id===pid);if(p){DB.users.push({id:'u'+Date.now(),username:p.username,password:p.password_hash,role:p.role,department:p.department,branch:(p.role==='HEAD_VIEWER'||p.role==='LOC_HEAD')?p.department:null,status:'active'});DB.pendingUsers=DB.pendingUsers.filter(x=>x.id!==pid);saveDB();renderPendingList();renderUserList();showToast(`User ${p.username} approved`,'success');} }
 function rejectUser(pid) { if(confirm('Reject this request?')){DB.pendingUsers=DB.pendingUsers.filter(p=>p.id!==pid);saveDB();renderPendingList();showToast('Request rejected','success');} }
 
 let chartMonthly,chartDept,chartDeptAvg,chartEmpTrend;
@@ -2809,13 +2827,24 @@ function renderLeaveList() {
   if(!DB.leaves)DB.leaves=[];
   const ef=document.getElementById('lvFilterEmp')?.value,sf=document.getElementById('lvFilterStatus')?.value;
   let list=DB.leaves;if(ef)list=list.filter(l=>l.employeeId==ef);if(sf)list=list.filter(l=>l.status===sf);
+  // LOC_HEAD: only show leaves for their location's employees
+  if(currentUser?.role==='LOC_HEAD'){
+    const userLoc=(currentUser.branch||currentUser.department||'').toLowerCase().trim();
+    list=list.filter(l=>{const lEmp=DB.employees.find(e=>e.id===l.employeeId);return(lEmp?.location||'').toLowerCase().trim()===userLoc;});
+  }
+  // DEPT_VIEWER: only show their own department's employees' leaves
+  if(currentUser?.role==='DEPT_VIEWER'){
+    const userDept=(currentUser.department||'').toLowerCase().trim();
+    list=list.filter(l=>{const lEmp=DB.employees.find(e=>e.id===l.employeeId);return(lEmp?.department||'').toLowerCase().trim()===userDept;});
+  }
   list=list.sort((a,b)=>b.createdAt.localeCompare(a.createdAt));
   const c=document.getElementById('lvListContainer');
   if(!list.length){c.innerHTML='<div style="color:var(--muted);text-align:center;padding:2rem;">No leave requests found</div>';return;}
   c.innerHTML=list.map(l=>{
     const emp=DB.employees.find(e=>e.id===l.employeeId);
     const sc=l.status==='Approved'?'leave-approved':l.status==='Rejected'?'leave-rejected':'leave-pending';
-    return`<div class="leave-card"><div style="font-size:1.6rem;">${l.type==='Sick'?'🤒':l.type==='Annual'?'🌴':l.type==='Casual'?'😊':l.type==='Maternity'?'👶':l.type==='Nopay'?'⛔':'📋'}</div><div class="leave-card-info"><strong>${emp?.fullName||'Unknown'} <span class="doc-type-badge">${l.type}</span></strong><small>${l.from} → ${l.to} · ${l.days} day${l.days!==1?'s':''} · ${l.reason||'No reason'}</small></div><span class="leave-status-pill ${sc}">${l.status}</span>${currentUser?.role==='ADMIN'||currentUser?.role==='HR'?`<div style="display:flex;gap:4px;"><button class="btn btn-sm btn-success" style="padding:3px 8px;" onclick="updateLeaveStatus(${l.id},'Approved')">✓</button><button class="btn btn-sm btn-danger" style="padding:3px 8px;" onclick="updateLeaveStatus(${l.id},'Rejected')">✗</button><button class="btn btn-sm btn-danger" style="padding:3px 8px;" onclick="deleteLeave(${l.id})">🗑</button></div>`:''}</div>`;
+    const canApproveLv=currentUser?.role==='ADMIN'||currentUser?.role==='HR'||(currentUser?.role==='LOC_HEAD'&&(()=>{const lEmp=DB.employees.find(e=>e.id===l.employeeId);const userLoc=(currentUser.branch||currentUser.department||'').toLowerCase().trim();return(lEmp?.location||'').toLowerCase().trim()===userLoc;})());
+    return`<div class="leave-card"><div style="font-size:1.6rem;">${l.type==='Sick'?'🤒':l.type==='Annual'?'🌴':l.type==='Casual'?'😊':l.type==='Maternity'?'👶':l.type==='Nopay'?'⛔':'📋'}</div><div class="leave-card-info"><strong>${emp?.fullName||'Unknown'} <span class="doc-type-badge">${l.type}</span></strong><small>${l.from} → ${l.to} · ${l.days} day${l.days!==1?'s':''} · ${l.reason||'No reason'}</small></div><span class="leave-status-pill ${sc}">${l.status}</span>${canApproveLv?`<div style="display:flex;gap:4px;"><button class="btn btn-sm btn-success" style="padding:3px 8px;" onclick="updateLeaveStatus(${l.id},'Approved')">✓</button><button class="btn btn-sm btn-danger" style="padding:3px 8px;" onclick="updateLeaveStatus(${l.id},'Rejected')">✗</button><button class="btn btn-sm btn-danger" style="padding:3px 8px;" onclick="deleteLeave(${l.id})">🗑</button></div>`:''}</div>`;
   }).join('');
 }
 function updateLeaveStatus(id,status) { const l=DB.leaves.find(x=>x.id===id);if(l){l.status=status;saveDB();renderLeaveList();showToast(`Leave ${status.toLowerCase()}`,'success');} }
@@ -3025,7 +3054,7 @@ function formatLicenseInput(input) { let val=input.value.replace(/[^A-Z0-9]/gi,'
 function renderLicenseSection() {
   if(currentUser?.role!=='ADMIN')return'';
   const trial=DB.trial;const license=DB.license;const trialStart=trial?new Date(trial.startDate).toLocaleDateString():'Not started';const trialEnd=trial?new Date(trial.endDate).toLocaleDateString():'-';const daysLeft=trial?Math.max(0,Math.ceil((new Date(trial.endDate)-new Date())/86400000)):0;const keys=DB.licenseKeys||[];
-  return`<hr style="margin:20px 0;border:none;border-top:1px solid rgba(255,255,255,0.07);"><div class="license-section"><h4>🔑 License & Trial Management</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;"><div class="info-card"><label>Trial Started</label><span>${trialStart}</span></div><div class="info-card"><label>Trial Ends</label><span>${trialEnd} (${daysLeft}d left)</span></div><div class="info-card"><label>License Status</label><span style="color:${license?.status==='active'?'var(--success)':'var(--warning)'}">${license?.status==='active'?'✅ Licensed':'⏳ Trial'}</span></div><div class="info-card"><label>License Key</label><span style="font-family:'DM Mono',monospace;font-size:0.75rem;">${license?.key||'None'}</span></div></div><div style="margin-bottom:1rem;"><div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Extend Trial</div><div style="display:flex;gap:8px;flex-wrap:wrap;"><select id="extendDays" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:6px 10px;color:var(--text);font-size:0.8rem;"><option value="7">+7 days</option><option value="14">+14 days</option><option value="30" selected>+30 days</option><option value="60">+60 days</option><option value="90">+90 days</option><option value="365">+1 Year</option></select><button class="btn btn-primary btn-sm" onclick="extendTrial()">Extend Trial</button><button class="btn btn-sm" style="background:rgba(20,196,126,0.15);border-color:rgba(20,196,126,0.3);color:var(--success);" onclick="generateNewLicenseKey()">🔑 Generate Key</button></div></div><div><div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Generated Keys (${keys.length})</div>${keys.length>0?keys.map(k=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><div class="license-key-display" style="flex:1;font-size:0.85rem;">${k.key}</div><span style="font-size:0.7rem;padding:3px 8px;border-radius:20px;background:${k.status==='active'?'rgba(20,196,126,0.12)':'rgba(100,100,100,0.12)'};color:${k.status==='active'?'var(--success)':'var(--muted)'};">${k.status}</span><button class="btn btn-sm" onclick="copyToClipboard('${k.key}')" style="padding:4px 8px;">📋</button></div>`).join(''):'<div style="color:var(--muted);font-size:0.8rem;">No keys generated yet</div>'}</div><div id="licenseAdminMsg" style="margin-top:8px;font-size:0.75rem;min-height:1rem;"></div></div>`;
+  return`<hr style="margin:20px 0;border:none;border-top:1px solid rgba(255,255,255,0.07);"><div class="license-section"><h4>🔑 License & Trial Management</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;"><div class="info-card"><label>Trial Started</label><span>${trialStart}</span></div><div class="info-card"><label>Trial Ends</label><span>${trialEnd} (${daysLeft}d left)</span></div><div class="info-card"><label>License Status</label><span style="color:${license?.status==='active'?'var(--success)':'var(--warning)'}">${license?.status==='active'?'✅ Licensed':'⏳ Trial'}</span></div><div class="info-card"><label>License Key</label><span style="font-family:'DM Mono',monospace;font-size:0.75rem;">${license?.key||'None'}</span></div></div><div style="margin-bottom:1rem;"><div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Extend Trial</div><div style="display:flex;gap:8px;flex-wrap:wrap;"><select id="extendDays" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:6px 10px;color:var(--text);font-size:0.8rem;"><option value="7">+7 days</option><option value="14">+14 days</option><option value="30" selected>+30 days</option><option value="60">+60 days</option><option value="90">+90 days</option><option value="365">+1 Year</option></select><button class="btn btn-primary btn-sm" onclick="extendTrial()">Extend Trial</button><button class="btn btn-sm" style="background:rgba(20,196,126,0.15);border-color:rgba(20,196,126,0.3);color:var(--success);" onclick="generateNewLicenseKey()">🔑 Generate Key</button></div></div><div style="margin-bottom:1rem;"><div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Set Exact Trial End Date</div><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;"><input type="date" id="trialEndDateInput" value="${trial?new Date(trial.endDate).toISOString().slice(0,10):''}" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:6px 10px;color:var(--text);font-size:0.8rem;outline:none;"><button class="btn btn-sm" style="background:rgba(248,184,78,0.12);border-color:rgba(248,184,78,0.3);color:var(--warning);" onclick="setTrialEndDate()">📅 Set Date</button></div></div><div><div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Generated Keys (${keys.length})</div>${keys.length>0?keys.map(k=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><div class="license-key-display" style="flex:1;font-size:0.85rem;">${k.key}</div><span style="font-size:0.7rem;padding:3px 8px;border-radius:20px;background:${k.status==='active'?'rgba(20,196,126,0.12)':'rgba(100,100,100,0.12)'};color:${k.status==='active'?'var(--success)':'var(--muted)'};">${k.status}</span><button class="btn btn-sm" onclick="copyToClipboard('${k.key}')" style="padding:4px 8px;">📋</button></div>`).join(''):'<div style="color:var(--muted);font-size:0.8rem;">No keys generated yet</div>'}</div><div id="licenseAdminMsg" style="margin-top:8px;font-size:0.75rem;min-height:1rem;"></div></div>`;
 }
 async function extendTrial() {
   const days=parseInt(document.getElementById('extendDays').value);const now=new Date();
@@ -3034,6 +3063,15 @@ async function extendTrial() {
   await saveDB();const msg=document.getElementById('licenseAdminMsg');if(msg){msg.style.color='var(--success)';msg.textContent=`✓ Trial extended by ${days} days. New end: ${new Date(DB.trial.endDate).toLocaleDateString()}`;}
   openUserManagement();showToast(`Trial extended by ${days} days`,'success');
 }
+async function setTrialEndDate() {
+  const dateInput=document.getElementById('trialEndDateInput');if(!dateInput||!dateInput.value){showToast('Please select a date','error');return;}
+  const newEnd=new Date(dateInput.value);newEnd.setHours(23,59,59,999);const now=new Date();
+  if(!DB.trial){DB.trial={startDate:now.toISOString(),endDate:newEnd.toISOString()};}
+  else{DB.trial.endDate=newEnd.toISOString();}
+  await saveDB();const msg=document.getElementById('licenseAdminMsg');if(msg){msg.style.color='var(--success)';msg.textContent=`✓ Trial end date set to ${newEnd.toLocaleDateString()}`;}
+  openUserManagement();showToast(`Trial end date set to ${newEnd.toLocaleDateString()}`,'success');
+}
+
 async function generateNewLicenseKey() {
   if(!DB.licenseKeys)DB.licenseKeys=[];const newKey=generateLicenseKey(Date.now()+Math.random()*1e9);DB.licenseKeys.push({key:newKey,status:'active',createdAt:new Date().toISOString()});await saveDB();openUserManagement();showToast('License key generated!','success');
 }
@@ -3047,7 +3085,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   document.getElementById('showRegisterBtn').addEventListener('click',()=>showRegisterForm(true));
   document.getElementById('backToLoginBtn').addEventListener('click',()=>showRegisterForm(false));
   document.getElementById('registerSubmitBtn').addEventListener('click',handleRegister);
-  document.getElementById('regRole').addEventListener('change',function(){document.getElementById('deptFieldReg').style.display=(this.value==='DEPT_VIEWER'||this.value==='HEAD_VIEWER')?'block':'none';const lbl=document.querySelector('#deptFieldReg label');if(lbl)lbl.textContent=this.value==='HEAD_VIEWER'?'Branch *':'Department *';});
+  document.getElementById('regRole').addEventListener('change',function(){document.getElementById('deptFieldReg').style.display=(this.value==='DEPT_VIEWER'||this.value==='HEAD_VIEWER'||this.value==='LOC_HEAD')?'block':'none';const lbl=document.querySelector('#deptFieldReg label');if(lbl)lbl.textContent=this.value==='HEAD_VIEWER'?'Branch *':this.value==='LOC_HEAD'?'Location *':'Department *';});
   document.getElementById('logoutBtn').addEventListener('click',handleLogout);
   const dz=document.getElementById('attDropZone');if(dz){dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag-over');});dz.addEventListener('dragleave',()=>dz.classList.remove('drag-over'));dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag-over');if(e.dataTransfer.files[0])handleAttFile(e.dataTransfer.files[0]);});}
   const afi=document.getElementById('attFileInput');if(afi)afi.addEventListener('change',function(){if(this.files[0])handleAttFile(this.files[0]);});
@@ -3067,7 +3105,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   document.getElementById('userMgmtBtn').addEventListener('click',openUserManagement);
   document.getElementById('locationBtn').addEventListener('click',openLocations);
   document.getElementById('addUserBtn').addEventListener('click',addUser);
-  document.getElementById('newRole').addEventListener('change',function(){const show=this.value==='DEPT_VIEWER'||this.value==='HEAD_VIEWER';document.getElementById('newDeptField').style.display=show?'block':'none';const lbl=document.querySelector('#newDeptField label');if(lbl)lbl.textContent=this.value==='HEAD_VIEWER'?'Branch *':'Department *';});
+  document.getElementById('newRole').addEventListener('change',function(){const show=this.value==='DEPT_VIEWER'||this.value==='HEAD_VIEWER'||this.value==='LOC_HEAD';document.getElementById('newDeptField').style.display=show?'block':'none';const lbl=document.querySelector('#newDeptField label');if(lbl)lbl.textContent=this.value==='HEAD_VIEWER'?'Branch *':this.value==='LOC_HEAD'?'Location *':'Department *';});
   document.querySelectorAll('.tab-btn').forEach(btn=>{btn.addEventListener('click',function(){const tabId=this.getAttribute('data-tab');document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));this.classList.add('active');document.getElementById(`tab${tabId}`).classList.add('active');});});
 });
 
