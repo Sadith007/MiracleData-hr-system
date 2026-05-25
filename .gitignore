@@ -1,0 +1,13 @@
+# Logs
+server.log
+*.log
+
+# Screenshots
+verification/
+*.png
+
+# Backups
+*.bak
+
+# OS files
+.DS_Store
