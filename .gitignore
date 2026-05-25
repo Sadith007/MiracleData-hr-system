@@ -1,0 +1,16 @@
+# Logs
+server.log
+*.log
+
+# Screenshots
+verification/
+*.png
+
+# Backups
+*.bak
+
+# Cloudflare
+.wrangler
+
+# OS files
+.DS_Store
