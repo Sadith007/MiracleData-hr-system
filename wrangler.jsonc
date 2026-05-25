@@ -1,5 +1,5 @@
 {
   "name": "hrsystem",
-  "main": "index.html",
+  "assets": { "directory": "." },
   "compatibility_date": "2024-05-25"
 }

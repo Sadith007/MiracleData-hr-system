@@ -9,5 +9,8 @@ verification/
 # Backups
 *.bak
 
+# Cloudflare
+.wrangler
+
 # OS files
 .DS_Store
