@@ -1603,7 +1603,7 @@ select option { background: #0F1628; color: var(--text); }
     <div class="input-group"><label>Password (min 4)</label><input type="password" id="regPass" placeholder="••••••••"></div>
     <div class="input-group"><label>Confirm Password</label><input type="password" id="regPass2" placeholder="••••••••"></div>
     <div class="input-group"><label>Role Request</label>
-      <select id="regRole"><option>VIEWER</option><option>HR</option><option>DEPT_VIEWER</option><option>HEAD_VIEWER</option><option>LOC_HEAD</option></select>
+      <select id="regRole"><option>VIEWER</option><option>HR</option><option>DEPT_VIEWER</option><option>HEAD_VIEWER</option><option>LOC_HEAD</option><option>SELF_VIEWER</option></select>
     </div>
     <div class="input-group" id="deptFieldReg" style="display:none;"><label>Department / Branch</label><input type="text" id="regDept" placeholder="e.g., IT, HR, Kandy Branch"></div>
     <button class="auth-btn" id="registerSubmitBtn">Submit Request</button>
@@ -2025,7 +2025,7 @@ select option { background: #0F1628; color: var(--text); }
         <div class="form-field"><label>Username</label><input id="newUsername" placeholder="Username"></div>
         <div class="form-field"><label>Password</label><input id="newPassword" type="password" placeholder="Password"></div>
         <div class="form-field"><label>Role</label>
-          <select id="newRole"><option>VIEWER</option><option>HR</option><option>ADMIN</option><option>DEPT_VIEWER</option><option>HEAD_VIEWER</option><option>LOC_HEAD</option></select>
+          <select id="newRole"><option>VIEWER</option><option>HR</option><option>ADMIN</option><option>DEPT_VIEWER</option><option>HEAD_VIEWER</option><option>LOC_HEAD</option><option>SELF_VIEWER</option></select>
         </div>
       </div>
       <div class="form-field" id="newDeptField" style="display:none;"><label>Department / Branch</label><input id="newDept" placeholder="e.g. Kandy Branch, IT Dept"></div>
@@ -2191,7 +2191,7 @@ try {
 const DEFAULT_EMPLOYEES = [{"id":1,"fullName":"John Smith","empId":"EMP001","email":"john@company.com","mobile":"0771234567","nic":"123456789V","dob":"1990-05-15","gender":"Male","maritalStatus":"Married","address":"Colombo","emergencyName":"Jane Smith","emergencyPhone":"0777654321","department":"IT","designation":"Senior Developer","doj":"2023-01-10","employmentType":"Permanent","status":"Active","location":"Colombo","salary":150000,"bankAccount":"123456789","bankName":"Commercial Bank","payMethod":"Bank Transfer","remarks":"Excellent performer"},{"id":2,"fullName":"Sarah Johnson","empId":"EMP002","email":"sarah@company.com","mobile":"0771234568","nic":"987654321V","dob":"1988-08-20","gender":"Female","maritalStatus":"Married","address":"Kandy","emergencyName":"Mike Johnson","emergencyPhone":"0777654322","department":"HR","designation":"HR Manager","doj":"2022-06-15","employmentType":"Permanent","status":"Active","location":"Kandy","salary":180000,"bankAccount":"987654321","bankName":"HSBC","payMethod":"Bank Transfer","remarks":"Great leader"}];
 const DEFAULT_USERS = [{"id":"u1","username":"admin","password":"admin123","role":"ADMIN","status":"active"},{"id":"u2","username":"hr","password":"hr123","role":"HR","status":"active"},{"id":"u3","username":"viewer","password":"view123","role":"VIEWER","status":"active"}];
 
-const DEFAULT_DB = { employees: DEFAULT_EMPLOYEES, users: DEFAULT_USERS, pendingUsers: [], payrolls: [], leaves: [], documents: [], locations: [], trial: null, license: null, licenseKeys: [] };
+const DEFAULT_DB = { employees: DEFAULT_EMPLOYEES, users: DEFAULT_USERS, pendingUsers: [], payrolls: [], leaves: [], documents: [], locations: [], trial: null, license: null, licenseKeys: [], pendingEmployeeApplications: [] };
 let DB = normalizeDB();
 
 function parseJSONSafe(value, fallback) {
@@ -2209,7 +2209,8 @@ function normalizeDB(data = {}) {
     locations: Array.isArray(data.locations) ? data.locations : [],
     trial: data.trial ?? null,
     license: data.license ?? null,
-    licenseKeys: Array.isArray(data.licenseKeys) ? data.licenseKeys : []
+    licenseKeys: Array.isArray(data.licenseKeys) ? data.licenseKeys : [],
+    pendingEmployeeApplications: Array.isArray(data.pendingEmployeeApplications) ? data.pendingEmployeeApplications : []
   };
 }
 function getClientId() {
@@ -2272,6 +2273,7 @@ async function syncCloudDB() {
     sbSet('hr_leaves', JSON.stringify(DB.leaves||[])),
     sbSet('hr_documents', JSON.stringify((DB.documents||[]).map(d=>({...d,data:d.data?.substring(0,50000)||d.data})))),
     sbSet('hr_locations', JSON.stringify(DB.locations||[])),
+    sbSet('hr_sv_apps', JSON.stringify(DB.pendingEmployeeApplications||[])),
   ]);
   return true;
 }
@@ -2281,9 +2283,10 @@ async function loadDB(forceCloud = false) {
   dbUpdatedAt = local.updatedAt;
   if (!_db) return;
   try {
-    const [metaRaw,emp,users,pending,payrolls,trial,license,licenseKeys,leaves,documents,locData] = await Promise.all([sbGet('hr_meta'),sbGet('hr_employees'),sbGet('hr_users'),sbGet('hr_pending'),sbGet('hr_payrolls'),sbGet('hr_trial'),sbGet('hr_license'),sbGet('hr_license_keys'),sbGet('hr_leaves'),sbGet('hr_documents'),sbGet('hr_locations')]);
+    const [metaRaw,emp,users,pending,payrolls,trial,license,licenseKeys,leaves,documents,locData,svApps] = await Promise.all([sbGet('hr_meta'),sbGet('hr_employees'),sbGet('hr_users'),sbGet('hr_pending'),sbGet('hr_payrolls'),sbGet('hr_trial'),sbGet('hr_license'),sbGet('hr_license_keys'),sbGet('hr_leaves'),sbGet('hr_documents'),sbGet('hr_locations'),sbGet('hr_sv_apps')]);
     const cloud = cloudPayloadFrom({ emp, users, pending, payrolls, trial, license, licenseKeys, leaves, documents, locData }, parseJSONSafe(metaRaw, null));
-    if (cloud.hasData && (!local.exists || cloud.updatedAt >= dbUpdatedAt)) {
+    if(svApps){try{DB.pendingEmployeeApplications=JSON.parse(svApps)||[];}catch(e){}}
+      if (cloud.hasData && (!local.exists || cloud.updatedAt >= dbUpdatedAt)) {
       DB = cloud.data;
       dbUpdatedAt = cloud.updatedAt;
       saveLocalDB();
@@ -2387,6 +2390,25 @@ async function handleLogin() {
   const user=DB.users.find(u=>u.username===username&&u.password===password&&u.status==='active');
   if(user){
     currentUser=user;
+    // ── SELF_VIEWER special flow ──
+    if(user.role==='SELF_VIEWER'){
+      const linked=DB.employees.find(e=>e._svUsername===username);
+      if(linked){
+        document.getElementById('loginView').style.display='none';
+        const app=document.getElementById('mainApp'); app.style.display='flex'; app.classList.add('visible');
+        setupApp();
+        selectedEmployeeId=linked.id;
+        renderEmployeeList();
+        renderDetail(linked.id);
+        startCloudLiveSync();
+        showToast('Welcome, '+linked.fullName+'!','success');
+        checkTrialStatus();
+      } else {
+        document.getElementById('loginView').style.display='none';
+        showSelfViewerApplicationForm(user);
+      }
+      return;
+    }
     document.getElementById('loginView').style.display='none';
     const app=document.getElementById('mainApp'); app.style.display='flex'; app.classList.add('visible');
     setupApp(); renderEmployeeList();
@@ -2438,24 +2460,27 @@ function setupApp() {
   const isHeadViewer=currentUser.role==='HEAD_VIEWER';
   const isLocHead=currentUser.role==='LOC_HEAD';
   const isDeptViewer=currentUser.role==='DEPT_VIEWER';
-  // LOC_HEAD: can add employees in their location, approve leave, view attendance history
-  // DEPT_VIEWER: can only view their dept employees and submit leave requests
+  const isSelfViewer=currentUser.role==='SELF_VIEWER';
   document.getElementById('addEmployeeBtn').style.display=(canEdit||isLocHead)?'flex':'none';
   document.getElementById('attendanceBtn').style.display=canEdit?'inline-flex':'none';
-  document.getElementById('attHistBtn').style.display=(isHeadViewer||isDeptViewer)?'none':'inline-flex';
-  document.getElementById('leaveBtn').style.display=isHeadViewer?'none':'inline-flex';
-  document.getElementById('docsBtn').style.display=(isHeadViewer||isDeptViewer)?'none':'inline-flex';
+  document.getElementById('attHistBtn').style.display=(isHeadViewer||isDeptViewer||isSelfViewer)?'none':'inline-flex';
+  document.getElementById('leaveBtn').style.display=(isHeadViewer||isSelfViewer)?'none':'inline-flex';
+  document.getElementById('docsBtn').style.display=(isHeadViewer||isDeptViewer||isSelfViewer)?'none':'inline-flex';
   document.getElementById('reportsBtn').style.display=canEdit?'inline-flex':'none';
   document.getElementById('payrollBtn').style.display=canEdit?'inline-flex':'none';
   document.getElementById('userMgmtBtn').style.display=currentUser.role==='ADMIN'?'inline-flex':'none';
-  document.getElementById('locationBtn').style.display=(isHeadViewer||isDeptViewer)?'none':'inline-flex';
-  // Branch filter: show for admin/hr/loc_head, hide for others
+  document.getElementById('locationBtn').style.display=(isHeadViewer||isDeptViewer||isSelfViewer)?'none':'inline-flex';
   const branchWrap=document.getElementById('branchFilterWrap');
   if(canEdit||isLocHead){
     branchWrap.style.display='block';
     populateBranchFilter();
   } else {
     branchWrap.style.display='none';
+  }
+  // SELF_VIEWER: hide sidebar extras
+  if(isSelfViewer){
+    const sa=document.querySelector('.sidebar-actions'); if(sa)sa.style.display='none';
+    const sb=document.querySelector('.search-box'); if(sb)sb.style.display='none';
   }
 }
 
@@ -2469,6 +2494,15 @@ function populateBranchFilter() {
 }
 
 function renderEmployeeList() {
+  // SELF_VIEWER: show only own linked employee
+  if(currentUser?.role==='SELF_VIEWER'){
+    const container=document.getElementById('employeeListContainer');
+    if(!container)return;
+    const linked=DB.employees.find(e=>e._svUsername===currentUser.username);
+    if(!linked){container.innerHTML='<div style="padding:1rem;text-align:center;color:var(--muted);font-size:0.8rem;">Awaiting admin approval</div>';return;}
+    container.innerHTML=`<div class="emp-card active"><div class="avatar" style="overflow:hidden;padding:0;">${linked.photo?`<img class='avatar-img' src='${linked.photo}'>`:`<span>${linked.fullName?.charAt(0)||'?'}</span>`}</div><div class="emp-info"><div class="emp-name">${linked.fullName}</div><div class="emp-meta">${linked.empId||''} · ${linked.department||'-'}</div></div><div class="status-dot" style="background:${linked.status==='Active'?'#14C47E':'#F05252'}"></div></div>`;
+    return;
+  }
   const search=document.getElementById('searchInput')?.value.toLowerCase()||'';
   let emps=DB.employees;
   // HEAD_VIEWER: show only their branch
@@ -2504,7 +2538,7 @@ function renderDetail(id) {
   const emp=DB.employees.find(e=>e.id==id);
   const container=document.getElementById('detailContainer');
   if(!emp){container.innerHTML='<div class="empty-state"><span>👤</span><p>Select an employee to view profile</p></div>';return;}
-  const canEdit=currentUser?.role==='ADMIN'||currentUser?.role==='HR'||(currentUser?.role==='LOC_HEAD'&&(emp.location||'').toLowerCase().trim()===(currentUser.branch||currentUser.department||'').toLowerCase().trim());
+  const canEdit=currentUser?.role!=='SELF_VIEWER'&&(currentUser?.role==='ADMIN'||currentUser?.role==='HR'||(currentUser?.role==='LOC_HEAD'&&(emp.location||'').toLowerCase().trim()===(currentUser.branch||currentUser.department||'').toLowerCase().trim()));
   const empPayrolls=DB.payrolls.filter(p=>p.employeeId==id).sort((a,b)=>b.month.localeCompare(a.month));
   container.innerHTML=`
     <div class="profile-header">
@@ -2539,7 +2573,7 @@ function renderDetail(id) {
       <div class="info-card"><label>Employment Type</label><span>${emp.employmentType||'-'}</span></div>
       <div class="info-card"><label>Work Location</label><span>${emp.location||'-'}</span></div>
     </div>
-    ${currentUser?.role!=='VIEWER'&&currentUser?.role!=='HEAD_VIEWER'?`
+    ${(currentUser?.role!=='VIEWER'&&currentUser?.role!=='HEAD_VIEWER')||(currentUser?.role==='SELF_VIEWER'&&emp._svUsername===currentUser?.username)?`
     <div class="section-title">Salary & Bank Details</div>
     <div class="info-grid">
       <div class="info-card"><label>Basic Salary</label><span>LKR ${(emp.salary||0).toLocaleString()}</span></div>
@@ -2698,8 +2732,67 @@ function openUserManagement() {
   renderUserList(); renderPendingList();
   const mb=document.querySelector('#userModal .modal-body');
   const ex=document.getElementById('licenseAdminSection'); if(ex)ex.remove();
+  const exSv=document.getElementById('svPendingSection'); if(exSv)exSv.remove();
   if(currentUser?.role==='ADMIN'){const div=document.createElement('div');div.id='licenseAdminSection';div.innerHTML=renderLicenseSection();mb.appendChild(div);}
+  // Pending employee applications (SELF_VIEWER)
+  if(currentUser?.role==='ADMIN'||currentUser?.role==='HR'){
+    const svApps=DB.pendingEmployeeApplications||[];
+    if(svApps.length){
+      const svDiv=document.createElement('div');
+      svDiv.id='svPendingSection';
+      svDiv.innerHTML=`<hr style="margin:20px 0;border:none;border-top:1px solid rgba(255,255,255,0.07);">
+      <h4 style="margin-bottom:12px;font-family:'Syne',sans-serif;font-size:0.95rem;">📋 Pending Employee Applications <span style="background:rgba(240,82,82,0.2);color:var(--danger);border-radius:20px;padding:2px 8px;font-size:0.72rem;margin-left:6px;">${svApps.length}</span></h4>
+      ${svApps.map(app=>`<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(79,142,247,0.18);border-radius:14px;padding:14px 16px;margin-bottom:10px;">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
+          <div style="flex:1;min-width:0;">
+            <strong style="font-size:0.88rem;">${app.fullName}</strong>
+            <span style="font-size:0.7rem;color:var(--muted);margin-left:8px;font-family:'DM Mono',monospace;">${app._svUsername}</span><br>
+            <span style="font-size:0.75rem;color:var(--text2);">${app.department||'-'} · ${app.designation||'-'} · ${app.mobile||'-'}</span>
+          </div>
+          <div style="display:flex;gap:6px;flex-shrink:0;">
+            <button class="btn btn-sm btn-success" onclick="approveSvApp('${app.id}')">✓ Approve</button>
+            <button class="btn btn-sm btn-danger" onclick="rejectSvApp('${app.id}')">✗ Reject</button>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:5px;font-size:0.73rem;">
+          <div><span style="color:var(--muted)">NIC:</span> ${app.nic||'-'}</div>
+          <div><span style="color:var(--muted)">DOB:</span> ${app.dob||'-'}</div>
+          <div><span style="color:var(--muted)">DOJ:</span> ${app.doj||'-'}</div>
+          <div><span style="color:var(--muted)">Location:</span> ${app.location||'-'}</div>
+          <div><span style="color:var(--muted)">Bank:</span> ${app.bankName||'-'} ${app.bankAccount||''}</div>
+          <div><span style="color:var(--muted)">Submitted:</span> ${new Date(app.submittedAt).toLocaleDateString()}</div>
+        </div>
+      </div>`).join('')}`;
+      mb.appendChild(svDiv);
+    }
+  }
   openModal('userModal');
+}
+
+async function approveSvApp(appId){
+  const app=(DB.pendingEmployeeApplications||[]).find(a=>a.id===appId);
+  if(!app)return;
+  const newEmp={
+    id:Date.now(),fullName:app.fullName,email:app.email||'',mobile:app.mobile,nic:app.nic,
+    dob:app.dob||'',gender:app.gender||'Male',maritalStatus:'Single',address:app.address||'',
+    emergencyName:app.emergencyName||'',emergencyPhone:app.emergencyPhone||'',
+    empId:app.empId||('EMP'+String(DB.employees.length+1).padStart(3,'0')),
+    department:app.department||'',designation:app.designation||'',doj:app.doj||'',
+    employmentType:app.employmentType||'Permanent',status:'Active',location:app.location||'',
+    salary:0,bankName:app.bankName||'',bankAccount:app.bankAccount||'',
+    payMethod:'Bank Transfer',remarks:'Added via Self-Service',_svUsername:app._svUsername
+  };
+  DB.employees.push(newEmp);
+  DB.pendingEmployeeApplications=(DB.pendingEmployeeApplications||[]).filter(a=>a.id!==appId);
+  await saveDB();
+  openUserManagement();renderEmployeeList();
+  showToast('✅ '+app.fullName+' approved and added!','success');
+}
+
+async function rejectSvApp(appId){
+  if(!confirm('Reject this application?'))return;
+  DB.pendingEmployeeApplications=(DB.pendingEmployeeApplications||[]).filter(a=>a.id!==appId);
+  await saveDB();openUserManagement();showToast('Application rejected','error');
 }
 
 function renderUserList() {
@@ -3717,5 +3810,116 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 </script>
+
+// ═══════════════════════════════════════════════
+// SELF_VIEWER — Application Form
+// ═══════════════════════════════════════════════
+function showSelfViewerApplicationForm(user){
+  const ex=document.getElementById('svAppOverlay'); if(ex)ex.remove();
+  const overlay=document.createElement('div');
+  overlay.id='svAppOverlay';
+  overlay.style.cssText='position:fixed;inset:0;background:var(--bg);z-index:9997;overflow-y:auto;display:flex;align-items:flex-start;justify-content:center;padding:2rem 1rem;';
+  const locOpts=(DB.locations||[]).map(l=>`<option value="${l.name}">${l.name}</option>`).join('');
+  overlay.innerHTML=`
+    <div style="width:100%;max-width:680px;background:rgba(10,16,32,0.9);border:1px solid rgba(255,255,255,0.1);border-radius:2rem;padding:2.2rem 2rem;backdrop-filter:blur(40px);box-shadow:0 32px 64px rgba(0,0,0,0.6);margin-bottom:2rem;position:relative;">
+      <div style="position:absolute;inset:-1px;border-radius:2rem;padding:1px;background:linear-gradient(135deg,rgba(79,142,247,0.3),rgba(155,114,248,0.2),transparent 60%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;"></div>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:1.5rem;padding-bottom:1.2rem;border-bottom:1px solid rgba(255,255,255,0.07);">
+        <div style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#4F8EF7,#9B72F8);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;">📋</div>
+        <div style="flex:1;">
+          <div style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;background:linear-gradient(135deg,#EEF2FF,#A5B4FC);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Employee Application</div>
+          <div style="font-size:0.75rem;color:var(--muted);">Fill in your details — Admin will review and activate your profile</div>
+        </div>
+        <button onclick="svLogout()" style="background:rgba(240,82,82,0.12);border:1px solid rgba(240,82,82,0.25);color:#F87171;border-radius:8px;padding:6px 12px;font-size:0.75rem;cursor:pointer;font-family:'DM Sans',sans-serif;flex-shrink:0;">⏻ Logout</button>
+      </div>
+      <div style="background:rgba(248,184,78,0.08);border:1px solid rgba(248,184,78,0.2);border-radius:12px;padding:0.8rem 1rem;margin-bottom:1.5rem;font-size:0.8rem;color:var(--warning);">
+        ⏳ Please enter your data and submit it, admin will approve the request, Then you can view your profile.
+      </div>
+      <div style="font-size:0.65rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1.2px;border-left:2px solid var(--accent);padding-left:10px;margin-bottom:12px;">Personal Information</div>
+      <div class="form-row">
+        <div class="form-field"><label>Full Name *</label><input id="sv_fullName" placeholder="John Doe"></div>
+        <div class="form-field"><label>Mobile *</label><input id="sv_mobile" placeholder="+94 XX XXX XXXX"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-field"><label>Email</label><input id="sv_email" placeholder="john@example.com"></div>
+        <div class="form-field"><label>NIC *</label><input id="sv_nic" placeholder="123456789V"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-field"><label>Date of Birth</label><input id="sv_dob" placeholder="YYYY-MM-DD"></div>
+        <div class="form-field"><label>Gender</label><select id="sv_gender"><option>Male</option><option>Female</option></select></div>
+      </div>
+      <div class="form-field" style="margin-bottom:12px;"><label>Permanent Address</label><textarea id="sv_address" rows="2" placeholder="Full permanent address" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.82rem;outline:none;resize:vertical;font-family:'DM Sans',sans-serif;"></textarea></div>
+      <div class="form-row" style="margin-bottom:1.5rem;">
+        <div class="form-field"><label>Emergency Contact Name</label><input id="sv_emergName" placeholder="Name"></div>
+        <div class="form-field"><label>Emergency Contact Phone</label><input id="sv_emergPhone" placeholder="Number"></div>
+      </div>
+      <div style="font-size:0.65rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1.2px;border-left:2px solid var(--accent);padding-left:10px;margin-bottom:12px;">Employment Information</div>
+      <div class="form-row">
+        <div class="form-field"><label>Employee ID (if known)</label><input id="sv_empId" placeholder="EMP001"></div>
+        <div class="form-field"><label>Department</label><input id="sv_dept" placeholder="IT, HR, Sales..."></div>
+      </div>
+      <div class="form-row">
+        <div class="form-field"><label>Designation / Job Title</label><input id="sv_designation" placeholder="Software Engineer"></div>
+        <div class="form-field"><label>Date of Joining</label><input id="sv_doj" placeholder="YYYY-MM-DD"></div>
+      </div>
+      <div class="form-row" style="margin-bottom:1.5rem;">
+        <div class="form-field"><label>Employment Type</label><select id="sv_empType"><option>Permanent</option><option>Contract</option></select></div>
+        <div class="form-field"><label>Work Location</label><select id="sv_location" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.82rem;outline:none;font-family:'DM Sans',sans-serif;"><option value="">— Select —</option>${locOpts}</select></div>
+      </div>
+      <div style="font-size:0.65rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1.2px;border-left:2px solid var(--accent);padding-left:10px;margin-bottom:12px;">Bank Details</div>
+      <div class="form-row" style="margin-bottom:1.5rem;">
+        <div class="form-field"><label>Bank Name</label><input id="sv_bankName" placeholder="Commercial Bank"></div>
+        <div class="form-field"><label>Account Number</label><input id="sv_bankAcc" placeholder="Account number"></div>
+      </div>
+      <div id="sv_msg" style="min-height:1.2rem;font-size:0.8rem;margin-bottom:10px;color:var(--danger);"></div>
+      <button onclick="submitSvApplication('${user.username}')" style="width:100%;background:linear-gradient(135deg,#4F8EF7,#9B72F8);border:none;border-radius:12px;padding:0.85rem;font-weight:700;font-family:'Syne',sans-serif;font-size:0.95rem;color:white;cursor:pointer;box-shadow:0 8px 24px rgba(79,142,247,0.3);">
+        📨 Submit Application
+      </button>
+      <div style="margin-top:0.8rem;font-size:0.72rem;color:var(--muted);text-align:center;">Already submitted? Admin panel එකේ Pending Employee Applications section check කරන්න.</div>
+    </div>`;
+  document.body.appendChild(overlay);
+}
+
+async function submitSvApplication(username){
+  const fullName=(document.getElementById('sv_fullName').value||'').trim();
+  const mobile=(document.getElementById('sv_mobile').value||'').trim();
+  const nic=(document.getElementById('sv_nic').value||'').trim();
+  const msg=document.getElementById('sv_msg');
+  if(!fullName||!mobile||!nic){msg.textContent='⚠️ Full Name, Mobile, සහ NIC අවශ්‍යයි.';return;}
+  msg.textContent='';
+  if(!DB.pendingEmployeeApplications)DB.pendingEmployeeApplications=[];
+  DB.pendingEmployeeApplications=DB.pendingEmployeeApplications.filter(a=>a._svUsername!==username);
+  DB.pendingEmployeeApplications.push({
+    id:'svapp_'+Date.now(),_svUsername:username,
+    fullName,mobile,email:(document.getElementById('sv_email').value||'').trim(),
+    nic,dob:(document.getElementById('sv_dob').value||'').trim(),
+    gender:document.getElementById('sv_gender').value,
+    address:(document.getElementById('sv_address').value||'').trim(),
+    emergencyName:(document.getElementById('sv_emergName').value||'').trim(),
+    emergencyPhone:(document.getElementById('sv_emergPhone').value||'').trim(),
+    empId:(document.getElementById('sv_empId').value||'').trim(),
+    department:(document.getElementById('sv_dept').value||'').trim(),
+    designation:(document.getElementById('sv_designation').value||'').trim(),
+    doj:(document.getElementById('sv_doj').value||'').trim(),
+    employmentType:document.getElementById('sv_empType').value,
+    location:document.getElementById('sv_location').value,
+    bankName:(document.getElementById('sv_bankName').value||'').trim(),
+    bankAccount:(document.getElementById('sv_bankAcc').value||'').trim(),
+    submittedAt:new Date().toISOString()
+  });
+  await saveDB();
+  msg.style.color='var(--success)';
+  msg.textContent='✅ Application submitted! Admin approval බලාසිටින්න.';
+  const btn=document.querySelector('#svAppOverlay button[onclick^="submitSvApp"]');
+  if(btn){btn.disabled=true;btn.style.opacity='0.5';btn.textContent='✅ Submitted — Awaiting Approval';}
+}
+
+function svLogout(){
+  currentUser=null;
+  const overlay=document.getElementById('svAppOverlay'); if(overlay)overlay.remove();
+  document.getElementById('loginView').style.display='flex';
+  document.getElementById('loginUsername').value='';
+  document.getElementById('loginPassword').value='';
+}
+
 </body>
 </html>
