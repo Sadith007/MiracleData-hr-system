@@ -1679,7 +1679,7 @@ select option { background: #0F1628; color: var(--text); }
       <button id="payrollBtn" class="btn btn-sm" style="display:none;">💰 Payroll</button>
       <button id="userMgmtBtn" class="btn btn-sm" style="display:none;">👥 Users</button>
       <button id="locationBtn" class="btn btn-sm" style="display:none;">📍 Locations</button>
-      <button id="logoutBtn" class="btn btn-sm">🚫 Logout</button>
+      <button id="logoutBtn" class="btn btn-sm">⏻ Logout</button>
     </div>
   </div>
 
@@ -1958,7 +1958,7 @@ select option { background: #0F1628; color: var(--text); }
         </div>
         <div class="form-row">
           <div class="form-field"><label>Days Calculated</label><input type="number" id="lvDays" readonly style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--success);font-size:0.8rem;outline:none;font-weight:700;"></div>
-          <div class="form-field"><label>Status</label>
+          <div class="form-field" id="lvStatusField"><label>Status</label>
             <select id="lvStatus" style="width:100%;">
               <option value="Pending">Pending</option><option value="Approved">Approved</option><option value="Rejected">Rejected</option>
             </select>
@@ -3038,11 +3038,35 @@ function exportReportPDF() {
 }
 
 function openLeave() { if(!DB.leaves)DB.leaves=[]; populateLeaveSelects(); openModal('leaveModal'); switchLeaveTab('apply',document.querySelector('#leaveModal .report-tab')); }
-function openLeaveForEmp(empId) { if(!DB.leaves)DB.leaves=[]; populateLeaveSelects(); document.getElementById('lvEmpSel').value=empId; document.getElementById('lvBalEmpSel').value=empId; openModal('leaveModal'); switchLeaveTab('apply',document.querySelector('#leaveModal .report-tab')); }
+function openLeaveForEmp(empId) {
+  if(!DB.leaves)DB.leaves=[];
+  // SELF_VIEWER: only allow opening their own leaves
+  if(currentUser?.role==='SELF_VIEWER'){
+    const linked=DB.employees.find(e=>e._svUsername===currentUser.username);
+    if(!linked||linked.id!=empId){showToast('You can only view your own leave records','error');return;}
+    empId=linked.id;
+  }
+  populateLeaveSelects();
+  document.getElementById('lvEmpSel').value=empId;
+  document.getElementById('lvBalEmpSel').value=empId;
+  openModal('leaveModal');
+  // SELF_VIEWER: go directly to balance/requests view, not apply tab
+  if(currentUser?.role==='SELF_VIEWER'){
+    switchLeaveTab('balances', document.querySelectorAll('#leaveModal .report-tab')[2]);
+  } else {
+    switchLeaveTab('apply',document.querySelector('#leaveModal .report-tab'));
+  }
+}
 function populateLeaveSelects() {
-  const opts=DB.employees.map(e=>`<option value="${e.id}">${e.fullName} (${e.empId})</option>`).join('');
+  let emps=DB.employees;
+  // SELF_VIEWER: only own employee in all selects
+  if(currentUser?.role==='SELF_VIEWER'){
+    const linked=DB.employees.find(e=>e._svUsername===currentUser.username);
+    emps=linked?[linked]:[];
+  }
+  const opts=emps.map(e=>`<option value="${e.id}">${e.fullName} (${e.empId})</option>`).join('');
   ['lvEmpSel','lvBalEmpSel'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=opts;});
-  const fOpts='<option value="">All Employees</option>'+opts;
+  const fOpts=(currentUser?.role==='SELF_VIEWER'?'':('<option value="">All Employees</option>'))+opts;
   const lvFil=document.getElementById('lvFilterEmp');if(lvFil)lvFil.innerHTML=fOpts;
   renderLeaveList();renderLeaveBalances();
 }
@@ -3051,22 +3075,39 @@ function switchLeaveTab(tab,btn) {
   document.querySelectorAll('#leaveModal .report-tab').forEach(b=>b.classList.remove('active'));
   const map={apply:'lvApply',requests:'lvRequests',balances:'lvBalances'};
   document.getElementById(map[tab]).classList.add('active');
-  if(btn)btn.classList.add('active');
+  const tabBtns=document.querySelectorAll('#leaveModal .report-tab');
+  const tabOrder=['apply','requests','balances'];
+  const tabIdx=tabOrder.indexOf(tab);
+  if(tabBtns[tabIdx])tabBtns[tabIdx].classList.add('active');
+  else if(btn)btn.classList.add('active');
+  // SELF_VIEWER: hide status field and employee select (they apply only for themselves)
+  const isSV=currentUser?.role==='SELF_VIEWER';
+  const sfEl=document.getElementById('lvStatusField');if(sfEl)sfEl.style.display=isSV?'none':'';
+  const empSelField=document.getElementById('lvEmpSel');if(empSelField&&empSelField.closest('.form-field'))empSelField.closest('.form-field').style.display=isSV?'none':'';
   if(tab==='requests')renderLeaveList();if(tab==='balances')renderLeaveBalances();
 }
 function calcLeaveDays() { const f=document.getElementById('lvFrom').value,t=document.getElementById('lvTo').value;if(f&&t){const d=Math.round((new Date(t)-new Date(f))/(1000*60*60*24))+1;document.getElementById('lvDays').value=d>0?d:0;} }
 function submitLeave() {
-  const empId=parseInt(document.getElementById('lvEmpSel').value);
+  let empId=parseInt(document.getElementById('lvEmpSel').value);
   const type=document.getElementById('lvType').value,from=document.getElementById('lvFrom').value,to=document.getElementById('lvTo').value,days=parseFloat(document.getElementById('lvDays').value)||0;
-  const status=document.getElementById('lvStatus').value,reason=document.getElementById('lvReason').value.trim();
   const msg=document.getElementById('lvMsg');
+  // SELF_VIEWER: validate own employee & force Pending status
+  if(currentUser?.role==='SELF_VIEWER'){
+    const linked=DB.employees.find(e=>e._svUsername===currentUser.username);
+    if(!linked){msg.style.color='var(--danger)';msg.textContent='Your profile is not linked. Contact admin.';return;}
+    empId=linked.id; // force own employee id
+  }
+  const status=currentUser?.role==='SELF_VIEWER'?'Pending':document.getElementById('lvStatus').value;
+  const reason=document.getElementById('lvReason').value.trim();
   if(!from||!to||!days){msg.style.color='var(--danger)';msg.textContent='Please fill in all date fields';return;}
   if(!DB.leaves)DB.leaves=[];
   DB.leaves.push({id:Date.now(),employeeId:empId,type,from,to,days,status,reason,createdAt:new Date().toISOString()});
-  saveDB();msg.style.color='var(--success)';msg.textContent='✓ Leave request saved!';
+  saveDB();msg.style.color='var(--success)';msg.textContent='✓ Leave request submitted!';
   setTimeout(()=>msg.textContent='',2500);
   ['lvFrom','lvTo','lvDays','lvReason'].forEach(id=>document.getElementById(id).value='');
-  showToast('Leave request saved','success');
+  showToast('Leave request submitted','success');
+  // Switch to requests tab to show the new request
+  if(currentUser?.role==='SELF_VIEWER') switchLeaveTab('requests', document.querySelectorAll('#leaveModal .report-tab')[1]);
 }
 function renderLeaveList() {
   if(!DB.leaves)DB.leaves=[];
@@ -3081,6 +3122,11 @@ function renderLeaveList() {
   if(currentUser?.role==='DEPT_VIEWER'){
     const userDept=(currentUser.department||'').toLowerCase().trim();
     list=list.filter(l=>{const lEmp=DB.employees.find(e=>e.id===l.employeeId);return(lEmp?.department||'').toLowerCase().trim()===userDept;});
+  }
+  // SELF_VIEWER: only show own employee's leaves
+  if(currentUser?.role==='SELF_VIEWER'){
+    const linked=DB.employees.find(e=>e._svUsername===currentUser.username);
+    if(linked)list=list.filter(l=>l.employeeId===linked.id);else list=[];
   }
   list=list.sort((a,b)=>b.createdAt.localeCompare(a.createdAt));
   const c=document.getElementById('lvListContainer');
