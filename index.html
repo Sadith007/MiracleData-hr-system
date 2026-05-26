@@ -1589,7 +1589,7 @@ select option { background: #0F1628; color: var(--text); }
       Don't have access? <button id="showRegisterBtn">Request Access</button>
     </div>
     <div class="link-text" style="margin-top:4px;">
-      Forgot password? <button id="showForgotBtn" onclick="showForgotPassword()">Reset Password</button>
+      Forgot password? <button id="showForgotBtn" onclick="showForgotPassword()">Reset via OTP</button>
     </div>
     <div class="demo-hint">Powered By: <strong>MIRACLE DATA</strong></div>
   </div>
@@ -1606,7 +1606,6 @@ select option { background: #0F1628; color: var(--text); }
     <div class="input-group"><label>Username</label><input type="text" id="regUser" placeholder="Choose username"></div>
     <div class="input-group"><label>Password (min 4)</label><input type="password" id="regPass" placeholder="••••••••"></div>
     <div class="input-group"><label>Confirm Password</label><input type="password" id="regPass2" placeholder="••••••••"></div>
-    <div class="form-field"><label>Email (for OTP reset)</label><input id="newEmail" type="email" placeholder="user@example.com"></div>
     <div class="input-group"><label>Role Request</label>
       <select id="regRole"><option>VIEWER</option><option>HR</option><option>DEPT_VIEWER</option><option>HEAD_VIEWER</option><option>LOC_HEAD</option><option>SELF_VIEWER</option></select>
     </div>
@@ -1627,6 +1626,7 @@ select option { background: #0F1628; color: var(--text); }
       <div class="input-group"><label>Bank Name</label><input id="sv_bankName" placeholder="Commercial Bank"></div>
       <div class="input-group"><label>Account Number</label><input id="sv_bankAcc" placeholder="Account number"></div>
     </div>
+    <div class="input-group" id="regEmailField"><label>Email <span style="font-size:0.7rem;color:var(--muted);">(for OTP password reset)</span></label><input type="email" id="regEmail" placeholder="your@email.com"></div>
     <div class="input-group" id="deptFieldReg" style="display:none;"><label>Department / Branch</label><input type="text" id="regDept" placeholder="e.g., IT, HR, Kandy Branch"></div>
     <button class="auth-btn" id="registerSubmitBtn">Submit Request</button>
     <div class="link-text"><button id="backToLoginBtn">← Back to Sign In</button></div>
@@ -2521,7 +2521,8 @@ function handleRegister() {
     if(!fullName||!mobile||!nic){msgDiv.style.color='var(--danger)';msgDiv.textContent='SELF_VIEWER: Full Name, Mobile, NIC අවශ්‍යයි.';return;}
   }
   if(DB.users.find(u=>u.username===username)){msgDiv.textContent='Username already exists';return;}
-  const pendingEntry={id:Date.now(),username,password_hash:password,role,department:dept,requested_at:new Date().toISOString()};
+  const regEmailVal=(document.getElementById('regEmail')?.value||'').trim();
+  const pendingEntry={id:Date.now(),username,password_hash:password,role,department:dept,email:regEmailVal||null,requested_at:new Date().toISOString()};
   if(role==='SELF_VIEWER'){
     pendingEntry.svData={
       fullName:(document.getElementById('sv_fullName')?.value||'').trim(),
@@ -3149,7 +3150,7 @@ function renderPendingList() {
       </div>`;
     }
     return `<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:10px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-      <div style="flex:1;"><strong style="font-size:0.85rem;">${p.username}</strong> <span style="font-size:0.72rem;color:var(--muted);">${p.role} · ${p.department||'-'} · ${new Date(p.requested_at).toLocaleDateString()}</span></div>
+      <div style="flex:1;"><strong style="font-size:0.85rem;">${p.username}</strong> <span style="font-size:0.72rem;color:var(--muted);">${p.role} · ${p.department||'-'} · ${new Date(p.requested_at).toLocaleDateString()}</span>${p.email?`<span style="font-size:0.68rem;color:var(--accent);margin-left:6px;">📧 ${p.email}</span>`:''}</div>
       <div style="display:flex;gap:6px;"><button class="btn btn-sm btn-success" onclick="approveUser(${p.id})">Approve</button><button class="btn btn-sm btn-danger" onclick="rejectUser(${p.id})">Reject</button></div>
     </div>`;
   }).join('');
@@ -3178,7 +3179,7 @@ function resetPassword(id) { const p=prompt('Enter new password (min 4):');if(p&
 async function approveUser(pid) {
   const p=DB.pendingUsers.find(x=>x.id===pid);
   if(!p)return;
-  const newUser={id:'u'+Date.now(),username:p.username,password:p.password_hash,role:p.role,department:p.department,branch:(p.role==='HEAD_VIEWER'||p.role==='LOC_HEAD')?p.department:null,status:'active'};
+  const newUser={id:'u'+Date.now(),username:p.username,password:p.password_hash,role:p.role,department:p.department,branch:(p.role==='HEAD_VIEWER'||p.role==='LOC_HEAD')?p.department:null,email:p.email||(p.svData?.email||null),status:'active'};
   // SELF_VIEWER: auto-create employee and link
   if(p.role==='SELF_VIEWER'&&p.svData){
     const d=p.svData;
@@ -3608,6 +3609,8 @@ document.addEventListener('DOMContentLoaded', async function() {
   const lbl=document.querySelector('#deptFieldReg label');if(lbl)lbl.textContent=this.value==='HEAD_VIEWER'?'Branch *':this.value==='LOC_HEAD'?'Location *':'Department *';
   document.getElementById('svRegFields').style.display=isSV?'block':'none';
   document.getElementById('svRegNote').style.display=isSV?'block':'none';
+  // SELF_VIEWER already has sv_email — hide the generic email field for them
+  document.getElementById('regEmailField').style.display=isSV?'none':'block';
 });
   document.getElementById('logoutBtn').addEventListener('click',handleLogout);
   const dz=document.getElementById('attDropZone');if(dz){dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag-over');});dz.addEventListener('dragleave',()=>dz.classList.remove('drag-over'));dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag-over');if(e.dataTransfer.files[0])handleAttFile(e.dataTransfer.files[0]);});}
