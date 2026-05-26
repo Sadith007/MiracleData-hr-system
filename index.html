@@ -1558,6 +1558,7 @@ select option { background: #0F1628; color: var(--text); }
 }
 </style>
 
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 
@@ -1586,6 +1587,9 @@ select option { background: #0F1628; color: var(--text); }
     <button class="auth-btn" id="loginBtn">Sign In →</button>
     <div class="link-text">
       Don't have access? <button id="showRegisterBtn">Request Access</button>
+    </div>
+    <div class="link-text" style="margin-top:4px;">
+      Forgot password? <button id="showForgotBtn" onclick="showForgotPassword()">Reset via OTP</button>
     </div>
     <div class="demo-hint">Powered By: <strong>MIRACLE DATA</strong></div>
   </div>
@@ -1625,6 +1629,50 @@ select option { background: #0F1628; color: var(--text); }
     <div class="input-group" id="deptFieldReg" style="display:none;"><label>Department / Branch</label><input type="text" id="regDept" placeholder="e.g., IT, HR, Kandy Branch"></div>
     <button class="auth-btn" id="registerSubmitBtn">Submit Request</button>
     <div class="link-text"><button id="backToLoginBtn">← Back to Sign In</button></div>
+  </div>
+</div>
+
+<!-- FORGOT PASSWORD VIEW -->
+<div id="forgotView" class="auth-container" style="display:none;">
+  <div class="auth-card">
+    <div class="auth-logo">🔑</div>
+    <h2>Reset Password</h2>
+    <p>OTP will be shown to Admin</p>
+    <div id="forgotMsg" class="error-message"></div>
+
+    <!-- Step 1: Enter username -->
+    <div id="forgotStep1">
+      <div class="input-group">
+        <label>Username</label>
+        <input type="text" id="forgotUsername" placeholder="Enter your username">
+      </div>
+      <button class="auth-btn" onclick="requestOTP()">Request OTP →</button>
+    </div>
+
+    <!-- Step 2: Enter OTP + new password -->
+    <div id="forgotStep2" style="display:none;">
+      <div style="background:rgba(56,201,168,0.08);border:1px solid rgba(56,201,168,0.2);border-radius:10px;padding:0.8rem 1rem;font-size:0.78rem;color:#38C9A8;margin-bottom:1rem;text-align:center;">
+        ✅ OTP generated! Contact admin to get your OTP code.
+      </div>
+      <div class="input-group">
+        <label>OTP Code</label>
+        <input type="text" id="forgotOTP" placeholder="Enter 6-digit OTP" maxlength="6" style="letter-spacing:4px;text-align:center;font-size:1.1rem;font-weight:700;">
+      </div>
+      <div class="input-group">
+        <label>New Password</label>
+        <input type="password" id="forgotNewPass" placeholder="Min 4 characters">
+      </div>
+      <div class="input-group">
+        <label>Confirm Password</label>
+        <input type="password" id="forgotConfirmPass" placeholder="Re-enter password">
+      </div>
+      <button class="auth-btn" onclick="verifyOTPAndReset()">Reset Password →</button>
+      <div style="text-align:center;margin-top:0.5rem;">
+        <button onclick="requestOTP()" style="background:none;border:none;color:var(--muted);font-size:0.75rem;cursor:pointer;text-decoration:underline;">Resend OTP</button>
+      </div>
+    </div>
+
+    <div class="link-text" style="margin-top:1rem;"><button onclick="showLoginView()">← Back to Sign In</button></div>
   </div>
 </div>
 
@@ -1679,7 +1727,7 @@ select option { background: #0F1628; color: var(--text); }
       <button id="payrollBtn" class="btn btn-sm" style="display:none;">💰 Payroll</button>
       <button id="userMgmtBtn" class="btn btn-sm" style="display:none;">👥 Users</button>
       <button id="locationBtn" class="btn btn-sm" style="display:none;">📍 Locations</button>
-      <button id="logoutBtn" class="btn btn-sm">➜🚪 Logout</button>
+      <button id="logoutBtn" class="btn btn-sm">⏻ Logout</button>
     </div>
   </div>
 
@@ -2046,11 +2094,26 @@ select option { background: #0F1628; color: var(--text); }
         </div>
       </div>
       <div class="form-field" id="newDeptField" style="display:none;"><label>Department / Branch</label><input id="newDept" placeholder="e.g. Kandy Branch, IT Dept"></div>
+      <div class="form-field"><label>Email (for OTP reset)</label><input id="newEmail" type="email" placeholder="user@example.com"></div>
       <button id="addUserBtn" class="btn btn-primary" style="margin-top:10px;">➕ Add User</button>
       <div id="userMsg" class="error-message" style="margin-top:10px;"></div>
       <hr style="margin:20px 0;border:none;border-top:1px solid rgba(255,255,255,0.07);">
       <h4 style="margin-bottom:15px;font-family:'Syne',sans-serif;font-size:0.95rem;">Pending Approvals</h4>
+      <div id="otpRequestsContainer" style="margin-bottom:1rem;"></div>
       <div id="pendingUsersContainer"></div>
+      <hr style="margin:20px 0;border:none;border-top:1px solid rgba(255,255,255,0.07);">
+      <div style="background:rgba(79,142,247,0.05);border:1px solid rgba(79,142,247,0.15);border-radius:14px;padding:14px 16px;margin-top:4px;">
+        <div style="font-size:0.82rem;font-weight:700;color:var(--accent);margin-bottom:10px;">📧 EmailJS Settings <span style="font-size:0.68rem;color:var(--muted);font-weight:400;">(for OTP email delivery)</span></div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-bottom:10px;">Create a free account at <a href="https://emailjs.com" target="_blank" style="color:var(--accent);">emailjs.com</a> → Add Email Service → Create Template → copy credentials below.</div>
+        <div class="form-row">
+          <div class="form-field"><label style="font-size:0.7rem;">Service ID</label><input id="ejsServiceId" placeholder="service_xxxxxxx" style="font-size:0.8rem;"></div>
+          <div class="form-field"><label style="font-size:0.7rem;">Template ID</label><input id="ejsTemplateId" placeholder="template_xxxxxxx" style="font-size:0.8rem;"></div>
+          <div class="form-field"><label style="font-size:0.7rem;">Public Key</label><input id="ejsPublicKey" placeholder="xxxxxxxxxxxxxxxxxxxx" style="font-size:0.8rem;"></div>
+        </div>
+        <div style="font-size:0.7rem;color:var(--muted);margin-bottom:8px;">Template variables needed: <code style="color:var(--accent);">{{to_email}}</code>, <code style="color:var(--accent);">{{to_name}}</code>, <code style="color:var(--accent);">{{otp_code}}</code>, <code style="color:var(--accent);">{{expiry_minutes}}</code></div>
+        <button class="btn btn-primary btn-sm" onclick="saveEmailJSSettings()">💾 Save Settings</button>
+        <span id="ejsMsg" style="font-size:0.75rem;margin-left:10px;"></span>
+      </div>
     </div>
     <div class="modal-footer"><button class="btn" onclick="closeModal('userModal')">Close</button></div>
   </div>
@@ -2208,7 +2271,7 @@ try {
 const DEFAULT_EMPLOYEES = [{"id":1,"fullName":"John Smith","empId":"EMP001","email":"john@company.com","mobile":"0771234567","nic":"123456789V","dob":"1990-05-15","gender":"Male","maritalStatus":"Married","address":"Colombo","emergencyName":"Jane Smith","emergencyPhone":"0777654321","department":"IT","designation":"Senior Developer","doj":"2023-01-10","employmentType":"Permanent","status":"Active","location":"Colombo","salary":150000,"bankAccount":"123456789","bankName":"Commercial Bank","payMethod":"Bank Transfer","remarks":"Excellent performer"},{"id":2,"fullName":"Sarah Johnson","empId":"EMP002","email":"sarah@company.com","mobile":"0771234568","nic":"987654321V","dob":"1988-08-20","gender":"Female","maritalStatus":"Married","address":"Kandy","emergencyName":"Mike Johnson","emergencyPhone":"0777654322","department":"HR","designation":"HR Manager","doj":"2022-06-15","employmentType":"Permanent","status":"Active","location":"Kandy","salary":180000,"bankAccount":"987654321","bankName":"HSBC","payMethod":"Bank Transfer","remarks":"Great leader"}];
 const DEFAULT_USERS = [{"id":"u1","username":"admin","password":"admin123","role":"ADMIN","status":"active"},{"id":"u2","username":"hr","password":"hr123","role":"HR","status":"active"},{"id":"u3","username":"viewer","password":"view123","role":"VIEWER","status":"active"}];
 
-const DEFAULT_DB = { employees: DEFAULT_EMPLOYEES, users: DEFAULT_USERS, pendingUsers: [], payrolls: [], leaves: [], documents: [], locations: [], trial: null, license: null, licenseKeys: [], pendingEmployeeApplications: [] };
+const DEFAULT_DB = { employees: DEFAULT_EMPLOYEES, users: DEFAULT_USERS, pendingUsers: [], payrolls: [], leaves: [], documents: [], locations: [], trial: null, license: null, licenseKeys: [], pendingEmployeeApplications: [], otpRequests: [] };
 let DB = normalizeDB();
 
 function parseJSONSafe(value, fallback) {
@@ -2227,7 +2290,8 @@ function normalizeDB(data = {}) {
     trial: data.trial ?? null,
     license: data.license ?? null,
     licenseKeys: Array.isArray(data.licenseKeys) ? data.licenseKeys : [],
-    pendingEmployeeApplications: Array.isArray(data.pendingEmployeeApplications) ? data.pendingEmployeeApplications : []
+    pendingEmployeeApplications: Array.isArray(data.pendingEmployeeApplications) ? data.pendingEmployeeApplications : [],
+    otpRequests: Array.isArray(data.otpRequests) ? data.otpRequests : []
   };
 }
 function getClientId() {
@@ -2291,6 +2355,7 @@ async function syncCloudDB() {
     sbSet('hr_documents', JSON.stringify((DB.documents||[]).map(d=>({...d,data:d.data?.substring(0,50000)||d.data})))),
     sbSet('hr_locations', JSON.stringify(DB.locations||[])),
     sbSet('hr_sv_apps', JSON.stringify(DB.pendingEmployeeApplications||[])),
+    sbSet('hr_otp_requests', JSON.stringify(DB.otpRequests||[])),
   ]);
   return true;
 }
@@ -2769,7 +2834,7 @@ function exportCurrentPayroll() {
 }
 
 function openUserManagement() {
-  renderUserList(); renderPendingList();
+  renderUserList(); renderPendingList(); renderOTPRequests(); setTimeout(loadEmailJSSettings, 100);
   const mb=document.querySelector('#userModal .modal-body');
   const ex=document.getElementById('licenseAdminSection'); if(ex)ex.remove();
   const exSv=document.getElementById('svPendingSection'); if(exSv)exSv.remove();
@@ -2894,6 +2959,165 @@ async function unlinkEmpFromUser(username){
   showToast('Unlinked','success');
 }
 
+// ── OTP PASSWORD RESET ──────────────────────────────────────────────
+let _otpSession = null; // {username, otp, expires}
+
+function saveEmailJSSettings() {
+  const sid = document.getElementById('ejsServiceId').value.trim();
+  const tid = document.getElementById('ejsTemplateId').value.trim();
+  const pk  = document.getElementById('ejsPublicKey').value.trim();
+  const msg = document.getElementById('ejsMsg');
+  if (!sid || !tid || !pk) { msg.style.color='var(--danger)'; msg.textContent='All three fields required'; return; }
+  localStorage.setItem('ejs_service', sid);
+  localStorage.setItem('ejs_template', tid);
+  localStorage.setItem('ejs_pubkey', pk);
+  emailjs.init({publicKey: pk});
+  msg.style.color='var(--success)'; msg.textContent='✅ Saved!';
+  setTimeout(()=>msg.textContent='', 2500);
+}
+
+function loadEmailJSSettings() {
+  const sid = localStorage.getItem('ejs_service');
+  const tid = localStorage.getItem('ejs_template');
+  const pk  = localStorage.getItem('ejs_pubkey');
+  if (sid) document.getElementById('ejsServiceId').value = sid;
+  if (tid) document.getElementById('ejsTemplateId').value = tid;
+  if (pk)  document.getElementById('ejsPublicKey').value = pk;
+  if (pk) emailjs.init({publicKey: pk});
+}
+
+async function sendOTPEmail(toEmail, toName, otp) {
+  const sid = localStorage.getItem('ejs_service');
+  const tid = localStorage.getItem('ejs_template');
+  if (!sid || !tid) return false;
+  try {
+    await emailjs.send(sid, tid, {
+      to_email: toEmail,
+      to_name: toName || 'User',
+      otp_code: otp,
+      expiry_minutes: '10'
+    });
+    return true;
+  } catch(e) {
+    console.error('EmailJS error:', e);
+    return false;
+  }
+}
+
+function showForgotPassword() {
+  document.getElementById('loginView').style.display='none';
+  document.getElementById('registerView').style.display='none';
+  document.getElementById('forgotView').style.display='flex';
+  document.getElementById('forgotMsg').textContent='';
+  document.getElementById('forgotUsername').value='';
+  document.getElementById('forgotOTP').value='';
+  document.getElementById('forgotNewPass').value='';
+  document.getElementById('forgotConfirmPass').value='';
+  document.getElementById('forgotStep1').style.display='';
+  document.getElementById('forgotStep2').style.display='none';
+}
+
+function showLoginView() {
+  document.getElementById('forgotView').style.display='none';
+  document.getElementById('registerView').style.display='none';
+  document.getElementById('loginView').style.display='flex';
+}
+
+async function requestOTP() {
+  const username = document.getElementById('forgotUsername').value.trim();
+  const msg = document.getElementById('forgotMsg');
+  if (!username) { msg.style.color='var(--danger)'; msg.textContent='Please enter your username'; return; }
+  const user = DB.users.find(u => u.username === username && u.status === 'active');
+  if (!user) { msg.style.color='var(--danger)'; msg.textContent='Username not found or account inactive'; return; }
+  const otp = String(Math.floor(100000 + Math.random() * 900000));
+  const expires = Date.now() + 10 * 60 * 1000;
+  _otpSession = { username, otp, expires };
+  if (!DB.otpRequests) DB.otpRequests = [];
+  DB.otpRequests = DB.otpRequests.filter(r => r.username !== username);
+  const userEmail = user.email || null;
+  DB.otpRequests.push({ username, otp, email: userEmail, requestedAt: new Date().toISOString(), expires, used: false });
+  saveDB();
+  console.log('[OTP Debug] OTP for', username, ':', otp);
+  // Try EmailJS if user has email + config saved
+  if (userEmail && localStorage.getItem('ejs_service')) {
+    msg.style.color='var(--muted)'; msg.textContent='📤 Sending OTP to your email...';
+    const sent = await sendOTPEmail(userEmail, user.username, otp);
+    if (sent) {
+      msg.style.color='var(--success)';
+      msg.textContent='✅ OTP sent to ' + userEmail.replace(/(.{2}).+(@.+)/, '$1***$2');
+    } else {
+      msg.style.color='var(--warning)';
+      msg.textContent='⚠️ Email failed. Contact admin for your OTP.';
+    }
+  } else if (!userEmail) {
+    msg.style.color='var(--warning)';
+    msg.textContent='⚠️ No email linked to this account. Contact admin for your OTP.';
+  } else {
+    msg.style.color='var(--success)';
+    msg.textContent='✅ OTP generated. Contact admin for your OTP code.';
+  }
+  document.getElementById('forgotStep1').style.display='none';
+  document.getElementById('forgotStep2').style.display='';
+}
+
+function verifyOTPAndReset() {
+  const msg = document.getElementById('forgotMsg');
+  const enteredOTP = document.getElementById('forgotOTP').value.trim();
+  const newPass = document.getElementById('forgotNewPass').value;
+  const confirmPass = document.getElementById('forgotConfirmPass').value;
+  if (!_otpSession) { msg.style.color='var(--danger)'; msg.textContent='Session expired. Request a new OTP.'; return; }
+  if (Date.now() > _otpSession.expires) { msg.style.color='var(--danger)'; msg.textContent='OTP expired. Please request a new one.'; _otpSession=null; return; }
+  if (enteredOTP !== _otpSession.otp) { msg.style.color='var(--danger)'; msg.textContent='Invalid OTP. Please try again.'; return; }
+  if (!newPass || newPass.length < 4) { msg.style.color='var(--danger)'; msg.textContent='Password must be at least 4 characters'; return; }
+  if (newPass !== confirmPass) { msg.style.color='var(--danger)'; msg.textContent='Passwords do not match'; return; }
+  // Reset password
+  const user = DB.users.find(u => u.username === _otpSession.username);
+  if (!user) { msg.style.color='var(--danger)'; msg.textContent='User not found'; return; }
+  user.password = newPass;
+  // Mark OTP as used
+  if (DB.otpRequests) {
+    const req = DB.otpRequests.find(r => r.username === _otpSession.username);
+    if (req) req.used = true;
+  }
+  _otpSession = null;
+  saveDB();
+  msg.style.color='var(--success)';
+  msg.textContent='✅ Password reset successful!';
+  showToast('Password reset successfully. Please login.', 'success');
+  setTimeout(() => showLoginView(), 1800);
+}
+
+function renderOTPRequests() {
+  const c = document.getElementById('otpRequestsContainer');
+  if (!c) return;
+  if (!DB.otpRequests || !DB.otpRequests.length) { c.innerHTML = ''; return; }
+  const pending = DB.otpRequests.filter(r => !r.used && Date.now() < r.expires);
+  if (!pending.length) { c.innerHTML = ''; return; }
+  c.innerHTML = `<div style="background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.25);border-radius:14px;padding:14px 16px;margin-bottom:12px;">
+    <div style="font-size:0.82rem;font-weight:700;color:#F59E0B;margin-bottom:10px;">🔑 Pending Password Reset Requests</div>
+    ${pending.map(r=>`
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:8px 10px;background:rgba(245,158,11,0.05);border:1px solid rgba(245,158,11,0.12);border-radius:10px;margin-bottom:6px;">
+        <div style="flex:1;">
+          <strong style="font-size:0.85rem;">${r.username}</strong>
+          ${r.email?`<span style="font-size:0.68rem;color:var(--accent);margin-left:6px;">${r.email}</span>`:'<span style="font-size:0.68rem;color:var(--danger);margin-left:6px;">no email</span>'}
+          <span style="font-size:0.7rem;color:var(--muted);margin-left:8px;">Requested: ${new Date(r.requestedAt).toLocaleTimeString()}</span>
+          <span style="font-size:0.7rem;color:var(--muted);display:block;">Expires: ${new Date(r.expires).toLocaleTimeString()}</span>
+        </div>
+        <div style="font-size:1.3rem;font-weight:800;font-family:monospace;letter-spacing:4px;color:#F59E0B;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);border-radius:8px;padding:6px 14px;">${r.otp}</div>
+        <button class="btn btn-sm btn-danger" onclick="dismissOTPRequest('${r.username}')">✓ Done</button>
+      </div>
+    `).join('')}
+    <div style="font-size:0.68rem;color:var(--muted);margin-top:6px;">📱 Share the OTP code with the user via WhatsApp/SMS. OTPs expire in 10 minutes.</div>
+  </div>`;
+}
+
+function dismissOTPRequest(username) {
+  if (!DB.otpRequests) return;
+  DB.otpRequests = DB.otpRequests.filter(r => r.username !== username);
+  saveDB(); renderOTPRequests();
+}
+// ─────────────────────────────────────────────────────────────────────
+
 function renderPendingList() {
   const c=document.getElementById('pendingUsersContainer');
   if(!DB.pendingUsers.length){c.innerHTML='<div class="info-card"><span style="color:var(--muted);">No pending approvals</span></div>';return;}
@@ -2935,12 +3159,13 @@ function addUser() {
   const password=document.getElementById('newPassword').value;
   const role=document.getElementById('newRole').value;
   const dept=document.getElementById('newDept').value.trim();
+  const email=document.getElementById('newEmail').value.trim();
   const msgDiv=document.getElementById('userMsg');
   if(!username||!password){msgDiv.textContent='Username and password required';return;}
   if(password.length<4){msgDiv.textContent='Password must be at least 4 characters';return;}
   if((role==='DEPT_VIEWER'||role==='HEAD_VIEWER'||role==='LOC_HEAD')&&!dept){msgDiv.textContent=role==='HEAD_VIEWER'?'Branch is required for HEAD_VIEWER':role==='LOC_HEAD'?'Location is required for LOC_HEAD':'Department required for DEPT_VIEWER';return;}
   if(DB.users.find(u=>u.username===username)){msgDiv.textContent='Username already exists';return;}
-  DB.users.push({id:'u'+Date.now(),username,password,role,department:role==='DEPT_VIEWER'?dept:null,branch:(role==='HEAD_VIEWER'||role==='LOC_HEAD')?dept:null,status:'active'});
+  DB.users.push({id:'u'+Date.now(),username,password,role,department:role==='DEPT_VIEWER'?dept:null,branch:(role==='HEAD_VIEWER'||role==='LOC_HEAD')?dept:null,email:email||null,status:'active'});
   saveDB();
   document.getElementById('newUsername').value='';document.getElementById('newPassword').value='';document.getElementById('newDept').value='';
   msgDiv.style.color='var(--success)';msgDiv.textContent='✓ User added successfully';
