@@ -1589,7 +1589,7 @@ select option { background: #0F1628; color: var(--text); }
       Don't have access? <button id="showRegisterBtn">Request Access</button>
     </div>
     <div class="link-text" style="margin-top:4px;">
-      Forgot password? <button id="showForgotBtn" onclick="showForgotPassword()">Reset via OTP</button>
+      Forgot password? <button id="showForgotBtn" onclick="showForgotPassword()">Reset Password</button>
     </div>
     <div class="demo-hint">Powered By: <strong>MIRACLE DATA</strong></div>
   </div>
@@ -1728,7 +1728,7 @@ select option { background: #0F1628; color: var(--text); }
       <button id="payrollBtn" class="btn btn-sm" style="display:none;">💰 Payroll</button>
       <button id="userMgmtBtn" class="btn btn-sm" style="display:none;">👥 Users</button>
       <button id="locationBtn" class="btn btn-sm" style="display:none;">📍 Locations</button>
-      <button id="logoutBtn" class="btn btn-sm">➜🚪 Logout</button>
+      <button id="logoutBtn" class="btn btn-sm">➡️🚪Logout</button>
     </div>
   </div>
 
@@ -2107,13 +2107,18 @@ select option { background: #0F1628; color: var(--text); }
         <div style="font-size:0.82rem;font-weight:700;color:var(--accent);margin-bottom:10px;">📧 EmailJS Settings <span style="font-size:0.68rem;color:var(--muted);font-weight:400;">(for OTP email delivery)</span></div>
         <div style="font-size:0.72rem;color:var(--muted);margin-bottom:10px;">Create a free account at <a href="https://emailjs.com" target="_blank" style="color:var(--accent);">emailjs.com</a> → Add Email Service → Create Template → copy credentials below.</div>
         <div class="form-row">
-          <div class="form-field"><label style="font-size:0.7rem;">Service ID</label><input id="ejsServiceId" placeholder="service_xxxxxxx" style="font-size:0.8rem;"></div>
-          <div class="form-field"><label style="font-size:0.7rem;">Template ID</label><input id="ejsTemplateId" placeholder="template_xxxxxxx" style="font-size:0.8rem;"></div>
-          <div class="form-field"><label style="font-size:0.7rem;">Public Key</label><input id="ejsPublicKey" placeholder="xxxxxxxxxxxxxxxxxxxx" style="font-size:0.8rem;"></div>
+          <div class="form-field"><label style="font-size:0.7rem;">Service ID</label><input id="ejsServiceId" placeholder="service_xxxxxxx" style="font-size:0.8rem;" value="service_c7srw5i"></div>
+          <div class="form-field"><label style="font-size:0.7rem;">Template ID</label><input id="ejsTemplateId" placeholder="template_xxxxxxx" style="font-size:0.8rem;" value="template_x0b37wu"></div>
+          <div class="form-field"><label style="font-size:0.7rem;">Public Key</label><input id="ejsPublicKey" placeholder="xxxxxxxxxxxxxxxxxxxx" style="font-size:0.8rem;" value="9IeznUbAXpMD2OMsP"></div>
         </div>
         <div style="font-size:0.7rem;color:var(--muted);margin-bottom:8px;">Template variables needed: <code style="color:var(--accent);">{{to_email}}</code>, <code style="color:var(--accent);">{{to_name}}</code>, <code style="color:var(--accent);">{{otp_code}}</code>, <code style="color:var(--accent);">{{expiry_minutes}}</code></div>
-        <button class="btn btn-primary btn-sm" onclick="saveEmailJSSettings()">💾 Save Settings</button>
-        <span id="ejsMsg" style="font-size:0.75rem;margin-left:10px;"></span>
+        <div style="margin-top:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="saveEmailJSSettings()">💾 Save Settings</button>
+          <button class="btn btn-sm" style="background:rgba(56,201,168,0.12);color:#38C9A8;border:1px solid rgba(56,201,168,0.25);" onclick="testEmailJS()">📤 Send Test Email</button>
+          <button class="btn btn-sm" style="background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid rgba(255,255,255,0.1);" onclick="showEmailJSDiag()">🔍 Diagnose</button>
+        </div>
+        <div id="ejsMsg" style="font-size:0.75rem;margin-top:8px;"></div>
+        <div id="ejsDiag" style="display:none;margin-top:10px;background:rgba(0,0,0,0.2);border-radius:10px;padding:10px;font-size:0.72rem;font-family:monospace;color:var(--muted);line-height:1.8;"></div>
       </div>
     </div>
     <div class="modal-footer"><button class="btn" onclick="closeModal('userModal')">Close</button></div>
@@ -2978,14 +2983,72 @@ function saveEmailJSSettings() {
   setTimeout(()=>msg.textContent='', 2500);
 }
 
-function loadEmailJSSettings() {
+async function testEmailJS() {
+  const msg = document.getElementById('ejsMsg');
   const sid = localStorage.getItem('ejs_service');
   const tid = localStorage.getItem('ejs_template');
   const pk  = localStorage.getItem('ejs_pubkey');
-  if (sid) document.getElementById('ejsServiceId').value = sid;
-  if (tid) document.getElementById('ejsTemplateId').value = tid;
-  if (pk)  document.getElementById('ejsPublicKey').value = pk;
-  if (pk) emailjs.init({publicKey: pk});
+  if (!sid || !tid || !pk) { msg.style.color='var(--danger)'; msg.textContent='❌ Settings not saved yet. Fill in all 3 fields and Save first.'; return; }
+  // Ask for test email
+  const testEmail = prompt('Send test email to which address?', currentUser?.email || '');
+  if (!testEmail) return;
+  msg.style.color='var(--muted)'; msg.textContent='📤 Sending test email...';
+  try {
+    await emailjs.send(sid, tid, {
+      to_email: testEmail,
+      to_name: 'Test User',
+      otp_code: '123456',
+      expiry_minutes: '10'
+    });
+    msg.style.color='var(--success)'; msg.textContent='✅ Test email sent to ' + testEmail + '! Check inbox (and spam).';
+  } catch(e) {
+    msg.style.color='var(--danger)';
+    const code = e?.status || e?.text || JSON.stringify(e);
+    msg.textContent='❌ Failed: ' + (typeof e === 'object' ? (e.text || e.status || JSON.stringify(e)) : e);
+    console.error('EmailJS test error:', e);
+  }
+}
+
+function showEmailJSDiag() {
+  const diag = document.getElementById('ejsDiag');
+  const msg  = document.getElementById('ejsMsg');
+  const sid = localStorage.getItem('ejs_service');
+  const tid = localStorage.getItem('ejs_template');
+  const pk  = localStorage.getItem('ejs_pubkey');
+  const ejsLoaded = typeof emailjs !== 'undefined';
+  const lines = [
+    '📋 EmailJS Library loaded : ' + (ejsLoaded ? '✅ YES' : '❌ NO — CDN blocked?'),
+    '🔑 Service ID saved       : ' + (sid ? '✅ ' + sid : '❌ NOT SET'),
+    '📄 Template ID saved      : ' + (tid ? '✅ ' + tid : '❌ NOT SET'),
+    '🗝️  Public Key saved       : ' + (pk  ? '✅ ' + pk.slice(0,6)+'...' : '❌ NOT SET'),
+    '',
+    '📧 Required template vars : {{to_email}}, {{to_name}}, {{otp_code}}, {{expiry_minutes}}',
+    '',
+    ejsLoaded && sid && tid && pk
+      ? '✅ Config looks OK — click "Send Test Email" to verify'
+      : '⚠️  Fix above issues first, then save settings again',
+  ];
+  if (diag.style.display === 'none') {
+    diag.style.display = 'block';
+    diag.innerHTML = lines.map(l => l ? `<div>${l}</div>` : '<div style="height:4px;"></div>').join('');
+    msg.textContent = '';
+  } else {
+    diag.style.display = 'none';
+  }
+}
+
+function loadEmailJSSettings() {
+  const DEFAULT_EJS = { service: 'service_c7srw5i', template: 'template_x0b37wu', pubkey: '9IeznUbAXpMD2OMsP' };
+  if (!localStorage.getItem('ejs_service')) localStorage.setItem('ejs_service', DEFAULT_EJS.service);
+  if (!localStorage.getItem('ejs_template')) localStorage.setItem('ejs_template', DEFAULT_EJS.template);
+  if (!localStorage.getItem('ejs_pubkey')) localStorage.setItem('ejs_pubkey', DEFAULT_EJS.pubkey);
+  const sid = localStorage.getItem('ejs_service');
+  const tid = localStorage.getItem('ejs_template');
+  const pk  = localStorage.getItem('ejs_pubkey');
+  const ejsEl = document.getElementById('ejsServiceId'); if(ejsEl) ejsEl.value = sid;
+  const ejsTEl = document.getElementById('ejsTemplateId'); if(ejsTEl) ejsTEl.value = tid;
+  const ejsPEl = document.getElementById('ejsPublicKey'); if(ejsPEl) ejsPEl.value = pk;
+  if (pk) try { emailjs.init({publicKey: pk}); } catch(e) {}
 }
 
 async function sendOTPEmail(toEmail, toName, otp) {
@@ -3596,6 +3659,15 @@ async function generateNewLicenseKey() {
 function copyToClipboard(text) { navigator.clipboard.writeText(text).then(()=>showToast('License key copied! 📋','success')); }
 
 document.addEventListener('DOMContentLoaded', async function() {
+  // Init EmailJS immediately with saved/default credentials
+  try {
+    if(!localStorage.getItem('ejs_pubkey')){
+      localStorage.setItem('ejs_pubkey','9IeznUbAXpMD2OMsP');
+      localStorage.setItem('ejs_service','service_c7srw5i');
+      localStorage.setItem('ejs_template','template_x0b37wu');
+    }
+    emailjs.init({publicKey: localStorage.getItem('ejs_pubkey')});
+  } catch(e) { console.warn('EmailJS init failed:',e); }
   await loadDB();
   document.getElementById('loginBtn').addEventListener('click',handleLogin);
   document.getElementById('loginUsername').addEventListener('keypress',e=>{if(e.key==='Enter')handleLogin();});
