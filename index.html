@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HR Nexus | Complete HR Solution</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -2388,7 +2388,11 @@ async function loadDB(forceCloud = false) {
     console.error('Cloud load failed; using local saved data.', e);
   }
 }
+// ===== OPTIMIZED saveDB with debounce =====
+let _saveDBTimer = null;
+let _saveDBResolvers = [];
 async function saveDB() {
+  // Always save locally immediately (fast, no network)
   dbUpdatedAt = Date.now();
   try {
     saveLocalDB();
@@ -2402,15 +2406,24 @@ async function saveDB() {
     showToast?.('Saved on this computer. Cloud sync is not connected.', 'error');
     return true;
   }
-  try {
-    await syncCloudDB();
-    lastCloudSaveOk = true;
-  } catch(e) {
-    lastCloudSaveOk = false;
-    console.error('Cloud save failed; data remains saved locally in this browser.', e);
-    showToast?.('Saved on this computer, but cloud sync failed.', 'error');
-  }
-  return true;
+  // Debounce cloud sync — wait 1.5s before pushing to Firestore
+  return new Promise((resolve) => {
+    _saveDBResolvers.push(resolve);
+    clearTimeout(_saveDBTimer);
+    _saveDBTimer = setTimeout(async () => {
+      const resolvers = _saveDBResolvers.splice(0);
+      try {
+        await syncCloudDB();
+        lastCloudSaveOk = true;
+        resolvers.forEach(r => r(true));
+      } catch(e) {
+        lastCloudSaveOk = false;
+        console.error('Cloud save failed; data remains saved locally.', e);
+        showToast?.('Saved on this computer, but cloud sync failed.', 'error');
+        resolvers.forEach(r => r(false));
+      }
+    }, 1500);
+  });
 }
 function refreshVisibleData() {
   if (!currentUser) return;
@@ -3795,7 +3808,12 @@ document.addEventListener('DOMContentLoaded', async function() {
   document.getElementById('addEmployeeBtn').addEventListener('click',()=>{editingEmployeeId=null;document.getElementById('modalTitle').textContent='New Employee';document.querySelectorAll('#empModal input,#empModal select,#empModal textarea').forEach(el=>el.value='');document.getElementById('empGender').value='Male';document.getElementById('empMarital').value='Single';document.getElementById('empType').value='Permanent';document.getElementById('empStatus').value='Active';document.getElementById('empPayMethod').value='Bank Transfer'; currentEmpPhotoData=null; refreshEmpLocationDropdown(); const pzr=document.getElementById('photoUploadZone'); if(pzr){pzr.innerHTML='<span class="upload-icon">📷</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;">✕</button>';} const eiq2=document.getElementById('empIdQuick'); if(eiq2)eiq2.value=''; document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));document.querySelector('.tab-btn[data-tab="0"]').classList.add('active');document.getElementById('tab0').classList.add('active');openModal('empModal');});
   document.getElementById('saveEmpBtn').addEventListener('click',saveEmployee);
   document.getElementById('refreshListBtn').addEventListener('click',async()=>{showLoading();await loadDB(true);hideLoading();renderEmployeeList();if(selectedEmployeeId)renderDetail(selectedEmployeeId);showToast('Cloud data refreshed','success');});
-  document.getElementById('searchInput').addEventListener('input',renderEmployeeList);
+  // Debounced search — 300ms wait before rendering
+  let _searchDebounce = null;
+  document.getElementById('searchInput').addEventListener('input', () => {
+    clearTimeout(_searchDebounce);
+    _searchDebounce = setTimeout(renderEmployeeList, 300);
+  });
   document.getElementById('attendanceBtn').addEventListener('click',openAttendance);
   document.getElementById('attHistBtn').addEventListener('click',openAttHistory);
   document.getElementById('leaveBtn').addEventListener('click',openLeave);
@@ -4267,7 +4285,9 @@ Format: use numbered lists for steps, bullet points for features. Keep answers u
     hcHistory.push({ role: 'user', content: text });
     hcShowTyping();
     try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
+      // ⚠️ Replace YOUR-PROJECT-ID with your Firebase project ID
+      const PROXY_URL = 'https://us-central1-YOUR-PROJECT-ID.cloudfunctions.net/claudeProxy';
+      const res = await fetch(PROXY_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
