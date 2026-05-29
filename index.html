@@ -50,10 +50,7 @@ body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background:
-    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(79, 142, 247, 0.07) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 80% 80%, rgba(155, 114, 248, 0.06) 0%, transparent 55%),
-    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(56, 201, 168, 0.04) 0%, transparent 60%);
+  background: linear-gradient(135deg, rgba(79,142,247,0.04) 0%, transparent 60%);
   pointer-events: none;
   z-index: 0;
 }
@@ -71,8 +68,8 @@ body::before {
   border-radius: 20px; overflow: hidden;
   flex-direction: column;
   box-shadow: 0 24px 64px rgba(0,0,0,0.6), 0 0 0 1px rgba(79,142,247,0.1);
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   animation: chatSlideUp 0.3s cubic-bezier(0.16,1,0.3,1);
   position: absolute; bottom: 70px; right: 0;
 }
@@ -226,19 +223,36 @@ body::before {
   
 body > * { position: relative; z-index: 1; }
 
+/* ===== PERFORMANCE OPTIMIZATIONS ===== */
+.hc-messages, .emp-list, .modal-body {
+  will-change: scroll-position;
+  -webkit-overflow-scrolling: touch;
+}
+.modal {
+  will-change: opacity;
+}
+/* Reduce animation duration for low-end devices */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+
 /* ===== GLASS MIXIN ===== */
 .glass {
   background: var(--glass);
   border: 1px solid var(--glass-border);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
 .glass-strong {
   background: rgba(15, 22, 40, 0.65);
   border: 1px solid var(--glass-border-strong);
-  backdrop-filter: blur(32px) saturate(200%);
-  -webkit-backdrop-filter: blur(32px) saturate(200%);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 
 /* ===== LOGIN & AUTH ===== */
@@ -262,7 +276,7 @@ body > * { position: relative; z-index: 1; }
 .orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
+  filter: blur(0px); opacity: 0;
   animation: orbFloat 8s ease-in-out infinite;
 }
 
@@ -290,8 +304,6 @@ body > * { position: relative; z-index: 1; }
 
 @keyframes orbFloat {
   0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(30px, -20px) scale(1.05); }
-  66% { transform: translate(-20px, 15px) scale(0.97); }
 }
 
 .auth-card {
@@ -301,8 +313,8 @@ body > * { position: relative; z-index: 1; }
   padding: 2.8rem 2.5rem;
   width: 100%;
   max-width: 430px;
-  backdrop-filter: blur(40px) saturate(200%);
-  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   box-shadow:
     0 0 0 1px rgba(79, 142, 247, 0.08),
     0 32px 64px -16px rgba(0, 0, 0, 0.6),
@@ -496,8 +508,8 @@ body > * { position: relative; z-index: 1; }
   align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   box-shadow: 0 1px 0 rgba(79, 142, 247, 0.08);
   position: relative;
   z-index: 10;
@@ -535,8 +547,8 @@ body > * { position: relative; z-index: 1; }
   border-right: 1px solid rgba(255, 255, 255, 0.06);
   display: flex;
   flex-direction: column;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
 .search-box { padding: 1rem; }
@@ -796,8 +808,8 @@ body > * { position: relative; z-index: 1; }
   display: flex; flex-direction: column;
   transform: scale(0.95) translateY(10px);
   transition: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  backdrop-filter: blur(40px) saturate(180%);
-  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   box-shadow:
     0 0 0 1px rgba(79, 142, 247, 0.1),
     0 32px 64px -16px rgba(0, 0, 0, 0.7),
@@ -909,8 +921,8 @@ body > * { position: relative; z-index: 1; }
   transform: translateX(120%);
   transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 16px 32px rgba(0,0,0,0.4);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 .toast.show { transform: translateX(0); }
 .toast.error { border-left-color: var(--danger); }
@@ -979,8 +991,8 @@ body > * { position: relative; z-index: 1; }
 .lock-overlay {
   position: fixed; inset: 0;
   background: rgba(6, 11, 20, 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   z-index: 9999;
   display: flex; align-items: center; justify-content: center;
 }
@@ -993,8 +1005,8 @@ body > * { position: relative; z-index: 1; }
   width: 100%; max-width: 480px;
   text-align: center;
   box-shadow: 0 40px 80px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.08);
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   position: relative;
 }
 
@@ -1070,7 +1082,7 @@ body > * { position: relative; z-index: 1; }
   max-width: 320px;
   z-index: 500;
   box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(4px);
   animation: slideInRight 0.3s ease;
 }
 @keyframes slideInRight { from{transform:translateX(120%);opacity:0} to{transform:translateX(0);opacity:1} }
@@ -1681,7 +1693,7 @@ select option { background: #0F1628; color: var(--text); }
 <div id="mobileDrawerOverlay" onclick="closeMobileDrawer()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:1998;backdrop-filter:blur(4px);"></div>
 
 <!-- MOBILE SIDE DRAWER -->
-<div id="mobileDrawer" style="display:none;position:fixed;top:0;left:0;bottom:0;width:82vw;max-width:300px;background:rgba(8,14,26,0.97);border-right:1px solid rgba(79,142,247,0.18);z-index:1999;flex-direction:column;transform:translateX(-100%);transition:transform 0.3s cubic-bezier(0.16,1,0.3,1);backdrop-filter:blur(40px);">
+<div id="mobileDrawer" style="display:none;position:fixed;top:0;left:0;bottom:0;width:82vw;max-width:300px;background:rgba(8,14,26,0.97);border-right:1px solid rgba(79,142,247,0.18);z-index:1999;flex-direction:column;transform:translateX(-100%);transition:transform 0.3s cubic-bezier(0.16,1,0.3,1);backdrop-filter: blur(8px);">
   <div style="padding:1.2rem 1rem 0.8rem;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;gap:10px;">
     <div class="brand-icon">🏢</div>
     <div>
@@ -2392,7 +2404,6 @@ async function loadDB(forceCloud = false) {
 let _saveDBTimer = null;
 let _saveDBResolvers = [];
 async function saveDB() {
-  // Always save locally immediately (fast, no network)
   dbUpdatedAt = Date.now();
   try {
     saveLocalDB();
@@ -2406,7 +2417,6 @@ async function saveDB() {
     showToast?.('Saved on this computer. Cloud sync is not connected.', 'error');
     return true;
   }
-  // Debounce cloud sync — wait 1.5s before pushing to Firestore
   return new Promise((resolve) => {
     _saveDBResolvers.push(resolve);
     clearTimeout(_saveDBTimer);
@@ -2418,8 +2428,8 @@ async function saveDB() {
         resolvers.forEach(r => r(true));
       } catch(e) {
         lastCloudSaveOk = false;
-        console.error('Cloud save failed; data remains saved locally.', e);
-        showToast?.('Saved on this computer, but cloud sync failed.', 'error');
+        console.error('Cloud save failed; data saved locally.', e);
+        showToast?.('Saved locally, cloud sync failed.', 'error');
         resolvers.forEach(r => r(false));
       }
     }, 1500);
@@ -3808,7 +3818,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   document.getElementById('addEmployeeBtn').addEventListener('click',()=>{editingEmployeeId=null;document.getElementById('modalTitle').textContent='New Employee';document.querySelectorAll('#empModal input,#empModal select,#empModal textarea').forEach(el=>el.value='');document.getElementById('empGender').value='Male';document.getElementById('empMarital').value='Single';document.getElementById('empType').value='Permanent';document.getElementById('empStatus').value='Active';document.getElementById('empPayMethod').value='Bank Transfer'; currentEmpPhotoData=null; refreshEmpLocationDropdown(); const pzr=document.getElementById('photoUploadZone'); if(pzr){pzr.innerHTML='<span class="upload-icon">📷</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;">✕</button>';} const eiq2=document.getElementById('empIdQuick'); if(eiq2)eiq2.value=''; document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));document.querySelector('.tab-btn[data-tab="0"]').classList.add('active');document.getElementById('tab0').classList.add('active');openModal('empModal');});
   document.getElementById('saveEmpBtn').addEventListener('click',saveEmployee);
   document.getElementById('refreshListBtn').addEventListener('click',async()=>{showLoading();await loadDB(true);hideLoading();renderEmployeeList();if(selectedEmployeeId)renderDetail(selectedEmployeeId);showToast('Cloud data refreshed','success');});
-  // Debounced search — 300ms wait before rendering
+  // Debounced search
   let _searchDebounce = null;
   document.getElementById('searchInput').addEventListener('input', () => {
     clearTimeout(_searchDebounce);
@@ -4285,9 +4295,7 @@ Format: use numbered lists for steps, bullet points for features. Keep answers u
     hcHistory.push({ role: 'user', content: text });
     hcShowTyping();
     try {
-      // ⚠️ Replace YOUR-PROJECT-ID with your Firebase project ID
-      const PROXY_URL = 'https://us-central1-YOUR-PROJECT-ID.cloudfunctions.net/claudeProxy';
-      const res = await fetch(PROXY_URL, {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
