@@ -6,8 +6,9 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%234F8EF7'/><text x='16' y='22' text-anchor='middle' font-size='18' fill='white'>HR</text></svg>">
 <title>HR Nexus | Complete HR Solution</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script>
+document.documentElement.classList.add('low-memory-mode');
+</script>
 
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -44,6 +45,36 @@ body {
   color: var(--text);
   min-height: 100vh;
   overflow-x: hidden;
+}
+
+/* Low-memory tuning: keeps the same UI, but avoids expensive continuous paints on 4GB PCs. */
+:root { --blur-heavy: 8px; --blur-soft: 4px; }
+*, *::before, *::after {
+  scroll-behavior: auto !important;
+}
+html.low-memory-mode .auth-bg-orbs,
+html.low-memory-mode body::before {
+  display: none !important;
+}
+html.low-memory-mode *,
+html.low-memory-mode *::before,
+html.low-memory-mode *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.08s !important;
+}
+html.low-memory-mode .auth-card,
+html.low-memory-mode .topbar,
+html.low-memory-mode .modal-card,
+html.low-memory-mode #hrChatBox,
+html.low-memory-mode .bottom-nav {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+html.low-memory-mode .auth-card,
+html.low-memory-mode .modal-card,
+html.low-memory-mode #hrChatBox {
+  box-shadow: 0 12px 28px rgba(0,0,0,0.35) !important;
 }
 
 /* ===== ANIMATED BACKGROUND ===== */
@@ -2274,15 +2305,51 @@ let _db = null;
 let lastCloudSaveOk = false;
 let dbUpdatedAt = 0;
 let cloudSyncUnsubscribe = null;
+let firebaseLoadPromise = null;
 
-try {
+function loadScriptOnce(src) {
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector(`script[src="${src}"]`);
+    if (existing) {
+      existing.addEventListener('load', resolve, { once: true });
+      existing.addEventListener('error', reject, { once: true });
+      return;
+    }
+    const s = document.createElement('script');
+    s.src = src;
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+async function initFirebaseSDK() {
+  if (_db) return true;
+  if (!firebaseLoadPromise) {
+    firebaseLoadPromise = (async () => {
+      if (!window.firebase?.initializeApp) {
+        await loadScriptOnce('https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js');
+      }
+      if (!window.firebase?.firestore) {
+        await loadScriptOnce('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js');
+      }
+      if (!firebase.apps?.length) firebase.initializeApp(firebaseConfig);
+      _db = firebase.firestore();
+      return true;
+    })().catch(e => {
+      firebaseLoadPromise = null;
+      console.warn('Firebase is unavailable; using local permanent storage.', e);
+      return false;
+    });
+  }
+  return firebaseLoadPromise;
+}
+function initFirebaseIfAlreadyLoaded() {
   if (window.firebase?.initializeApp && window.firebase?.firestore) {
     if (!firebase.apps?.length) firebase.initializeApp(firebaseConfig);
     _db = firebase.firestore();
   }
-} catch (e) {
-  console.warn('Firebase is unavailable; using local permanent storage.', e);
 }
+initFirebaseIfAlreadyLoaded();
 
 const DEFAULT_EMPLOYEES = [{"id":1,"fullName":"John Smith","empId":"EMP001","email":"john@company.com","mobile":"0771234567","nic":"123456789V","dob":"1990-05-15","gender":"Male","maritalStatus":"Married","address":"Colombo","emergencyName":"Jane Smith","emergencyPhone":"0777654321","department":"IT","designation":"Senior Developer","doj":"2023-01-10","employmentType":"Permanent","status":"Active","location":"Colombo","salary":150000,"bankAccount":"123456789","bankName":"Commercial Bank","payMethod":"Bank Transfer","remarks":"Excellent performer"},{"id":2,"fullName":"Sarah Johnson","empId":"EMP002","email":"sarah@company.com","mobile":"0771234568","nic":"987654321V","dob":"1988-08-20","gender":"Female","maritalStatus":"Married","address":"Kandy","emergencyName":"Mike Johnson","emergencyPhone":"0777654322","department":"HR","designation":"HR Manager","doj":"2022-06-15","employmentType":"Permanent","status":"Active","location":"Kandy","salary":180000,"bankAccount":"987654321","bankName":"HSBC","payMethod":"Bank Transfer","remarks":"Great leader"}];
 const DEFAULT_USERS = [{"id":"u1","username":"admin","password":"admin123","role":"ADMIN","status":"active"},{"id":"u2","username":"hr","password":"hr123","role":"HR","status":"active"},{"id":"u3","username":"viewer","password":"view123","role":"VIEWER","status":"active"}];
@@ -2327,6 +2394,11 @@ function loadLocalRecord() {
 }
 function saveLocalDB() {
   localStorage.setItem(LOCAL_DB_KEY, JSON.stringify({ data: DB, updatedAt: dbUpdatedAt, clientId: getClientId() }));
+}
+function loadLocalStartup() {
+  const local = loadLocalRecord();
+  DB = local.data;
+  dbUpdatedAt = local.updatedAt;
 }
 function cloudPayloadFrom(parts, meta) {
   return {
@@ -2379,6 +2451,7 @@ async function loadDB(forceCloud = false) {
   const local = loadLocalRecord();
   DB = local.data;
   dbUpdatedAt = local.updatedAt;
+  if (!_db) await initFirebaseSDK();
   if (!_db) return;
   try {
     const [metaRaw,emp,users,pending,payrolls,trial,license,licenseKeys,leaves,documents,locData,svApps] = await Promise.all([sbGet('hr_meta'),sbGet('hr_employees'),sbGet('hr_users'),sbGet('hr_pending'),sbGet('hr_payrolls'),sbGet('hr_trial'),sbGet('hr_license'),sbGet('hr_license_keys'),sbGet('hr_leaves'),sbGet('hr_documents'),sbGet('hr_locations'),sbGet('hr_sv_apps')]);
@@ -2407,6 +2480,7 @@ async function saveDB() {
     showToast?.('Local save failed. Browser storage may be full.', 'error');
     return false;
   }
+  if (!_db) await initFirebaseSDK();
   if (!_db) {
     lastCloudSaveOk = false;
     showToast?.('Saved on this computer. Cloud sync is not connected.', 'error');
@@ -2463,7 +2537,7 @@ document.addEventListener('keydown',e=>{ if(e.key==='Escape')document.querySelec
 
 function exportProfilePDF(emp) {
   const pdfContent=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Employee Profile - ${emp.fullName}</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:40px;background:white;color:#1e293b}.header{background:linear-gradient(135deg,#3B82F6,#8B5CF6);color:white;padding:30px;border-radius:12px;margin-bottom:30px;text-align:center}.header h1{font-size:28px;margin-bottom:8px}.header p{font-size:14px;opacity:0.9}.section{margin-bottom:25px}.section-title{font-size:16px;font-weight:bold;color:#3B82F6;border-left:4px solid #3B82F6;padding-left:12px;margin-bottom:15px}.info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.info-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:12px}.info-card label{font-size:10px;text-transform:uppercase;color:#64748b;display:block;margin-bottom:5px}.info-card span{font-size:14px;font-weight:500;color:#1e293b}.footer{margin-top:40px;padding-top:20px;border-top:1px solid #e2e8f0;text-align:center;font-size:10px;color:#94a3b8}@media print{.header{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style></head><body><div class="header"><h1>Employee Profile</h1><p>${emp.empId} · ${emp.department}</p></div><div class="section"><div class="section-title">Personal Information</div><div class="info-grid"><div class="info-card"><label>Full Name</label><span>${emp.fullName||'-'}</span></div><div class="info-card"><label>Employee ID</label><span>${emp.empId||'-'}</span></div><div class="info-card"><label>Email</label><span>${emp.email||'-'}</span></div><div class="info-card"><label>Mobile</label><span>${emp.mobile||'-'}</span></div><div class="info-card"><label>NIC</label><span>${emp.nic||'-'}</span></div><div class="info-card"><label>Date of Birth</label><span>${emp.dob||'-'}</span></div><div class="info-card"><label>Gender</label><span>${emp.gender||'-'}</span></div><div class="info-card"><label>Marital Status</label><span>${emp.maritalStatus||'-'}</span></div></div></div><div class="section"><div class="section-title">Employment Details</div><div class="info-grid"><div class="info-card"><label>Department</label><span>${emp.department||'-'}</span></div><div class="info-card"><label>Designation</label><span>${emp.designation||'-'}</span></div><div class="info-card"><label>Date of Joining</label><span>${emp.doj||'-'}</span></div><div class="info-card"><label>Employment Type</label><span>${emp.employmentType||'-'}</span></div><div class="info-card"><label>Work Location</label><span>${emp.location||'-'}</span></div><div class="info-card"><label>Status</label><span>${emp.status||'Active'}</span></div></div></div><div class="section"><div class="section-title">Salary & Bank Details</div><div class="info-grid"><div class="info-card"><label>Basic Salary</label><span>LKR ${(emp.salary||0).toLocaleString()}</span></div><div class="info-card"><label>Bank Name</label><span>${emp.bankName||'-'}</span></div><div class="info-card"><label>Bank Account</label><span>${emp.bankAccount||'-'}</span></div><div class="info-card"><label>Payment Method</label><span>${emp.payMethod||'-'}</span></div></div></div><div class="footer">Generated on ${new Date().toLocaleString()} | HR Management System</div></body></html>`;
-  const opt={margin:[0.5,0.5,0.5,0.5],filename:`Employee_Profile_${emp.empId}.pdf`,image:{type:'jpeg',quality:0.98},html2canvas:{scale:2},jsPDF:{unit:'in',format:'a4',orientation:'portrait'}};
+  const opt={margin:[0.5,0.5,0.5,0.5],filename:`Employee_Profile_${emp.empId}.pdf`,image:{type:'jpeg',quality:0.85},html2canvas:{scale:1},jsPDF:{unit:'in',format:'a4',orientation:'portrait'}};
   const el=document.createElement('div'); el.innerHTML=pdfContent; document.body.appendChild(el);
   if(window.html2pdf){html2pdf().set(opt).from(el).save().then(()=>{document.body.removeChild(el);showToast('PDF exported!','success');});}else{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';s.onload=()=>{html2pdf().set(opt).from(el).save().then(()=>{document.body.removeChild(el);showToast('PDF exported!','success');});};document.head.appendChild(s);}
 }
@@ -2473,7 +2547,7 @@ function exportPayrollPDF(emp,payrollData,month) {
   const deds=payrollData.epf+payrollData.etf+payrollData.tax+payrollData.otherDeductions;
   const net=gross-deds;
   const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:40px;background:white;color:#1e293b}.header{background:linear-gradient(135deg,#3B82F6,#8B5CF6);color:white;padding:30px;border-radius:12px;margin-bottom:20px;text-align:center}.header h1{font-size:28px}.header p{font-size:14px;opacity:.9}.emp-det{background:#f8fafc;padding:15px;border-radius:8px;margin-bottom:20px;display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px}.emp-det strong{color:#3B82F6}table{width:100%;border-collapse:collapse;margin-bottom:15px;font-size:12px}th{background:#3B82F6;color:white;padding:8px;text-align:left}td{padding:8px;border-bottom:1px solid #e2e8f0}td:last-child{text-align:right}.tot{font-weight:700;background:#f1f5f9}.net{background:linear-gradient(135deg,#10B981,#059669);color:white;padding:15px;border-radius:8px;text-align:center}.net .label{font-size:14px;opacity:.9}.net .amt{font-size:28px;font-weight:700;margin-top:5px}.foot{margin-top:30px;padding-top:15px;border-top:1px solid #e2e8f0;text-align:center;font-size:10px;color:#94a3b8}@media print{.header,.net{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style></head><body><div class="header"><h1>PAYSLIP</h1><p>${month}</p></div><div class="emp-det"><div><strong>Employee ID:</strong> ${emp.empId}</div><div><strong>Name:</strong> ${emp.fullName}</div><div><strong>Department:</strong> ${emp.department}</div><div><strong>Designation:</strong> ${emp.designation}</div></div><table><thead><tr><th>Earnings</th><th>Amount</th></tr></thead><tbody><tr><td>Basic Salary</td><td>LKR ${payrollData.basicSalary.toLocaleString()}</td></tr><tr><td>Transport</td><td>LKR ${payrollData.transport.toLocaleString()}</td></tr><tr><td>Meal</td><td>LKR ${payrollData.meal.toLocaleString()}</td></tr><tr><td>Other</td><td>LKR ${payrollData.otherAllow.toLocaleString()}</td></tr><tr class="tot"><td>Gross Earnings</td><td>LKR ${gross.toLocaleString()}</td></tr></tbody></table><table><thead><tr><th>Deductions</th><th>Amount</th></tr></thead><tbody><tr><td>EPF (8%)</td><td>LKR ${payrollData.epf.toLocaleString()}</td></tr><tr><td>ETF (3%)</td><td>LKR ${payrollData.etf.toLocaleString()}</td></tr><tr><td>PAYE Tax</td><td>LKR ${payrollData.tax.toLocaleString()}</td></tr><tr><td>Other</td><td>LKR ${payrollData.otherDeductions.toLocaleString()}</td></tr><tr class="tot"><td>Total Deductions</td><td>LKR ${deds.toLocaleString()}</td></tr></tbody></table><div class="net"><div class="label">NET SALARY</div><div class="amt">LKR ${net.toLocaleString()}</div></div><div class="foot">Generated on ${new Date().toLocaleString()} | HR Management System</div></body></html>`;
-  const opt={margin:[0.5,0.5,0.5,0.5],filename:`Payslip_${emp.empId}_${month}.pdf`,image:{type:'jpeg',quality:0.98},html2canvas:{scale:2},jsPDF:{unit:'in',format:'a4',orientation:'portrait'}};
+  const opt={margin:[0.5,0.5,0.5,0.5],filename:`Payslip_${emp.empId}_${month}.pdf`,image:{type:'jpeg',quality:0.85},html2canvas:{scale:1},jsPDF:{unit:'in',format:'a4',orientation:'portrait'}};
   const el=document.createElement('div'); el.innerHTML=html; document.body.appendChild(el);
   if(window.html2pdf){html2pdf().set(opt).from(el).save().then(()=>{document.body.removeChild(el);showToast('Payslip exported!','success');});}else{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';s.onload=()=>{html2pdf().set(opt).from(el).save().then(()=>{document.body.removeChild(el);showToast('Payslip exported!','success');});};document.head.appendChild(s);}
 }
@@ -2726,7 +2800,7 @@ function renderEmployeeList() {
     if(!container)return;
     const linked=DB.employees.find(e=>e._svUsername===currentUser.username);
     if(!linked){container.innerHTML='<div style="padding:1rem;text-align:center;color:var(--muted);font-size:0.8rem;">Awaiting admin approval</div>';return;}
-    container.innerHTML=`<div class="emp-card active"><div class="avatar" style="overflow:hidden;padding:0;">${linked.photo?`<img class='avatar-img' src='${linked.photo}'>`:`<span>${linked.fullName?.charAt(0)||'?'}</span>`}</div><div class="emp-info"><div class="emp-name">${linked.fullName}</div><div class="emp-meta">${linked.empId||''} · ${linked.department||'-'}</div></div><div class="status-dot" style="background:${linked.status==='Active'?'#14C47E':'#F05252'}"></div></div>`;
+    container.innerHTML=`<div class="emp-card active"><div class="avatar" style="overflow:hidden;padding:0;">${linked.photo?`<img class='avatar-img' loading='lazy' src='${linked.photo}'>`:`<span>${linked.fullName?.charAt(0)||'?'}</span>`}</div><div class="emp-info"><div class="emp-name">${linked.fullName}</div><div class="emp-meta">${linked.empId||''} · ${linked.department||'-'}</div></div><div class="status-dot" style="background:${linked.status==='Active'?'#14C47E':'#F05252'}"></div></div>`;
     return;
   }
   const search=document.getElementById('searchInput')?.value.toLowerCase()||'';
@@ -2755,10 +2829,17 @@ function renderEmployeeList() {
   const container=document.getElementById('employeeListContainer');
   if(!container)return;
   if(!filtered.length){container.innerHTML='<div style="padding:1rem;text-align:center;color:var(--muted);">No employees found</div>';return;}
-  container.innerHTML=filtered.map(emp=>`<div class="emp-card ${selectedEmployeeId===emp.id?'active':''}" onclick="selectEmployee(${emp.id})"><div class="avatar" style="overflow:hidden;padding:0;">${emp.photo?`<img class='avatar-img' src='${emp.photo}'>`:`<span>${emp.fullName?.charAt(0)||'?'}</span>`}</div><div class="emp-info"><div class="emp-name">${emp.fullName||'Unnamed'}</div><div class="emp-meta">${emp.empId||''} · ${emp.department||'-'}${emp.location?` · ${emp.location}`:''}</div></div><div class="status-dot" style="background:${emp.status==='Active'?'#14C47E':'#F05252'}"></div></div>`).join('');
+  const visible=filtered.slice(0,150);
+  const more=filtered.length>visible.length?`<div style="padding:0.75rem 1rem;text-align:center;color:var(--muted);font-size:0.78rem;">Showing ${visible.length} of ${filtered.length}. Use search to narrow results.</div>`:'';
+  container.innerHTML=visible.map(emp=>`<div class="emp-card ${selectedEmployeeId===emp.id?'active':''}" data-emp-id="${emp.id}" onclick="selectEmployee(${emp.id})"><div class="avatar" style="overflow:hidden;padding:0;">${emp.photo?`<img class='avatar-img' loading='lazy' src='${emp.photo}'>`:`<span>${emp.fullName?.charAt(0)||'?'}</span>`}</div><div class="emp-info"><div class="emp-name">${emp.fullName||'Unnamed'}</div><div class="emp-meta">${emp.empId||''} · ${emp.department||'-'}${emp.location?` · ${emp.location}`:''}</div></div><div class="status-dot" style="background:${emp.status==='Active'?'#14C47E':'#F05252'}"></div></div>`).join('')+more;
 }
 
-function selectEmployee(id) { selectedEmployeeId=id; renderEmployeeList(); renderDetail(id); }
+function selectEmployee(id) {
+  selectedEmployeeId=id;
+  document.querySelectorAll('#employeeListContainer .emp-card.active').forEach(card=>card.classList.remove('active'));
+  document.querySelector(`#employeeListContainer .emp-card[data-emp-id="${id}"]`)?.classList.add('active');
+  renderDetail(id);
+}
 
 function renderDetail(id) {
   const emp=DB.employees.find(e=>e.id==id);
@@ -3439,7 +3520,7 @@ function exportReportPDF() {
   const rows=DB.payrolls.filter(p=>p.month===month);const empFn=id=>DB.employees.find(e=>e.id===id);const total=rows.reduce((s,r)=>s+(r.netSalary||0),0);
   const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:30px;color:#1e293b}.hdr{background:linear-gradient(135deg,#3B82F6,#8B5CF6);color:white;padding:20px;border-radius:10px;margin-bottom:20px;text-align:center}.hdr h1{font-size:20px}.hdr p{font-size:11px;opacity:.9}table{width:100%;border-collapse:collapse;font-size:10px}th{background:#3B82F6;color:white;padding:7px;text-align:left}td{padding:6px 7px;border-bottom:1px solid #e2e8f0}tr:nth-child(even) td{background:#f8fafc}.tot td{background:#1e293b!important;color:white;font-weight:700}</style></head><body><div class="hdr"><h1>Payroll Report — ${month}</h1><p>Generated: ${new Date().toLocaleString()}</p></div><table><thead><tr><th>Emp ID</th><th>Name</th><th>Dept</th><th>Basic</th><th>Gross</th><th>EPF</th><th>ETF</th><th>Net Pay</th></tr></thead><tbody>${rows.map(r=>{const e=empFn(r.employeeId);return`<tr><td>${e?.empId||'—'}</td><td>${e?.fullName||'—'}</td><td>${e?.department||'—'}</td><td>LKR ${(r.basicSalary||0).toLocaleString()}</td><td>LKR ${(r.grossEarnings||0).toLocaleString()}</td><td>LKR ${(r.epf||0).toLocaleString()}</td><td>LKR ${(r.etf||0).toLocaleString()}</td><td>LKR ${(r.netSalary||0).toLocaleString()}</td></tr>`;}).join('')}<tr class="tot"><td colspan="7" style="text-align:right">Total Net Payroll</td><td>LKR ${total.toLocaleString()}</td></tr></tbody></table></body></html>`;
   const el=document.createElement('div');el.innerHTML=html;document.body.appendChild(el);
-  const loadAndExport=()=>html2pdf().set({margin:[0.4,0.3],filename:`Payroll_Report_${month}.pdf`,image:{type:'jpeg',quality:0.95},html2canvas:{scale:2},jsPDF:{unit:'in',format:'a4',orientation:'landscape'}}).from(el).save().then(()=>{document.body.removeChild(el);showToast('Report exported!','success');});
+  const loadAndExport=()=>html2pdf().set({margin:[0.4,0.3],filename:`Payroll_Report_${month}.pdf`,image:{type:'jpeg',quality:0.85},html2canvas:{scale:1},jsPDF:{unit:'in',format:'a4',orientation:'landscape'}}).from(el).save().then(()=>{document.body.removeChild(el);showToast('Report exported!','success');});
   if(window.html2pdf)loadAndExport();else{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';s.onload=loadAndExport;document.head.appendChild(s);}
 }
 
@@ -3560,7 +3641,7 @@ function exportLeavePDF() {
   if(!DB.leaves)return;
   const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:30px;color:#1e293b}h1{color:#3B82F6;font-size:18px;margin-bottom:4px}p{font-size:11px;color:#64748b;margin-bottom:16px}table{width:100%;border-collapse:collapse;font-size:10px}th{background:#3B82F6;color:white;padding:7px}td{padding:6px 8px;border-bottom:1px solid #e2e8f0}.pend{color:#F59E0B}.appr{color:#10B981}.rej{color:#EF4444}</style></head><body><h1>Leave Report</h1><p>Generated: ${new Date().toLocaleString()}</p><table><thead><tr><th>Employee</th><th>Type</th><th>From</th><th>To</th><th>Days</th><th>Reason</th><th>Status</th></tr></thead><tbody>${DB.leaves.map(l=>{const e=DB.employees.find(x=>x.id===l.employeeId);const cls=l.status==='Approved'?'appr':l.status==='Rejected'?'rej':'pend';return`<tr><td>${e?.fullName||'—'}</td><td>${l.type}</td><td>${l.from}</td><td>${l.to}</td><td>${l.days}</td><td>${l.reason||'—'}</td><td class="${cls}">${l.status}</td></tr>`;}).join('')}</tbody></table></body></html>`;
   const el=document.createElement('div');el.innerHTML=html;document.body.appendChild(el);
-  const go=()=>html2pdf().set({margin:[0.4,0.4],filename:'Leave_Report.pdf',image:{type:'jpeg',quality:0.95},html2canvas:{scale:2},jsPDF:{unit:'in',format:'a4'}}).from(el).save().then(()=>{document.body.removeChild(el);showToast('Leave report exported!','success');});
+  const go=()=>html2pdf().set({margin:[0.4,0.4],filename:'Leave_Report.pdf',image:{type:'jpeg',quality:0.85},html2canvas:{scale:1},jsPDF:{unit:'in',format:'a4'}}).from(el).save().then(()=>{document.body.removeChild(el);showToast('Leave report exported!','success');});
   if(window.html2pdf)go();else{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';s.onload=go;document.head.appendChild(s);}
 }
 
@@ -3586,7 +3667,7 @@ function exportAttHistPDF() {
   if(!emp){showToast('Select an employee','error');return;}
   const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:30px;color:#1e293b}.hdr{background:linear-gradient(135deg,#3B82F6,#8B5CF6);color:white;padding:20px;border-radius:10px;margin-bottom:20px;text-align:center}table{width:100%;border-collapse:collapse;font-size:11px}th{background:#3B82F6;color:white;padding:7px}td{padding:7px 8px;border-bottom:1px solid #e2e8f0}</style></head><body><div class="hdr"><h1>Attendance Report — ${month}</h1><p>${emp.fullName} · ${emp.empId} · ${emp.department}</p></div>${pay?`<table><thead><tr><th>Item</th><th>Value</th></tr></thead><tbody><tr><td>Days Present</td><td>${pay.workingDays||'—'}</td></tr><tr><td>Absent Days</td><td>${pay.absentDays||0}</td></tr><tr><td>Leave Days</td><td>${pay.leaveDays||0}</td></tr><tr><td>OT Hours</td><td>${pay.overtimeHrs||0}</td></tr><tr><td>Basic Salary</td><td>LKR ${(pay.basicSalary||0).toLocaleString()}</td></tr><tr><td>Net Salary</td><td><strong>LKR ${(pay.netSalary||0).toLocaleString()}</strong></td></tr></tbody></table>`:'<p>No payroll record for this month.</p>'}</body></html>`;
   const el=document.createElement('div');el.innerHTML=html;document.body.appendChild(el);
-  const go=()=>html2pdf().set({margin:[0.4,0.4],filename:`Attendance_${emp.empId}_${month}.pdf`,image:{type:'jpeg',quality:0.95},html2canvas:{scale:2},jsPDF:{unit:'in',format:'a4'}}).from(el).save().then(()=>{document.body.removeChild(el);showToast('Exported!','success');});
+  const go=()=>html2pdf().set({margin:[0.4,0.4],filename:`Attendance_${emp.empId}_${month}.pdf`,image:{type:'jpeg',quality:0.85},html2canvas:{scale:1},jsPDF:{unit:'in',format:'a4'}}).from(el).save().then(()=>{document.body.removeChild(el);showToast('Exported!','success');});
   if(window.html2pdf)go();else{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';s.onload=go;document.head.appendChild(s);}
 }
 
@@ -3718,7 +3799,7 @@ function exportAttendanceSummaryPDF() {
   const rows=attendanceMapped.map(r=>{if(!r.emp)return`<tr style="color:#ef4444"><td>${r.rawId}</td><td>${r.rawName}</td><td>Not Found</td><td>—</td><td>${r.absentDays}</td><td>${r.overtimeHrs}</td><td>—</td></tr>`;const pay=calcAttendanceSalary(r.emp,r,wd);return`<tr><td>${r.emp.empId}</td><td>${r.emp.fullName}</td><td>${r.emp.department||'—'}</td><td>${r.workDays??wd-r.absentDays}</td><td>${r.absentDays}</td><td>${r.overtimeHrs}</td><td>LKR ${pay.netSalary.toLocaleString()}</td></tr>`;}).join('');
   const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:30px;color:#1e293b}h1{font-size:20px;color:#3B82F6;margin-bottom:4px}p{font-size:11px;color:#64748b;margin-bottom:16px}table{width:100%;border-collapse:collapse;font-size:10px}th{background:#3B82F6;color:white;padding:7px;text-align:left}td{padding:6px 7px;border-bottom:1px solid #e2e8f0}</style></head><body><h1>Attendance Summary — ${month}</h1><p>Generated: ${new Date().toLocaleString()}</p><table><thead><tr><th>Emp ID</th><th>Name</th><th>Dept</th><th>Days</th><th>Absent</th><th>OT Hrs</th><th>Est. Net</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;
   const el=document.createElement('div');el.innerHTML=html;document.body.appendChild(el);
-  const go=()=>html2pdf().set({margin:[0.4,0.3],filename:`Attendance_${month}.pdf`,image:{type:'jpeg',quality:0.95},html2canvas:{scale:2},jsPDF:{unit:'in',format:'a4',orientation:'landscape'}}).from(el).save().then(()=>{document.body.removeChild(el);showToast('PDF exported!','success');});
+  const go=()=>html2pdf().set({margin:[0.4,0.3],filename:`Attendance_${month}.pdf`,image:{type:'jpeg',quality:0.85},html2canvas:{scale:1},jsPDF:{unit:'in',format:'a4',orientation:'landscape'}}).from(el).save().then(()=>{document.body.removeChild(el);showToast('PDF exported!','success');});
   if(window.html2pdf)go();else{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';s.onload=go;document.head.appendChild(s);}
 }
 
@@ -3807,7 +3888,7 @@ document.addEventListener('DOMContentLoaded', async function() {
       document.head.appendChild(s);
     });
   };
-  await loadDB();
+  loadLocalStartup();
   document.getElementById('loginBtn').addEventListener('click',handleLogin);
   document.getElementById('loginUsername').addEventListener('keypress',e=>{if(e.key==='Enter')handleLogin();});
   document.getElementById('loginPassword').addEventListener('keypress',e=>{if(e.key==='Enter')handleLogin();});
@@ -3830,7 +3911,8 @@ document.addEventListener('DOMContentLoaded', async function() {
   document.getElementById('addEmployeeBtn').addEventListener('click',()=>{editingEmployeeId=null;document.getElementById('modalTitle').textContent='New Employee';document.querySelectorAll('#empModal input,#empModal select,#empModal textarea').forEach(el=>el.value='');document.getElementById('empGender').value='Male';document.getElementById('empMarital').value='Single';document.getElementById('empType').value='Permanent';document.getElementById('empStatus').value='Active';document.getElementById('empPayMethod').value='Bank Transfer'; currentEmpPhotoData=null; refreshEmpLocationDropdown(); const pzr=document.getElementById('photoUploadZone'); if(pzr){pzr.innerHTML='<span class="upload-icon">📷</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;">✕</button>';} const eiq2=document.getElementById('empIdQuick'); if(eiq2)eiq2.value=''; document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));document.querySelector('.tab-btn[data-tab="0"]').classList.add('active');document.getElementById('tab0').classList.add('active');openModal('empModal');});
   document.getElementById('saveEmpBtn').addEventListener('click',saveEmployee);
   document.getElementById('refreshListBtn').addEventListener('click',async()=>{showLoading();await loadDB(true);hideLoading();renderEmployeeList();if(selectedEmployeeId)renderDetail(selectedEmployeeId);showToast('Cloud data refreshed','success');});
-  document.getElementById('searchInput').addEventListener('input',renderEmployeeList);
+  let searchRenderTimer;
+  document.getElementById('searchInput').addEventListener('input',()=>{clearTimeout(searchRenderTimer);searchRenderTimer=setTimeout(renderEmployeeList,120);});
   document.getElementById('attendanceBtn').addEventListener('click',openAttendance);
   document.getElementById('attHistBtn').addEventListener('click',openAttHistory);
   document.getElementById('leaveBtn').addEventListener('click',openLeave);
