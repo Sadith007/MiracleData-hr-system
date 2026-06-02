@@ -1910,11 +1910,14 @@ select option { background: #0F1628; color: var(--text); }
         <div class="form-field"><label>Other Allowance</label><input type="number" id="payOtherAllow" value="0" oninput="calculatePayroll()"></div>
       </div>
       <div class="form-row">
-        <div class="form-field"><label>EPF (8%)</label><input type="number" id="payEpf" value="0" oninput="calculatePayroll()"></div>
-        <div class="form-field"><label>Salary Advance</label><input type="number" id="payAdvance" value="0" oninput="calculatepayroll()"></div>
+        <div class="form-field"><label>EPF - Employee Deduction (8%)</label><input type="number" id="payEpf" value="0" oninput="calculatePayroll()"></div>
+
       </div>
       <div class="form-row">
+        <div class="form-field"><label>Salary Advance</label><input type="number" id="payAdvance" value="0" oninput="calculatePayroll()"></div>
         <div class="form-field"><label>Tax (PAYE)</label><input type="number" id="payTax" value="0" oninput="calculatePayroll()"></div>
+      </div>
+      <div class="form-row">
         <div class="form-field"><label>Other Deductions</label><input type="number" id="payOtherDed" value="0" oninput="calculatePayroll()"></div>
       </div>
       <div id="payrollSummary" class="payroll-summary"></div>
@@ -2516,9 +2519,9 @@ function exportProfilePDF(emp) {
 
 function exportPayrollPDF(emp,payrollData,month) {
   const gross=payrollData.basicSalary+payrollData.transport+payrollData.meal+payrollData.otherAllow;
-  const deds=payrollData.epf+payrollData.etf+payrollData.tax+payrollData.otherDeductions;
+  const deds=payrollData.epf+(payrollData.advance||0)+payrollData.tax+payrollData.otherDeductions; // ETF excluded (employer cost)
   const net=gross-deds;
-  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:40px;background:white;color:#1e293b}.header{background:linear-gradient(135deg,#3B82F6,#8B5CF6);color:white;padding:30px;border-radius:12px;margin-bottom:20px;text-align:center}.header h1{font-size:28px}.header p{font-size:14px;opacity:.9}.emp-det{background:#f8fafc;padding:15px;border-radius:8px;margin-bottom:20px;display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px}.emp-det strong{color:#3B82F6}table{width:100%;border-collapse:collapse;margin-bottom:15px;font-size:12px}th{background:#3B82F6;color:white;padding:8px;text-align:left}td{padding:8px;border-bottom:1px solid #e2e8f0}td:last-child{text-align:right}.tot{font-weight:700;background:#f1f5f9}.net{background:linear-gradient(135deg,#10B981,#059669);color:white;padding:15px;border-radius:8px;text-align:center}.net .label{font-size:14px;opacity:.9}.net .amt{font-size:28px;font-weight:700;margin-top:5px}.foot{margin-top:30px;padding-top:15px;border-top:1px solid #e2e8f0;text-align:center;font-size:10px;color:#94a3b8}@media print{.header,.net{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style></head><body><div class="header"><h1>PAYSLIP</h1><p>${month}</p></div><div class="emp-det"><div><strong>Employee ID:</strong> ${emp.empId}</div><div><strong>Name:</strong> ${emp.fullName}</div><div><strong>Department:</strong> ${emp.department}</div><div><strong>Designation:</strong> ${emp.designation}</div></div><table><thead><tr><th>Earnings</th><th>Amount</th></tr></thead><tbody><tr><td>Basic Salary</td><td>LKR ${payrollData.basicSalary.toLocaleString()}</td></tr><tr><td>Transport</td><td>LKR ${payrollData.transport.toLocaleString()}</td></tr><tr><td>Meal</td><td>LKR ${payrollData.meal.toLocaleString()}</td></tr><tr><td>Other</td><td>LKR ${payrollData.otherAllow.toLocaleString()}</td></tr><tr class="tot"><td>Gross Earnings</td><td>LKR ${gross.toLocaleString()}</td></tr></tbody></table><table><thead><tr><th>Deductions</th><th>Amount</th></tr></thead><tbody><tr><td>EPF (8%)</td><td>LKR ${payrollData.epf.toLocaleString()}</td></tr><tr><td>ETF (3%)</td><td>LKR ${payrollData.etf.toLocaleString()}</td></tr><tr><td>PAYE Tax</td><td>LKR ${payrollData.tax.toLocaleString()}</td></tr><tr><td>Other</td><td>LKR ${payrollData.otherDeductions.toLocaleString()}</td></tr><tr class="tot"><td>Total Deductions</td><td>LKR ${deds.toLocaleString()}</td></tr></tbody></table><div class="net"><div class="label">NET SALARY</div><div class="amt">LKR ${net.toLocaleString()}</div></div><div class="foot">Generated on ${new Date().toLocaleString()} | HR Management System</div></body></html>`;
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:40px;background:white;color:#1e293b}.header{background:linear-gradient(135deg,#3B82F6,#8B5CF6);color:white;padding:30px;border-radius:12px;margin-bottom:20px;text-align:center}.header h1{font-size:28px}.header p{font-size:14px;opacity:.9}.emp-det{background:#f8fafc;padding:15px;border-radius:8px;margin-bottom:20px;display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px}.emp-det strong{color:#3B82F6}table{width:100%;border-collapse:collapse;margin-bottom:15px;font-size:12px}th{background:#3B82F6;color:white;padding:8px;text-align:left}td{padding:8px;border-bottom:1px solid #e2e8f0}td:last-child{text-align:right}.tot{font-weight:700;background:#f1f5f9}.net{background:linear-gradient(135deg,#10B981,#059669);color:white;padding:15px;border-radius:8px;text-align:center}.net .label{font-size:14px;opacity:.9}.net .amt{font-size:28px;font-weight:700;margin-top:5px}.foot{margin-top:30px;padding-top:15px;border-top:1px solid #e2e8f0;text-align:center;font-size:10px;color:#94a3b8}@media print{.header,.net{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style></head><body><div class="header"><h1>PAYSLIP</h1><p>${month}</p></div><div class="emp-det"><div><strong>Employee ID:</strong> ${emp.empId}</div><div><strong>Name:</strong> ${emp.fullName}</div><div><strong>Department:</strong> ${emp.department}</div><div><strong>Designation:</strong> ${emp.designation}</div></div><table><thead><tr><th>Earnings</th><th>Amount</th></tr></thead><tbody><tr><td>Basic Salary</td><td>LKR ${payrollData.basicSalary.toLocaleString()}</td></tr><tr><td>Transport</td><td>LKR ${payrollData.transport.toLocaleString()}</td></tr><tr><td>Meal</td><td>LKR ${payrollData.meal.toLocaleString()}</td></tr><tr><td>Other</td><td>LKR ${payrollData.otherAllow.toLocaleString()}</td></tr><tr class="tot"><td>Gross Earnings</td><td>LKR ${gross.toLocaleString()}</td></tr></tbody></table><table><thead><tr><th>Deductions</th><th>Amount</th></tr></thead><tbody><tr><td>EPF - Employee (8%)</td><td>LKR ${payrollData.epf.toLocaleString()}</td></tr><tr><td>Salary Advance</td><td>LKR ${(payrollData.advance||0).toLocaleString()}</td></tr><tr><td>PAYE Tax</td><td>LKR ${payrollData.tax.toLocaleString()}</td></tr><tr><td>Other</td><td>LKR ${payrollData.otherDeductions.toLocaleString()}</td></tr><tr style='color:#6b7280;font-style:italic;'><td>ETF - Employer Cost (3%)</td><td>LKR ${payrollData.etf.toLocaleString()}</td></tr><tr class="tot"><td>Total Deductions</td><td>LKR ${deds.toLocaleString()}</td></tr></tbody></table><div class="net"><div class="label">NET SALARY</div><div class="amt">LKR ${net.toLocaleString()}</div></div><div class="foot">Generated on ${new Date().toLocaleString()} | HR Management System</div></body></html>`;
   const opt={margin:[0.5,0.5,0.5,0.5],filename:`Payslip_${emp.empId}_${month}.pdf`,image:{type:'jpeg',quality:0.85},html2canvas:{scale:1},jsPDF:{unit:'in',format:'a4',orientation:'portrait'}};
   const el=document.createElement('div'); el.innerHTML=html; document.body.appendChild(el);
   if(window.html2pdf){html2pdf().set(opt).from(el).save().then(()=>{document.body.removeChild(el);showToast('Payslip exported!','success');});}else{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';s.onload=()=>{html2pdf().set(opt).from(el).save().then(()=>{document.body.removeChild(el);showToast('Payslip exported!','success');});};document.head.appendChild(s);}
@@ -2947,7 +2950,7 @@ async function saveEmployee() {
 function openPayroll() {
   const select=document.getElementById('payrollEmpSelect');
   select.innerHTML=DB.employees.map(emp=>`<option value="${emp.id}" data-salary="${emp.salary||0}">${emp.fullName} (${emp.empId})</option>`).join('');
-  select.onchange=function(){const salary=select.options[select.selectedIndex]?.dataset.salary||0;document.getElementById('payBasic').value=salary;document.getElementById('payEpf').value=salary*0.08;document.getElementById('payEtf').value=salary*0.03;calculatePayroll();loadPayrollHistory();};
+  select.onchange=function(){const salary=select.options[select.selectedIndex]?.dataset.salary||0;document.getElementById('payBasic').value=salary;document.getElementById('payEpf').value=Math.round(salary*0.08);calculatePayroll();loadPayrollHistory();};
   document.getElementById('payMonth').value=new Date().toISOString().slice(0,7);
   if(select.options.length>0){select.selectedIndex=0;select.onchange();}
   loadPayrollHistory(); openModal('payrollModal');
@@ -2959,11 +2962,11 @@ function calculatePayroll() {
   const meal=parseFloat(document.getElementById('payMeal').value)||0;
   const otherAllow=parseFloat(document.getElementById('payOtherAllow').value)||0;
   const epf=parseFloat(document.getElementById('payEpf').value)||0;
-  const etf=parseFloat(document.getElementById('payEtf').value)||0;
+  const advance=parseFloat(document.getElementById('payAdvance').value)||0;
   const tax=parseFloat(document.getElementById('payTax').value)||0;
   const otherDed=parseFloat(document.getElementById('payOtherDed').value)||0;
   const gross=basic+transport+meal+otherAllow;
-  const deds=epf+etf+tax+otherDed;
+  const deds=epf+advance+tax+otherDed;
   const net=gross-deds;
   document.getElementById('payrollSummary').innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><div><strong style="color:var(--text2);font-size:0.75rem;text-transform:uppercase;">Gross Earnings</strong><br><span style="font-size:1.2rem;font-weight:700;color:var(--text);">LKR ${gross.toLocaleString()}</span></div><div><strong style="color:var(--text2);font-size:0.75rem;text-transform:uppercase;">Total Deductions</strong><br><span style="font-size:1.2rem;font-weight:700;color:var(--danger);">LKR ${deds.toLocaleString()}</span></div><div style="grid-column:span 2;background:rgba(20,196,126,0.15);border:1px solid rgba(20,196,126,0.25);border-radius:10px;padding:12px;text-align:center;"><span style="font-size:0.72rem;text-transform:uppercase;letter-spacing:1px;color:var(--success);">Net Salary</span><br><span style="font-size:1.6rem;font-weight:800;font-family:'Syne',sans-serif;color:var(--success);">LKR ${net.toLocaleString()}</span></div></div>`;
   return{grossEarnings:gross,totalDeductions:deds,netSalary:net};
@@ -2986,14 +2989,15 @@ function savePayslip() {
   const meal=parseFloat(document.getElementById('payMeal').value)||0;
   const otherAllow=parseFloat(document.getElementById('payOtherAllow').value)||0;
   const epf=parseFloat(document.getElementById('payEpf').value)||0;
-  const etf=parseFloat(document.getElementById('payEtf').value)||0;
+  const etf=0; // ETF removed
+  const advance=parseFloat(document.getElementById('payAdvance').value)||0;
   const tax=parseFloat(document.getElementById('payTax').value)||0;
   const otherDed=parseFloat(document.getElementById('payOtherDed').value)||0;
   const gross=basic+transport+meal+otherAllow;
-  const deds=epf+etf+tax+otherDed;
+  const deds=epf+advance+tax+otherDed; // ETF not deducted from employee
   const net=gross-deds;
   const xi=DB.payrolls.findIndex(p=>p.employeeId===empId&&p.month===month);
-  const pd={id:xi!==-1?DB.payrolls[xi].id:Date.now(),employeeId:empId,month,basicSalary:basic,transport,meal,otherAllow,epf,etf,tax,otherDeductions:otherDed,grossEarnings:gross,totalDeductions:deds,netSalary:net,createdAt:new Date().toISOString()};
+  const pd={id:xi!==-1?DB.payrolls[xi].id:Date.now(),employeeId:empId,month,basicSalary:basic,transport,meal,otherAllow,epf,etf,advance,tax,otherDeductions:otherDed,grossEarnings:gross,totalDeductions:deds,netSalary:net,createdAt:new Date().toISOString()};
   if(xi!==-1){DB.payrolls[xi]=pd;showToast('Payslip updated','success');}else{DB.payrolls.push(pd);showToast('Payslip saved','success');}
   saveDB(); loadPayrollHistory(); if(selectedEmployeeId)renderDetail(selectedEmployeeId);
 }
@@ -3003,7 +3007,7 @@ function exportCurrentPayroll() {
   const month=document.getElementById('payMonth').value;
   const emp=DB.employees.find(e=>e.id===empId);
   if(!emp){showToast('Employee not found','error');return;}
-  const pd={basicSalary:parseFloat(document.getElementById('payBasic').value)||0,transport:parseFloat(document.getElementById('payTransport').value)||0,meal:parseFloat(document.getElementById('payMeal').value)||0,otherAllow:parseFloat(document.getElementById('payOtherAllow').value)||0,epf:parseFloat(document.getElementById('payEpf').value)||0,etf:parseFloat(document.getElementById('payEtf').value)||0,tax:parseFloat(document.getElementById('payTax').value)||0,otherDeductions:parseFloat(document.getElementById('payOtherDed').value)||0};
+  const pd={basicSalary:parseFloat(document.getElementById('payBasic').value)||0,transport:parseFloat(document.getElementById('payTransport').value)||0,meal:parseFloat(document.getElementById('payMeal').value)||0,otherAllow:parseFloat(document.getElementById('payOtherAllow').value)||0,epf:parseFloat(document.getElementById('payEpf').value)||0,etf:0,tax:parseFloat(document.getElementById('payTax').value)||0,otherDeductions:parseFloat(document.getElementById('payOtherDed').value)||0};
   exportPayrollPDF(emp,pd,month);
 }
 
@@ -3470,7 +3474,7 @@ function renderMonthlyReport() {
   const rows=DB.payrolls.filter(p=>p.month===month);
   const empFn=id=>DB.employees.find(e=>e.id===id);
   const total=rows.reduce((s,r)=>s+(r.netSalary||0),0);
-  document.getElementById('rMonthlyTable').innerHTML=`<table class="report-table"><thead><tr><th>Emp ID</th><th>Name</th><th>Dept</th><th>Basic</th><th>Gross</th><th>EPF</th><th>ETF</th><th>Net Pay</th></tr></thead><tbody>${rows.map(r=>{const e=empFn(r.employeeId);return`<tr><td>${e?.empId||'—'}</td><td>${e?.fullName||'—'}</td><td>${e?.department||'—'}</td><td>LKR ${(r.basicSalary||0).toLocaleString()}</td><td>LKR ${(r.grossEarnings||0).toLocaleString()}</td><td>LKR ${(r.epf||0).toLocaleString()}</td><td>LKR ${(r.etf||0).toLocaleString()}</td><td><strong>LKR ${(r.netSalary||0).toLocaleString()}</strong></td></tr>`;}).join('')}<tr style="background:rgba(79,142,247,0.08);font-weight:700;"><td colspan="7" style="text-align:right;">Total Net Payroll:</td><td>LKR ${total.toLocaleString()}</td></tr></tbody></table>`;
+  document.getElementById('rMonthlyTable').innerHTML=`<table class="report-table"><thead><tr><th>Emp ID</th><th>Name</th><th>Dept</th><th>Basic</th><th>Gross</th><th>EPF</th><th>Net Pay</th></tr></thead><tbody>${rows.map(r=>{const e=empFn(r.employeeId);return`<tr><td>${e?.empId||'—'}</td><td>${e?.fullName||'—'}</td><td>${e?.department||'—'}</td><td>LKR ${(r.basicSalary||0).toLocaleString()}</td><td>LKR ${(r.grossEarnings||0).toLocaleString()}</td><td>LKR ${(r.epf||0).toLocaleString()}</td><td><strong>LKR ${(r.netSalary||0).toLocaleString()}</strong></td></tr>`;}).join('')}<tr style="background:rgba(79,142,247,0.08);font-weight:700;"><td colspan="6" style="text-align:right;">Total Net Payroll:</td><td>LKR ${total.toLocaleString()}</td></tr></tbody></table>`;
 }
 function renderDeptReport() {
   const depts={};DB.employees.forEach(e=>{const d=e.department||'Unknown';if(!depts[d])depts[d]={count:0,totalSalary:0};depts[d].count++;depts[d].totalSalary+=e.salary||0;});
@@ -3490,7 +3494,7 @@ function renderEmpPayrollHistory() {
 function exportReportPDF() {
   const month=document.getElementById('rMonthSel')?.value;if(!month)return;
   const rows=DB.payrolls.filter(p=>p.month===month);const empFn=id=>DB.employees.find(e=>e.id===id);const total=rows.reduce((s,r)=>s+(r.netSalary||0),0);
-  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:30px;color:#1e293b}.hdr{background:linear-gradient(135deg,#3B82F6,#8B5CF6);color:white;padding:20px;border-radius:10px;margin-bottom:20px;text-align:center}.hdr h1{font-size:20px}.hdr p{font-size:11px;opacity:.9}table{width:100%;border-collapse:collapse;font-size:10px}th{background:#3B82F6;color:white;padding:7px;text-align:left}td{padding:6px 7px;border-bottom:1px solid #e2e8f0}tr:nth-child(even) td{background:#f8fafc}.tot td{background:#1e293b!important;color:white;font-weight:700}</style></head><body><div class="hdr"><h1>Payroll Report — ${month}</h1><p>Generated: ${new Date().toLocaleString()}</p></div><table><thead><tr><th>Emp ID</th><th>Name</th><th>Dept</th><th>Basic</th><th>Gross</th><th>EPF</th><th>ETF</th><th>Net Pay</th></tr></thead><tbody>${rows.map(r=>{const e=empFn(r.employeeId);return`<tr><td>${e?.empId||'—'}</td><td>${e?.fullName||'—'}</td><td>${e?.department||'—'}</td><td>LKR ${(r.basicSalary||0).toLocaleString()}</td><td>LKR ${(r.grossEarnings||0).toLocaleString()}</td><td>LKR ${(r.epf||0).toLocaleString()}</td><td>LKR ${(r.etf||0).toLocaleString()}</td><td>LKR ${(r.netSalary||0).toLocaleString()}</td></tr>`;}).join('')}<tr class="tot"><td colspan="7" style="text-align:right">Total Net Payroll</td><td>LKR ${total.toLocaleString()}</td></tr></tbody></table></body></html>`;
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:30px;color:#1e293b}.hdr{background:linear-gradient(135deg,#3B82F6,#8B5CF6);color:white;padding:20px;border-radius:10px;margin-bottom:20px;text-align:center}.hdr h1{font-size:20px}.hdr p{font-size:11px;opacity:.9}table{width:100%;border-collapse:collapse;font-size:10px}th{background:#3B82F6;color:white;padding:7px;text-align:left}td{padding:6px 7px;border-bottom:1px solid #e2e8f0}tr:nth-child(even) td{background:#f8fafc}.tot td{background:#1e293b!important;color:white;font-weight:700}</style></head><body><div class="hdr"><h1>Payroll Report — ${month}</h1><p>Generated: ${new Date().toLocaleString()}</p></div><table><thead><tr><th>Emp ID</th><th>Name</th><th>Dept</th><th>Basic</th><th>Gross</th><th>EPF</th><th>Net Pay</th></tr></thead><tbody>${rows.map(r=>{const e=empFn(r.employeeId);return`<tr><td>${e?.empId||'—'}</td><td>${e?.fullName||'—'}</td><td>${e?.department||'—'}</td><td>LKR ${(r.basicSalary||0).toLocaleString()}</td><td>LKR ${(r.grossEarnings||0).toLocaleString()}</td><td>LKR ${(r.epf||0).toLocaleString()}</td><td>LKR ${(r.etf||0).toLocaleString()}</td><td>LKR ${(r.netSalary||0).toLocaleString()}</td></tr>`;}).join('')}<tr class="tot"><td colspan="7" style="text-align:right">Total Net Payroll</td><td>LKR ${total.toLocaleString()}</td></tr></tbody></table></body></html>`;
   const el=document.createElement('div');el.innerHTML=html;document.body.appendChild(el);
   const loadAndExport=()=>html2pdf().set({margin:[0.4,0.3],filename:`Payroll_Report_${month}.pdf`,image:{type:'jpeg',quality:0.85},html2canvas:{scale:1},jsPDF:{unit:'in',format:'a4',orientation:'landscape'}}).from(el).save().then(()=>{document.body.removeChild(el);showToast('Report exported!','success');});
   if(window.html2pdf)loadAndExport();else{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';s.onload=loadAndExport;document.head.appendChild(s);}
@@ -3632,7 +3636,7 @@ function renderAttHistory() {
   for(let i=0;i<firstDay;i++)cal+=`<div class="att-cal-empty"></div>`;
   for(let d=1;d<=daysInMonth;d++){const date=new Date(year,mon-1,d);const dow=date.getDay();const isWkd=dow===0||dow===6;const isToday=date.toDateString()===new Date().toDateString();let cls=isWkd?'att-cal-weekend':'att-cal-present';if(payroll&&!isWkd){const totalWD=daysInMonth-Math.floor(daysInMonth*2/7);if(d>totalWD-(payroll.absentDays||0))cls='att-cal-absent';if(d>totalWD-(payroll.absentDays||0)-(payroll.leaveDays||0)&&d<=totalWD-(payroll.absentDays||0))cls='att-cal-leave';}if(isToday)cls+=' att-cal-today';cal+=`<div class="att-cal-day ${cls}">${d}</div>`;}
   cal+=`</div>`;document.getElementById('ahCalendar').innerHTML=cal;
-  document.getElementById('ahTable').innerHTML=payroll?`<div class="section-title" style="margin-top:0;">Payroll for this Month</div><table class="report-table"><thead><tr><th>Item</th><th>Amount</th></tr></thead><tbody><tr><td>Basic Salary</td><td>LKR ${(payroll.basicSalary||0).toLocaleString()}</td></tr><tr><td>Overtime Pay</td><td>LKR ${(payroll.otherAllow||0).toLocaleString()}</td></tr><tr><td>Absent Deduction</td><td style="color:var(--danger)">- LKR ${Math.round((payroll.basicSalary||0)/26*(payroll.absentDays||0)).toLocaleString()}</td></tr><tr><td>EPF (8%)</td><td style="color:var(--danger)">- LKR ${(payroll.epf||0).toLocaleString()}</td></tr><tr><td>ETF (3%)</td><td style="color:var(--danger)">- LKR ${(payroll.etf||0).toLocaleString()}</td></tr><tr style="font-weight:700;"><td>Net Salary</td><td style="color:var(--success)">LKR ${(payroll.netSalary||0).toLocaleString()}</td></tr></tbody></table>`:'<div style="color:var(--muted);text-align:center;padding:1.5rem;">No payroll record for this month.</div>';
+  document.getElementById('ahTable').innerHTML=payroll?`<div class="section-title" style="margin-top:0;">Payroll for this Month</div><table class="report-table"><thead><tr><th>Item</th><th>Amount</th></tr></thead><tbody><tr><td>Basic Salary</td><td>LKR ${(payroll.basicSalary||0).toLocaleString()}</td></tr><tr><td>Overtime Pay</td><td>LKR ${(payroll.otherAllow||0).toLocaleString()}</td></tr><tr><td>Absent Deduction</td><td style="color:var(--danger)">- LKR ${Math.round((payroll.basicSalary||0)/26*(payroll.absentDays||0)).toLocaleString()}</td></tr><tr><td>EPF (8%)</td><td style="color:var(--danger)">- LKR ${(payroll.epf||0).toLocaleString()}</td></tr><tr style="font-weight:700;"><td>Net Salary</td><td style="color:var(--success)">LKR ${(payroll.netSalary||0).toLocaleString()}</td></tr></tbody></table>`:'<div style="color:var(--muted);text-align:center;padding:1.5rem;">No payroll record for this month.</div>';
 }
 function exportAttHistPDF() {
   const empId=parseInt(document.getElementById('ahEmpSel').value);const month=document.getElementById('ahMonth').value;const emp=DB.employees.find(e=>e.id===empId);const pay=DB.payrolls.find(p=>p.employeeId===empId&&p.month===month);
@@ -3715,8 +3719,8 @@ function calcAttendanceSalary(emp,row,workingDays) {
   const overtimePay=hourly*1.5*overtimeHrs;
   const gross=basic-unpaidDeduction+overtimePay;
   const epf=Math.round(basic*0.08);
-  const etf=Math.round(basic*0.03);
-  const totalDeductions=epf+etf;
+  const etf=Math.round(basic*0.03); // employer cost only - not deducted
+  const totalDeductions=epf; // ETF removed from employee deductions
   const net=Math.round(gross-totalDeductions);
   return{basicSalary:basic,transport:0,meal:0,otherAllow:Math.round(overtimePay),epf,etf,tax:0,otherDeductions:0,grossEarnings:Math.round(gross),totalDeductions,netSalary:net,absentDays,leaveDays,overtimeHrs,unpaidDeduction:Math.round(unpaidDeduction),overtimePay:Math.round(overtimePay)};
 }
