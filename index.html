@@ -1648,7 +1648,7 @@ select option { background: #0F1628; color: var(--text); }
     <div class="input-group"><label>Password (min 4)</label><input type="password" id="regPass" placeholder="••••••••"></div>
     <div class="input-group"><label>Confirm Password</label><input type="password" id="regPass2" placeholder="••••••••"></div>
     <div class="input-group"><label>Role Request</label>
-      <select id="regRole"><option>VIEWER</option><option>HR</option><option>DEPT_VIEWER</option><option>HEAD_VIEWER</option><option>LOC_HEAD</option><option>SELF_VIEWER</option></select>
+      <select id="regRole"><option>HR</option><option value="BRANCH_HEAD">BRANCH_HEAD</option><option>SELF_VIEWER</option></select>
     </div>
     <div id="svRegNote" style="display:none;background:rgba(56,201,168,0.08);border:1px solid rgba(56,201,168,0.2);border-radius:10px;padding:0.6rem 0.9rem;font-size:0.75rem;color:#38C9A8;margin-bottom:0.8rem;">
       📋 SELF_VIEWER — Please enter your data and submit it, admin will approve the request, Then you can view your profile.
@@ -1668,7 +1668,7 @@ select option { background: #0F1628; color: var(--text); }
       <div class="input-group"><label>Account Number</label><input id="sv_bankAcc" placeholder="Account number"></div>
     </div>
     <div class="input-group" id="regEmailField"><label>Email <span style="font-size:0.7rem;color:var(--muted);">(for OTP password reset)</span></label><input type="email" id="regEmail" placeholder="your@email.com"></div>
-    <div class="input-group" id="deptFieldReg" style="display:none;"><label>Department / Branch</label><input type="text" id="regDept" placeholder="e.g., IT, HR, Kandy Branch"></div>
+    <div class="input-group" id="deptFieldReg" style="display:none;"><label>Location / Branch *</label><input type="text" id="regDept" placeholder="e.g., Kandy, Galle Branch"></div>
     <button class="auth-btn" id="registerSubmitBtn">Submit Request</button>
     <div class="link-text"><button id="backToLoginBtn">← Back to Sign In</button></div>
   </div>
@@ -2135,10 +2135,10 @@ select option { background: #0F1628; color: var(--text); }
         <div class="form-field"><label>Username</label><input id="newUsername" placeholder="Username"></div>
         <div class="form-field"><label>Password</label><input id="newPassword" type="password" placeholder="Password"></div>
         <div class="form-field"><label>Role</label>
-          <select id="newRole"><option>VIEWER</option><option>HR</option><option>ADMIN</option><option>DEPT_VIEWER</option><option>HEAD_VIEWER</option><option>LOC_HEAD</option><option>SELF_VIEWER</option></select>
+          <select id="newRole"><option>HR</option><option>ADMIN</option><option value="BRANCH_HEAD">BRANCH_HEAD</option><option>SELF_VIEWER</option></select>
         </div>
       </div>
-      <div class="form-field" id="newDeptField" style="display:none;"><label>Department / Branch</label><input id="newDept" placeholder="e.g. Kandy Branch, IT Dept"></div>
+      <div class="form-field" id="newDeptField" style="display:none;"><label>Location / Branch *</label><input id="newDept" placeholder="e.g. Kandy, Galle Branch"></div>
       <div class="form-field"><label>Email (for OTP reset)</label><input id="newEmail" type="email" placeholder="user@example.com"></div>
       <button id="addUserBtn" class="btn btn-primary" style="margin-top:10px;">➕ Add User</button>
       <div id="userMsg" class="error-message" style="margin-top:10px;"></div>
@@ -2502,6 +2502,51 @@ function startCloudLiveSync() {
 
 let currentUser = null, selectedEmployeeId = null, editingEmployeeId = null;
 
+function isBranchHeadRole(user=currentUser) {
+  return user?.role === 'BRANCH_HEAD' || user?.role === 'LOC_HEAD';
+}
+
+function branchHeadLocation(user=currentUser) {
+  return (user?.branch || user?.department || user?.location || '').toLowerCase().trim();
+}
+
+function employeeInBranch(emp, user=currentUser) {
+  const loc = branchHeadLocation(user);
+  return !!loc && (emp?.location || '').toLowerCase().trim() === loc;
+}
+
+function scopedEmployees() {
+  if (currentUser?.role === 'SELF_VIEWER') {
+    const linked = DB.employees.find(e => e._svUsername === currentUser.username);
+    return linked ? [linked] : [];
+  }
+  if (isBranchHeadRole()) return DB.employees.filter(e => employeeInBranch(e));
+  if (currentUser?.role === 'HEAD_VIEWER') {
+    const userBranch = (currentUser.branch || currentUser.department || '').toLowerCase().trim();
+    return DB.employees.filter(e => (e.location || '').toLowerCase().trim() === userBranch);
+  }
+  if (currentUser?.role === 'DEPT_VIEWER') {
+    const userDept = (currentUser.department || '').toLowerCase().trim();
+    return DB.employees.filter(e => (e.department || '').toLowerCase().trim() === userDept);
+  }
+  return DB.employees;
+}
+
+function employeeIdsForScope() {
+  return new Set(scopedEmployees().map(e => e.id));
+}
+
+function scopedPayrolls() {
+  if (!isBranchHeadRole() && currentUser?.role !== 'SELF_VIEWER' && currentUser?.role !== 'HEAD_VIEWER' && currentUser?.role !== 'DEPT_VIEWER') return DB.payrolls;
+  const ids = employeeIdsForScope();
+  return DB.payrolls.filter(p => ids.has(p.employeeId));
+}
+
+function canAccessEmployee(empId) {
+  if (currentUser?.role === 'ADMIN' || currentUser?.role === 'HR') return true;
+  return employeeIdsForScope().has(Number(empId));
+}
+
 function showLoading() { if(document.getElementById('loadingOverlay'))return; const el=document.createElement('div'); el.className='loading-overlay'; el.id='loadingOverlay'; el.innerHTML='<div class="spinner"></div>'; document.body.appendChild(el); }
 function hideLoading() { const el=document.getElementById('loadingOverlay'); if(el)el.remove(); }
 function showToast(message,type='success') { const t=document.createElement('div'); t.className=`toast ${type}`; t.textContent=message; document.body.appendChild(t); setTimeout(()=>t.classList.add('show'),10); setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300);},3000); }
@@ -2575,9 +2620,7 @@ function handleRegister() {
   if(!username||!password){msgDiv.textContent='Username and password required';return;}
   if(password.length<4){msgDiv.textContent='Password must be at least 4 characters';return;}
   if(password!==password2){msgDiv.textContent='Passwords do not match';return;}
-  if(role==='DEPT_VIEWER'&&!dept){msgDiv.textContent='Department required for DEPT_VIEWER';return;}
-  if(role==='HEAD_VIEWER'&&!dept){msgDiv.textContent='Branch required for HEAD_VIEWER';return;}
-  if(role==='LOC_HEAD'&&!dept){msgDiv.textContent='Location required for LOC_HEAD';return;}
+  if(role==='BRANCH_HEAD'&&!dept){msgDiv.textContent='Location / Branch required for BRANCH_HEAD';return;}
   if(role==='SELF_VIEWER'){
     const fullName=(document.getElementById('sv_fullName')?.value||'').trim();
     const mobile=(document.getElementById('sv_mobile')?.value||'').trim();
@@ -2733,20 +2776,21 @@ function setupApp() {
   rb.textContent=`${currentUser.username.toUpperCase()} · ${currentUser.role}`;
   const canEdit=currentUser.role==='ADMIN'||currentUser.role==='HR';
   const isHeadViewer=currentUser.role==='HEAD_VIEWER';
-  const isLocHead=currentUser.role==='LOC_HEAD';
+  const isLocHead=isBranchHeadRole();
+  const canUseHrTools=canEdit||isLocHead;
   const isDeptViewer=currentUser.role==='DEPT_VIEWER';
   const isSelfViewer=currentUser.role==='SELF_VIEWER';
-  document.getElementById('addEmployeeBtn').style.display=(canEdit||isLocHead)?'flex':'none';
-  document.getElementById('attendanceBtn').style.display=canEdit?'inline-flex':'none';
+  document.getElementById('addEmployeeBtn').style.display=canUseHrTools?'flex':'none';
+  document.getElementById('attendanceBtn').style.display=canUseHrTools?'inline-flex':'none';
   document.getElementById('attHistBtn').style.display=(isHeadViewer||isDeptViewer||isSelfViewer)?'none':'inline-flex';
   document.getElementById('leaveBtn').style.display=(isHeadViewer||isSelfViewer)?'none':'inline-flex';
   document.getElementById('docsBtn').style.display=(isHeadViewer||isDeptViewer||isSelfViewer)?'none':'inline-flex';
-  document.getElementById('reportsBtn').style.display=canEdit?'inline-flex':'none';
-  document.getElementById('payrollBtn').style.display=canEdit?'inline-flex':'none';
+  document.getElementById('reportsBtn').style.display=canUseHrTools?'inline-flex':'none';
+  document.getElementById('payrollBtn').style.display=canUseHrTools?'inline-flex':'none';
   document.getElementById('userMgmtBtn').style.display=currentUser.role==='ADMIN'?'inline-flex':'none';
   document.getElementById('locationBtn').style.display=(isHeadViewer||isDeptViewer||isSelfViewer)?'none':'inline-flex';
   const branchWrap=document.getElementById('branchFilterWrap');
-  if(canEdit||isLocHead){
+  if(canUseHrTools){
     branchWrap.style.display='block';
     populateBranchFilter();
   } else {
@@ -2762,7 +2806,7 @@ function setupApp() {
 function populateBranchFilter() {
   const sel=document.getElementById('branchFilterSel');
   if(!sel)return;
-  const branches=[...new Set(DB.employees.map(e=>e.location).filter(Boolean))].sort();
+  const branches=[...new Set(scopedEmployees().map(e=>e.location).filter(Boolean))].sort();
   const cur=sel.value;
   sel.innerHTML='<option value="">🏢 All Branches</option>'+branches.map(b=>`<option value="${b}">${b}</option>`).join('');
   if(branches.includes(cur))sel.value=cur;
@@ -2779,23 +2823,8 @@ function renderEmployeeList() {
     return;
   }
   const search=document.getElementById('searchInput')?.value.toLowerCase()||'';
-  let emps=DB.employees;
-  // HEAD_VIEWER: show only their branch
-  if(currentUser?.role==='HEAD_VIEWER'){
-    const userBranch=(currentUser.branch||currentUser.department||'').toLowerCase().trim();
-    emps=emps.filter(e=>(e.location||'').toLowerCase().trim()===userBranch);
-  }
-  // LOC_HEAD: show only their location
-  if(currentUser?.role==='LOC_HEAD'){
-    const userLoc=(currentUser.branch||currentUser.department||'').toLowerCase().trim();
-    emps=emps.filter(e=>(e.location||'').toLowerCase().trim()===userLoc);
-  }
-  // DEPT_VIEWER: show only their department
-  if(currentUser?.role==='DEPT_VIEWER'){
-    const userDept=(currentUser.department||'').toLowerCase().trim();
-    emps=emps.filter(e=>(e.department||'').toLowerCase().trim()===userDept);
-  }
-  // Admin/HR/LOC_HEAD: apply branch filter dropdown
+  let emps=scopedEmployees();
+  // Apply branch filter dropdown inside the already scoped employee list.
   const branchSel=document.getElementById('branchFilterSel');
   if(branchSel&&branchSel.value){
     emps=emps.filter(e=>e.location===branchSel.value);
@@ -2820,7 +2849,8 @@ function renderDetail(id) {
   const emp=DB.employees.find(e=>e.id==id);
   const container=document.getElementById('detailContainer');
   if(!emp){container.innerHTML='<div class="empty-state"><span>👤</span><p>Select an employee to view profile</p></div>';return;}
-  const canEdit=currentUser?.role!=='SELF_VIEWER'&&(currentUser?.role==='ADMIN'||currentUser?.role==='HR'||(currentUser?.role==='LOC_HEAD'&&(emp.location||'').toLowerCase().trim()===(currentUser.branch||currentUser.department||'').toLowerCase().trim()));
+  if(!canAccessEmployee(emp.id)){container.innerHTML='<div class="empty-state"><span>🔒</span><p>No access to this employee</p></div>';return;}
+  const canEdit=currentUser?.role!=='SELF_VIEWER'&&(currentUser?.role==='ADMIN'||currentUser?.role==='HR'||(isBranchHeadRole()&&employeeInBranch(emp)));
   const empPayrolls=DB.payrolls.filter(p=>p.employeeId==id).sort((a,b)=>b.month.localeCompare(a.month));
   container.innerHTML=`
     <div class="profile-header">
@@ -2872,6 +2902,7 @@ function renderDetail(id) {
 
 function editEmployee(id) {
   const emp=DB.employees.find(e=>e.id==id); if(!emp)return;
+  if(!canAccessEmployee(emp.id)){showToast('No access to this employee','error');return;}
   editingEmployeeId=id;
   document.getElementById('modalTitle').textContent=`Edit Employee - ${emp.fullName}`;
   ['empFullName','empEmail','empMobile','empNic','empDob','empAddress','empEmergeName','empEmergePhone','empId','empDept','empDesignation','empDoj','empLocation','empBankAccount','empBankName','empRemarks'].forEach(f=>{
@@ -2901,6 +2932,7 @@ function editEmployee(id) {
 }
 
 function deleteEmployeeConfirm(id) {
+  if(!canAccessEmployee(id)){showToast('No access to this employee','error');return;}
   if(confirm('Are you sure you want to delete this employee?')){
     DB.employees=DB.employees.filter(e=>e.id!=id);
     DB.payrolls=DB.payrolls.filter(p=>p.employeeId!=id);
@@ -2911,6 +2943,10 @@ function deleteEmployeeConfirm(id) {
 }
 
 async function saveEmployee() {
+  if(editingEmployeeId&&isBranchHeadRole()){
+    const existing=DB.employees.find(e=>e.id==editingEmployeeId);
+    if(!existing||!employeeInBranch(existing)){showToast('No access to this employee','error');return;}
+  }
   const empData={
     fullName:document.getElementById('empFullName').value,
     email:document.getElementById('empEmail').value,
@@ -2935,10 +2971,9 @@ async function saveEmployee() {
     payMethod:document.getElementById('empPayMethod').value,
     remarks:document.getElementById('empRemarks').value
   };
+  if(isBranchHeadRole()) empData.location=currentUser.branch||currentUser.department||'';
   if(currentEmpPhotoData!==null){empData.photo=currentEmpPhotoData;} if(editingEmployeeId){const idx=DB.employees.findIndex(e=>e.id==editingEmployeeId);if(idx!==-1){empData.id=editingEmployeeId;DB.employees[idx]={...DB.employees[idx],...empData};}}
   else{empData.id=Date.now();
-    // LOC_HEAD: auto-assign their location if not set
-    if(currentUser?.role==='LOC_HEAD'&&!empData.location){empData.location=currentUser.branch||currentUser.department||'';}
     DB.employees.push(empData);}
   const saved = await saveDB();
   if(!saved) return;
@@ -2949,10 +2984,12 @@ async function saveEmployee() {
 
 function openPayroll() {
   const select=document.getElementById('payrollEmpSelect');
-  select.innerHTML=DB.employees.map(emp=>`<option value="${emp.id}" data-salary="${emp.salary||0}">${emp.fullName} (${emp.empId})</option>`).join('');
+  const emps=scopedEmployees();
+  select.innerHTML=emps.map(emp=>`<option value="${emp.id}" data-salary="${emp.salary||0}">${emp.fullName} (${emp.empId})</option>`).join('');
   select.onchange=function(){const salary=select.options[select.selectedIndex]?.dataset.salary||0;document.getElementById('payBasic').value=salary;document.getElementById('payEpf').value=Math.round(salary*0.08);calculatePayroll();loadPayrollHistory();};
   document.getElementById('payMonth').value=new Date().toISOString().slice(0,7);
   if(select.options.length>0){select.selectedIndex=0;select.onchange();}
+  else{document.getElementById('payrollHistory').innerHTML='<div class="info-card"><span>No employees available for your branch</span></div>';}
   loadPayrollHistory(); openModal('payrollModal');
 }
 
@@ -2974,6 +3011,7 @@ function calculatePayroll() {
 
 function loadPayrollHistory() {
   const empId=parseInt(document.getElementById('payrollEmpSelect').value);
+  if(!empId||!canAccessEmployee(empId)){document.getElementById('payrollHistory').innerHTML='<div class="info-card"><span>No employee selected</span></div>';return;}
   const empPayrolls=DB.payrolls.filter(p=>p.employeeId===empId).sort((a,b)=>b.month.localeCompare(a.month));
   const div=document.getElementById('payrollHistory');
   if(!empPayrolls.length){div.innerHTML='<div class="info-card"><span>No previous payslips</span></div>';return;}
@@ -2982,6 +3020,7 @@ function loadPayrollHistory() {
 
 function savePayslip() {
   const empId=parseInt(document.getElementById('payrollEmpSelect').value);
+  if(!empId||!canAccessEmployee(empId)){showToast('No access to this employee','error');return;}
   const month=document.getElementById('payMonth').value;
   if(!month){showToast('Please enter a month','error');return;}
   const basic=parseFloat(document.getElementById('payBasic').value)||0;
@@ -3004,6 +3043,7 @@ function savePayslip() {
 
 function exportCurrentPayroll() {
   const empId=parseInt(document.getElementById('payrollEmpSelect').value);
+  if(!empId||!canAccessEmployee(empId)){showToast('No access to this employee','error');return;}
   const month=document.getElementById('payMonth').value;
   const emp=DB.employees.find(e=>e.id===empId);
   if(!emp){showToast('Employee not found','error');return;}
@@ -3401,9 +3441,9 @@ function addUser() {
   const msgDiv=document.getElementById('userMsg');
   if(!username||!password){msgDiv.textContent='Username and password required';return;}
   if(password.length<4){msgDiv.textContent='Password must be at least 4 characters';return;}
-  if((role==='DEPT_VIEWER'||role==='HEAD_VIEWER'||role==='LOC_HEAD')&&!dept){msgDiv.textContent=role==='HEAD_VIEWER'?'Branch is required for HEAD_VIEWER':role==='LOC_HEAD'?'Location is required for LOC_HEAD':'Department required for DEPT_VIEWER';return;}
+  if(role==='BRANCH_HEAD'&&!dept){msgDiv.textContent='Location / Branch is required for BRANCH_HEAD';return;}
   if(DB.users.find(u=>u.username===username)){msgDiv.textContent='Username already exists';return;}
-  DB.users.push({id:'u'+Date.now(),username,password,role,department:role==='DEPT_VIEWER'?dept:null,branch:(role==='HEAD_VIEWER'||role==='LOC_HEAD')?dept:null,email:email||null,status:'active'});
+  DB.users.push({id:'u'+Date.now(),username,password,role,department:null,branch:role==='BRANCH_HEAD'?dept:null,email:email||null,status:'active'});
   saveDB();
   document.getElementById('newUsername').value='';document.getElementById('newPassword').value='';document.getElementById('newDept').value='';
   msgDiv.style.color='var(--success)';msgDiv.textContent='✓ User added successfully';
@@ -3415,7 +3455,7 @@ function resetPassword(id) { const p=prompt('Enter new password (min 4):');if(p&
 async function approveUser(pid) {
   const p=DB.pendingUsers.find(x=>x.id===pid);
   if(!p)return;
-  const newUser={id:'u'+Date.now(),username:p.username,password:p.password_hash,role:p.role,department:p.department,branch:(p.role==='HEAD_VIEWER'||p.role==='LOC_HEAD')?p.department:null,email:p.email||(p.svData?.email||null),status:'active'};
+  const newUser={id:'u'+Date.now(),username:p.username,password:p.password_hash,role:p.role,department:p.role==='BRANCH_HEAD'?null:p.department,branch:p.role==='BRANCH_HEAD'?p.department:((p.role==='HEAD_VIEWER'||p.role==='LOC_HEAD')?p.department:null),email:p.email||(p.svData?.email||null),status:'active'};
   // SELF_VIEWER: auto-create employee and link
   if(p.role==='SELF_VIEWER'&&p.svData){
     const d=p.svData;
@@ -3446,7 +3486,7 @@ let chartMonthly,chartDept,chartDeptAvg,chartEmpTrend;
 function openReports() { const go=()=>{renderReportOverview();openModal('reportsModal');}; if(window.Chart){go();return;} const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js';s.onload=go;document.head.appendChild(s); }
 function switchReport(pane,btn) { document.querySelectorAll('#reportsModal .report-pane').forEach(p=>p.classList.remove('active'));document.querySelectorAll('#reportsModal .report-tab').forEach(b=>b.classList.remove('active'));document.getElementById('rp'+pane.charAt(0).toUpperCase()+pane.slice(1)).classList.add('active');btn.classList.add('active');if(pane==='overview')renderReportOverview();if(pane==='monthly')renderMonthlyReport();if(pane==='dept')renderDeptReport();if(pane==='emp')renderEmpPayrollHistory(); }
 function renderReportOverview() {
-  const payrolls=DB.payrolls,employees=DB.employees;
+  const payrolls=scopedPayrolls(),employees=scopedEmployees();
   const avgSalary=employees.length?Math.round(employees.reduce((s,e)=>s+(e.salary||0),0)/employees.length):0;
   const activeEmps=employees.filter(e=>e.status==='Active').length;
   const thisMonth=new Date().toISOString().slice(0,7);
@@ -3467,33 +3507,35 @@ function renderReportOverview() {
 }
 function renderMonthlyReport() {
   const sel=document.getElementById('rMonthSel');
-  const months=[...new Set(DB.payrolls.map(p=>p.month))].sort().reverse();
+  const payrolls=scopedPayrolls();
+  const months=[...new Set(payrolls.map(p=>p.month))].sort().reverse();
   if(!months.length){document.getElementById('rMonthlyTable').innerHTML='<div style="color:var(--muted);text-align:center;padding:2rem;">No payroll data yet</div>';return;}
   if(sel.options.length===0)sel.innerHTML=months.map(m=>`<option value="${m}">${m}</option>`).join('');
   const month=sel.value||months[0];
-  const rows=DB.payrolls.filter(p=>p.month===month);
-  const empFn=id=>DB.employees.find(e=>e.id===id);
+  const rows=payrolls.filter(p=>p.month===month);
+  const empFn=id=>scopedEmployees().find(e=>e.id===id);
   const total=rows.reduce((s,r)=>s+(r.netSalary||0),0);
   document.getElementById('rMonthlyTable').innerHTML=`<table class="report-table"><thead><tr><th>Emp ID</th><th>Name</th><th>Dept</th><th>Basic</th><th>Gross</th><th>EPF</th><th>Net Pay</th></tr></thead><tbody>${rows.map(r=>{const e=empFn(r.employeeId);return`<tr><td>${e?.empId||'—'}</td><td>${e?.fullName||'—'}</td><td>${e?.department||'—'}</td><td>LKR ${(r.basicSalary||0).toLocaleString()}</td><td>LKR ${(r.grossEarnings||0).toLocaleString()}</td><td>LKR ${(r.epf||0).toLocaleString()}</td><td><strong>LKR ${(r.netSalary||0).toLocaleString()}</strong></td></tr>`;}).join('')}<tr style="background:rgba(79,142,247,0.08);font-weight:700;"><td colspan="6" style="text-align:right;">Total Net Payroll:</td><td>LKR ${total.toLocaleString()}</td></tr></tbody></table>`;
 }
 function renderDeptReport() {
-  const depts={};DB.employees.forEach(e=>{const d=e.department||'Unknown';if(!depts[d])depts[d]={count:0,totalSalary:0};depts[d].count++;depts[d].totalSalary+=e.salary||0;});
+  const depts={};scopedEmployees().forEach(e=>{const d=e.department||'Unknown';if(!depts[d])depts[d]={count:0,totalSalary:0};depts[d].count++;depts[d].totalSalary+=e.salary||0;});
   const labels=Object.keys(depts);const avgs=labels.map(d=>Math.round(depts[d].totalSalary/depts[d].count));
   setTimeout(()=>{if(chartDeptAvg)chartDeptAvg.destroy();const ctx=document.getElementById('chartDeptAvg');if(!ctx||!window.Chart)return;chartDeptAvg=new Chart(ctx,{type:'bar',data:{labels,datasets:[{label:'Avg Salary',data:avgs,backgroundColor:'rgba(155,114,248,0.7)',borderColor:'#9B72F8',borderWidth:1}]},options:{responsive:true,plugins:{legend:{labels:{color:'#8FA3CC'}}},scales:{x:{ticks:{color:'#4A6080'}},y:{ticks:{color:'#4A6080',callback:v=>'LKR '+v.toLocaleString()}}}}});},100);
   document.getElementById('rDeptTable').innerHTML=`<table class="report-table"><thead><tr><th>Department</th><th>Employees</th><th>Total Salary</th><th>Avg Salary</th></tr></thead><tbody>${labels.map(d=>`<tr><td>${d}</td><td>${depts[d].count}</td><td>LKR ${depts[d].totalSalary.toLocaleString()}</td><td>LKR ${Math.round(depts[d].totalSalary/depts[d].count).toLocaleString()}</td></tr>`).join('')}</tbody></table>`;
 }
 function renderEmpPayrollHistory() {
   const sel=document.getElementById('rEmpSel');
-  if(sel.options.length===0)sel.innerHTML=DB.employees.map(e=>`<option value="${e.id}">${e.fullName} (${e.empId})</option>`).join('');
+  if(sel.options.length===0)sel.innerHTML=scopedEmployees().map(e=>`<option value="${e.id}">${e.fullName} (${e.empId})</option>`).join('');
   const empId=parseInt(sel.value);
-  const records=DB.payrolls.filter(p=>p.employeeId===empId).sort((a,b)=>a.month.localeCompare(b.month));
+  if(!empId||!canAccessEmployee(empId)){document.getElementById('rEmpTable').innerHTML='<div style="color:var(--muted);text-align:center;padding:1.5rem;">No employee selected</div>';return;}
+  const records=scopedPayrolls().filter(p=>p.employeeId===empId).sort((a,b)=>a.month.localeCompare(b.month));
   const months=records.map(r=>r.month);const nets=records.map(r=>r.netSalary||0);
   setTimeout(()=>{if(chartEmpTrend)chartEmpTrend.destroy();const ctx=document.getElementById('chartEmpTrend');if(!ctx||!window.Chart)return;chartEmpTrend=new Chart(ctx,{type:'line',data:{labels:months,datasets:[{label:'Net Salary',data:nets,borderColor:'#14C47E',backgroundColor:'rgba(20,196,126,0.1)',fill:true,tension:0.4}]},options:{responsive:true,plugins:{legend:{labels:{color:'#8FA3CC'}}},scales:{x:{ticks:{color:'#4A6080'}},y:{ticks:{color:'#4A6080',callback:v=>'LKR '+v.toLocaleString()}}}}});},100);
   document.getElementById('rEmpTable').innerHTML=records.length?`<table class="report-table"><thead><tr><th>Month</th><th>Basic</th><th>Allowances</th><th>EPF</th><th>Net Pay</th><th>Absent</th><th>OT Hrs</th></tr></thead><tbody>${records.map(r=>`<tr><td>${r.month}</td><td>LKR ${(r.basicSalary||0).toLocaleString()}</td><td>LKR ${((r.transport||0)+(r.meal||0)+(r.otherAllow||0)).toLocaleString()}</td><td>LKR ${(r.epf||0).toLocaleString()}</td><td><strong>LKR ${(r.netSalary||0).toLocaleString()}</strong></td><td>${r.absentDays||0}</td><td>${r.overtimeHrs||0}</td></tr>`).join('')}</tbody></table>`:'<div style="color:var(--muted);text-align:center;padding:1.5rem;">No payroll records</div>';
 }
 function exportReportPDF() {
   const month=document.getElementById('rMonthSel')?.value;if(!month)return;
-  const rows=DB.payrolls.filter(p=>p.month===month);const empFn=id=>DB.employees.find(e=>e.id===id);const total=rows.reduce((s,r)=>s+(r.netSalary||0),0);
+  const rows=scopedPayrolls().filter(p=>p.month===month);const empFn=id=>scopedEmployees().find(e=>e.id===id);const total=rows.reduce((s,r)=>s+(r.netSalary||0),0);
   const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:30px;color:#1e293b}.hdr{background:linear-gradient(135deg,#3B82F6,#8B5CF6);color:white;padding:20px;border-radius:10px;margin-bottom:20px;text-align:center}.hdr h1{font-size:20px}.hdr p{font-size:11px;opacity:.9}table{width:100%;border-collapse:collapse;font-size:10px}th{background:#3B82F6;color:white;padding:7px;text-align:left}td{padding:6px 7px;border-bottom:1px solid #e2e8f0}tr:nth-child(even) td{background:#f8fafc}.tot td{background:#1e293b!important;color:white;font-weight:700}</style></head><body><div class="hdr"><h1>Payroll Report — ${month}</h1><p>Generated: ${new Date().toLocaleString()}</p></div><table><thead><tr><th>Emp ID</th><th>Name</th><th>Dept</th><th>Basic</th><th>Gross</th><th>EPF</th><th>Net Pay</th></tr></thead><tbody>${rows.map(r=>{const e=empFn(r.employeeId);return`<tr><td>${e?.empId||'—'}</td><td>${e?.fullName||'—'}</td><td>${e?.department||'—'}</td><td>LKR ${(r.basicSalary||0).toLocaleString()}</td><td>LKR ${(r.grossEarnings||0).toLocaleString()}</td><td>LKR ${(r.epf||0).toLocaleString()}</td><td>LKR ${(r.etf||0).toLocaleString()}</td><td>LKR ${(r.netSalary||0).toLocaleString()}</td></tr>`;}).join('')}<tr class="tot"><td colspan="7" style="text-align:right">Total Net Payroll</td><td>LKR ${total.toLocaleString()}</td></tr></tbody></table></body></html>`;
   const el=document.createElement('div');el.innerHTML=html;document.body.appendChild(el);
   const loadAndExport=()=>html2pdf().set({margin:[0.4,0.3],filename:`Payroll_Report_${month}.pdf`,image:{type:'jpeg',quality:0.85},html2canvas:{scale:1},jsPDF:{unit:'in',format:'a4',orientation:'landscape'}}).from(el).save().then(()=>{document.body.removeChild(el);showToast('Report exported!','success');});
@@ -3503,6 +3545,7 @@ function exportReportPDF() {
 function openLeave() { if(!DB.leaves)DB.leaves=[]; populateLeaveSelects(); openModal('leaveModal'); switchLeaveTab('apply',document.querySelector('#leaveModal .report-tab')); }
 function openLeaveForEmp(empId) {
   if(!DB.leaves)DB.leaves=[];
+  if(!canAccessEmployee(empId)){showToast('No access to this employee','error');return;}
   // SELF_VIEWER: only allow opening their own leaves
   if(currentUser?.role==='SELF_VIEWER'){
     const linked=DB.employees.find(e=>e._svUsername===currentUser.username);
@@ -3521,12 +3564,7 @@ function openLeaveForEmp(empId) {
   }
 }
 function populateLeaveSelects() {
-  let emps=DB.employees;
-  // SELF_VIEWER: only own employee in all selects
-  if(currentUser?.role==='SELF_VIEWER'){
-    const linked=DB.employees.find(e=>e._svUsername===currentUser.username);
-    emps=linked?[linked]:[];
-  }
+  let emps=scopedEmployees();
   const opts=emps.map(e=>`<option value="${e.id}">${e.fullName} (${e.empId})</option>`).join('');
   ['lvEmpSel','lvBalEmpSel'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=opts;});
   const fOpts=(currentUser?.role==='SELF_VIEWER'?'':('<option value="">All Employees</option>'))+opts;
@@ -3560,6 +3598,7 @@ function submitLeave() {
     if(!linked){msg.style.color='var(--danger)';msg.textContent='Your profile is not linked. Contact admin.';return;}
     empId=linked.id; // force own employee id
   }
+  if(!canAccessEmployee(empId)){msg.style.color='var(--danger)';msg.textContent='No access to this employee';return;}
   const status=currentUser?.role==='SELF_VIEWER'?'Pending':document.getElementById('lvStatus').value;
   const reason=document.getElementById('lvReason').value.trim();
   if(!from||!to||!days){msg.style.color='var(--danger)';msg.textContent='Please fill in all date fields';return;}
@@ -3576,10 +3615,9 @@ function renderLeaveList() {
   if(!DB.leaves)DB.leaves=[];
   const ef=document.getElementById('lvFilterEmp')?.value,sf=document.getElementById('lvFilterStatus')?.value;
   let list=DB.leaves;if(ef)list=list.filter(l=>l.employeeId==ef);if(sf)list=list.filter(l=>l.status===sf);
-  // LOC_HEAD: only show leaves for their location's employees
-  if(currentUser?.role==='LOC_HEAD'){
-    const userLoc=(currentUser.branch||currentUser.department||'').toLowerCase().trim();
-    list=list.filter(l=>{const lEmp=DB.employees.find(e=>e.id===l.employeeId);return(lEmp?.location||'').toLowerCase().trim()===userLoc;});
+  // BRANCH_HEAD/LOC_HEAD: only show leaves for their location's employees
+  if(isBranchHeadRole()){
+    list=list.filter(l=>{const lEmp=DB.employees.find(e=>e.id===l.employeeId);return employeeInBranch(lEmp);});
   }
   // DEPT_VIEWER: only show their own department's employees' leaves
   if(currentUser?.role==='DEPT_VIEWER'){
@@ -3597,7 +3635,7 @@ function renderLeaveList() {
   c.innerHTML=list.map(l=>{
     const emp=DB.employees.find(e=>e.id===l.employeeId);
     const sc=l.status==='Approved'?'leave-approved':l.status==='Rejected'?'leave-rejected':'leave-pending';
-    const canApproveLv=currentUser?.role==='ADMIN'||currentUser?.role==='HR'||(currentUser?.role==='LOC_HEAD'&&(()=>{const lEmp=DB.employees.find(e=>e.id===l.employeeId);const userLoc=(currentUser.branch||currentUser.department||'').toLowerCase().trim();return(lEmp?.location||'').toLowerCase().trim()===userLoc;})());
+    const canApproveLv=currentUser?.role==='ADMIN'||currentUser?.role==='HR'||(isBranchHeadRole()&&(()=>{const lEmp=DB.employees.find(e=>e.id===l.employeeId);return employeeInBranch(lEmp);})());
     return`<div class="leave-card"><div style="font-size:1.6rem;">${l.type==='Sick'?'🤒':l.type==='Annual'?'🌴':l.type==='Casual'?'😊':l.type==='Maternity'?'👶':l.type==='Nopay'?'⛔':'📋'}</div><div class="leave-card-info"><strong>${emp?.fullName||'Unknown'} <span class="doc-type-badge">${l.type}</span></strong><small>${l.from} → ${l.to} · ${l.days} day${l.days!==1?'s':''} · ${l.reason||'No reason'}</small></div><span class="leave-status-pill ${sc}">${l.status}</span>${canApproveLv?`<div style="display:flex;gap:4px;"><button class="btn btn-sm btn-success" style="padding:3px 8px;" onclick="updateLeaveStatus(${l.id},'Approved')">✓</button><button class="btn btn-sm btn-danger" style="padding:3px 8px;" onclick="updateLeaveStatus(${l.id},'Rejected')">✗</button><button class="btn btn-sm btn-danger" style="padding:3px 8px;" onclick="deleteLeave(${l.id})">🗑</button></div>`:''}</div>`;
   }).join('');
 }
@@ -3605,6 +3643,7 @@ function updateLeaveStatus(id,status) { const l=DB.leaves.find(x=>x.id===id);if(
 function deleteLeave(id) { if(confirm('Delete this leave request?')){DB.leaves=DB.leaves.filter(l=>l.id!==id);saveDB();renderLeaveList();showToast('Deleted','success');} }
 function renderLeaveBalances() {
   const empId=parseInt(document.getElementById('lvBalEmpSel')?.value);
+  if(!canAccessEmployee(empId)){document.getElementById('lvBalanceDisplay').innerHTML='';return;}
   const emp=DB.employees.find(e=>e.id===empId);
   if(!emp||!DB.leaves){document.getElementById('lvBalanceDisplay').innerHTML='';return;}
   const year=new Date().getFullYear();
@@ -3615,18 +3654,21 @@ function renderLeaveBalances() {
 }
 function exportLeavePDF() {
   if(!DB.leaves)return;
-  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:30px;color:#1e293b}h1{color:#3B82F6;font-size:18px;margin-bottom:4px}p{font-size:11px;color:#64748b;margin-bottom:16px}table{width:100%;border-collapse:collapse;font-size:10px}th{background:#3B82F6;color:white;padding:7px}td{padding:6px 8px;border-bottom:1px solid #e2e8f0}.pend{color:#F59E0B}.appr{color:#10B981}.rej{color:#EF4444}</style></head><body><h1>Leave Report</h1><p>Generated: ${new Date().toLocaleString()}</p><table><thead><tr><th>Employee</th><th>Type</th><th>From</th><th>To</th><th>Days</th><th>Reason</th><th>Status</th></tr></thead><tbody>${DB.leaves.map(l=>{const e=DB.employees.find(x=>x.id===l.employeeId);const cls=l.status==='Approved'?'appr':l.status==='Rejected'?'rej':'pend';return`<tr><td>${e?.fullName||'—'}</td><td>${l.type}</td><td>${l.from}</td><td>${l.to}</td><td>${l.days}</td><td>${l.reason||'—'}</td><td class="${cls}">${l.status}</td></tr>`;}).join('')}</tbody></table></body></html>`;
+  const ids=employeeIdsForScope();
+  const leaves=DB.leaves.filter(l=>ids.has(l.employeeId));
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:30px;color:#1e293b}h1{color:#3B82F6;font-size:18px;margin-bottom:4px}p{font-size:11px;color:#64748b;margin-bottom:16px}table{width:100%;border-collapse:collapse;font-size:10px}th{background:#3B82F6;color:white;padding:7px}td{padding:6px 8px;border-bottom:1px solid #e2e8f0}.pend{color:#F59E0B}.appr{color:#10B981}.rej{color:#EF4444}</style></head><body><h1>Leave Report</h1><p>Generated: ${new Date().toLocaleString()}</p><table><thead><tr><th>Employee</th><th>Type</th><th>From</th><th>To</th><th>Days</th><th>Reason</th><th>Status</th></tr></thead><tbody>${leaves.map(l=>{const e=scopedEmployees().find(x=>x.id===l.employeeId);const cls=l.status==='Approved'?'appr':l.status==='Rejected'?'rej':'pend';return`<tr><td>${e?.fullName||'—'}</td><td>${l.type}</td><td>${l.from}</td><td>${l.to}</td><td>${l.days}</td><td>${l.reason||'—'}</td><td class="${cls}">${l.status}</td></tr>`;}).join('')}</tbody></table></body></html>`;
   const el=document.createElement('div');el.innerHTML=html;document.body.appendChild(el);
   const go=()=>html2pdf().set({margin:[0.4,0.4],filename:'Leave_Report.pdf',image:{type:'jpeg',quality:0.85},html2canvas:{scale:1},jsPDF:{unit:'in',format:'a4'}}).from(el).save().then(()=>{document.body.removeChild(el);showToast('Leave report exported!','success');});
   if(window.html2pdf)go();else{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';s.onload=go;document.head.appendChild(s);}
 }
 
 function openAttHistory() {
-  const sel=document.getElementById('ahEmpSel');sel.innerHTML=DB.employees.map(e=>`<option value="${e.id}">${e.fullName} (${e.empId})</option>`).join('');
+  const sel=document.getElementById('ahEmpSel');sel.innerHTML=scopedEmployees().map(e=>`<option value="${e.id}">${e.fullName} (${e.empId})</option>`).join('');
   document.getElementById('ahMonth').value=new Date().toISOString().slice(0,7);renderAttHistory();openModal('attHistModal');
 }
 function renderAttHistory() {
   const empId=parseInt(document.getElementById('ahEmpSel').value);const month=document.getElementById('ahMonth').value;if(!empId||!month)return;
+  if(!canAccessEmployee(empId)){document.getElementById('ahTable').innerHTML='<div style="color:var(--muted);text-align:center;padding:1.5rem;">No access to this employee.</div>';return;}
   const payroll=DB.payrolls.find(p=>p.employeeId===empId&&p.month===month);
   const [year,mon]=month.split('-').map(Number);const daysInMonth=new Date(year,mon,0).getDate();const firstDay=new Date(year,mon-1,1).getDay();
   const present=payroll?(payroll.workingDays||(26-(payroll.absentDays||0))):'—';const absent=payroll?(payroll.absentDays||0):'—';const leave=payroll?(payroll.leaveDays||0):'—';const ot=payroll?(payroll.overtimeHrs||0):'—';
@@ -3640,6 +3682,7 @@ function renderAttHistory() {
 }
 function exportAttHistPDF() {
   const empId=parseInt(document.getElementById('ahEmpSel').value);const month=document.getElementById('ahMonth').value;const emp=DB.employees.find(e=>e.id===empId);const pay=DB.payrolls.find(p=>p.employeeId===empId&&p.month===month);
+  if(!canAccessEmployee(empId)){showToast('No access to this employee','error');return;}
   if(!emp){showToast('Select an employee','error');return;}
   const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:30px;color:#1e293b}.hdr{background:linear-gradient(135deg,#3B82F6,#8B5CF6);color:white;padding:20px;border-radius:10px;margin-bottom:20px;text-align:center}table{width:100%;border-collapse:collapse;font-size:11px}th{background:#3B82F6;color:white;padding:7px}td{padding:7px 8px;border-bottom:1px solid #e2e8f0}</style></head><body><div class="hdr"><h1>Attendance Report — ${month}</h1><p>${emp.fullName} · ${emp.empId} · ${emp.department}</p></div>${pay?`<table><thead><tr><th>Item</th><th>Value</th></tr></thead><tbody><tr><td>Days Present</td><td>${pay.workingDays||'—'}</td></tr><tr><td>Absent Days</td><td>${pay.absentDays||0}</td></tr><tr><td>Leave Days</td><td>${pay.leaveDays||0}</td></tr><tr><td>OT Hours</td><td>${pay.overtimeHrs||0}</td></tr><tr><td>Basic Salary</td><td>LKR ${(pay.basicSalary||0).toLocaleString()}</td></tr><tr><td>Net Salary</td><td><strong>LKR ${(pay.netSalary||0).toLocaleString()}</strong></td></tr></tbody></table>`:'<p>No payroll record for this month.</p>'}</body></html>`;
   const el=document.createElement('div');el.innerHTML=html;document.body.appendChild(el);
@@ -3649,10 +3692,10 @@ function exportAttHistPDF() {
 
 function openDocs() {
   if(!DB.documents)DB.documents=[];
-  const sel=document.getElementById('docEmpSel');sel.innerHTML=DB.employees.map(e=>`<option value="${e.id}">${e.fullName} (${e.empId})</option>`).join('');
+  const sel=document.getElementById('docEmpSel');sel.innerHTML=scopedEmployees().map(e=>`<option value="${e.id}">${e.fullName} (${e.empId})</option>`).join('');
   setupDocDropZone();renderDocList();openModal('docsModal');
 }
-function openDocsForEmp(empId) { openDocs();document.getElementById('docEmpSel').value=empId;renderDocList(); }
+function openDocsForEmp(empId) { if(!canAccessEmployee(empId)){showToast('No access to this employee','error');return;}openDocs();document.getElementById('docEmpSel').value=empId;renderDocList(); }
 function setupDocDropZone() {
   const dz=document.getElementById('docDropZone');const fi=document.getElementById('docFileInput');
   if(!dz||dz._setup)return;dz._setup=true;
@@ -3663,6 +3706,7 @@ function setupDocDropZone() {
 function handleDocFile(file) {
   if(!DB.documents)DB.documents=[];
   const empId=parseInt(document.getElementById('docEmpSel').value);const cat=document.getElementById('docCatSel').value;
+  if(!canAccessEmployee(empId)){showToast('No access to this employee','error');return;}
   if(file.size>5*1024*1024){showToast('File too large (max 5MB)','error');return;}
   const reader=new FileReader();reader.onload=e=>{DB.documents.push({id:Date.now()+Math.random(),employeeId:empId,category:cat,name:file.name,size:file.size,type:file.type,data:e.target.result,uploadedAt:new Date().toISOString(),uploadedBy:currentUser?.username||'system'});saveDB();renderDocList();showToast(`${file.name} uploaded!`,'success');};reader.readAsDataURL(file);
 }
@@ -3670,11 +3714,12 @@ function renderDocList() {
   if(!DB.documents)DB.documents=[];
   const empId=parseInt(document.getElementById('docEmpSel')?.value);const docs=DB.documents.filter(d=>d.employeeId===empId).sort((a,b)=>b.uploadedAt.localeCompare(a.uploadedAt));
   const c=document.getElementById('docListContainer');
+  if(!canAccessEmployee(empId)){c.innerHTML='<div style="text-align:center;color:var(--muted);padding:1.5rem;">No access to this employee</div>';return;}
   if(!docs.length){c.innerHTML='<div style="text-align:center;color:var(--muted);padding:1.5rem;">No documents uploaded for this employee</div>';return;}
   c.innerHTML=docs.map(d=>{const icon=d.type?.includes('pdf')?'📄':d.type?.includes('image')?'🖼️':d.type?.includes('word')||d.name.endsWith('.doc')?'📝':'📎';const size=d.size>1024*1024?(d.size/1024/1024).toFixed(1)+'MB':Math.round(d.size/1024)+'KB';return`<div class="doc-item"><div class="doc-icon">${icon}</div><div class="doc-info"><strong>${d.name}<span class="doc-type-badge">${d.category}</span></strong><small>${size} · Uploaded ${new Date(d.uploadedAt).toLocaleDateString()} by ${d.uploadedBy}</small></div><button class="btn btn-sm" onclick="downloadDoc(${d.id})">⬇ Download</button><button class="btn btn-sm btn-danger" onclick="deleteDoc(${d.id})" style="padding:5px 8px;">🗑</button></div>`;}).join('');
 }
-function downloadDoc(id) { const doc=DB.documents?.find(d=>d.id===id);if(!doc){showToast('Not found','error');return;}const a=document.createElement('a');a.href=doc.data;a.download=doc.name;a.click();showToast('Downloading...','success'); }
-function deleteDoc(id) { if(!confirm('Delete this document?'))return;DB.documents=DB.documents.filter(d=>d.id!==id);saveDB();renderDocList();showToast('Deleted','success'); }
+function downloadDoc(id) { const doc=DB.documents?.find(d=>d.id===id);if(!doc){showToast('Not found','error');return;}if(!canAccessEmployee(doc.employeeId)){showToast('No access to this document','error');return;}const a=document.createElement('a');a.href=doc.data;a.download=doc.name;a.click();showToast('Downloading...','success'); }
+function deleteDoc(id) { const doc=DB.documents?.find(d=>d.id===id);if(!doc){showToast('Not found','error');return;}if(!canAccessEmployee(doc.employeeId)){showToast('No access to this document','error');return;}if(!confirm('Delete this document?'))return;DB.documents=DB.documents.filter(d=>d.id!==id);saveDB();renderDocList();showToast('Deleted','success'); }
 
 let attendanceRawHeaders=[],attendanceRawRows=[],attendanceMapped=[];
 function openAttendance() {
@@ -3706,7 +3751,7 @@ function parseAttJSON(text) { try{const data=JSON.parse(text);const arr=Array.is
 function detectAttDelimiter(line) { const c={',': (line.match(/,/g)||[]).length,'\t':(line.match(/\t/g)||[]).length,';':(line.match(/;/g)||[]).length,'|':(line.match(/\|/g)||[]).length};return Object.entries(c).sort((a,b)=>b[1]-a[1])[0][0]; }
 function parseAttCSVLine(line,delim) { const r=[];let cur='',inQ=false;for(let i=0;i<line.length;i++){if(line[i]==='"'){inQ=!inQ;continue;}if(line[i]===delim&&!inQ){r.push(cur.trim());cur='';continue;}cur+=line[i];}r.push(cur.trim());return r; }
 function parseAttendanceInput() { const text=document.getElementById('attManualInput').value.trim();if(!text){showToast('Please upload or paste data','error');return;}parseAttCSVText(text); }
-function loadSampleAttendance() { const s=`EmpID,EmployeeName,WorkingDays,LeaveDays,AbsentDays,OvertimeHours\n`+DB.employees.slice(0,5).map(e=>`${e.empId},${e.fullName},26,1,0,4`).join('\n');document.getElementById('attManualInput').value=s;showToast('Sample data loaded!','success'); }
+function loadSampleAttendance() { const s=`EmpID,EmployeeName,WorkingDays,LeaveDays,AbsentDays,OvertimeHours\n`+scopedEmployees().slice(0,5).map(e=>`${e.empId},${e.fullName},26,1,0,4`).join('\n');document.getElementById('attManualInput').value=s;showToast('Sample data loaded!','success'); }
 function calcAttendanceSalary(emp,row,workingDays) {
   const basic=Number(emp?.salary)||0;
   const wd=Math.max(Number(workingDays)||26,1);
@@ -3746,7 +3791,7 @@ async function processAttendanceMapping() {
   const nmCol=getCol('empName'),wdCol=getCol('workDays'),ldCol=getCol('leaveDays'),adCol=getCol('absentDays'),otCol=getCol('overtimeHrs');
   const ci=col=>col?attendanceRawHeaders.indexOf(col):-1;
   const idIdx=ci(idCol),nmIdx=ci(nmCol),wdIdx=ci(wdCol),ldIdx=ci(ldCol),adIdx=ci(adCol),otIdx=ci(otCol);
-  attendanceMapped=attendanceRawRows.map(row=>{const empId=(row[idIdx]||'').toString().trim();const emp=DB.employees.find(e=>e.empId?.toLowerCase()===empId.toLowerCase()||e.fullName?.toLowerCase()===empId.toLowerCase());return{rawId:empId,rawName:nmIdx>=0?(row[nmIdx]||'').toString().trim():'',workDays:wdIdx>=0?parseFloat(row[wdIdx])||0:null,leaveDays:ldIdx>=0?parseFloat(row[ldIdx])||0:0,absentDays:adIdx>=0?parseFloat(row[adIdx])||0:0,overtimeHrs:otIdx>=0?parseFloat(row[otIdx])||0:0,emp:emp||null,matched:!!emp};}).filter(r=>r.rawId);
+  attendanceMapped=attendanceRawRows.map(row=>{const empId=(row[idIdx]||'').toString().trim();const emp=scopedEmployees().find(e=>e.empId?.toLowerCase()===empId.toLowerCase()||e.fullName?.toLowerCase()===empId.toLowerCase());return{rawId:empId,rawName:nmIdx>=0?(row[nmIdx]||'').toString().trim():'',workDays:wdIdx>=0?parseFloat(row[wdIdx])||0:null,leaveDays:ldIdx>=0?parseFloat(row[ldIdx])||0:0,absentDays:adIdx>=0?parseFloat(row[adIdx])||0:0,overtimeHrs:otIdx>=0?parseFloat(row[otIdx])||0:0,emp:emp||null,matched:!!emp};}).filter(r=>r.rawId);
   renderAttendancePreview();
   await generatePayrollFromAttendance();
 }
@@ -3873,8 +3918,8 @@ document.addEventListener('DOMContentLoaded', async function() {
   document.getElementById('registerSubmitBtn').addEventListener('click',handleRegister);
   document.getElementById('regRole').addEventListener('change',function(){
   const isSV=this.value==='SELF_VIEWER';
-  document.getElementById('deptFieldReg').style.display=(this.value==='DEPT_VIEWER'||this.value==='HEAD_VIEWER'||this.value==='LOC_HEAD')?'block':'none';
-  const lbl=document.querySelector('#deptFieldReg label');if(lbl)lbl.textContent=this.value==='HEAD_VIEWER'?'Branch *':this.value==='LOC_HEAD'?'Location *':'Department *';
+  document.getElementById('deptFieldReg').style.display=this.value==='BRANCH_HEAD'?'block':'none';
+  const lbl=document.querySelector('#deptFieldReg label');if(lbl)lbl.textContent='Location / Branch *';
   document.getElementById('svRegFields').style.display=isSV?'block':'none';
   document.getElementById('svRegNote').style.display=isSV?'block':'none';
   // SELF_VIEWER already has sv_email — hide the generic email field for them
@@ -3900,7 +3945,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   document.getElementById('userMgmtBtn').addEventListener('click',openUserManagement);
   document.getElementById('locationBtn').addEventListener('click',openLocations);
   document.getElementById('addUserBtn').addEventListener('click',addUser);
-  document.getElementById('newRole').addEventListener('change',function(){const show=this.value==='DEPT_VIEWER'||this.value==='HEAD_VIEWER'||this.value==='LOC_HEAD';document.getElementById('newDeptField').style.display=show?'block':'none';const lbl=document.querySelector('#newDeptField label');if(lbl)lbl.textContent=this.value==='HEAD_VIEWER'?'Branch *':this.value==='LOC_HEAD'?'Location *':'Department *';});
+  document.getElementById('newRole').addEventListener('change',function(){const show=this.value==='BRANCH_HEAD';document.getElementById('newDeptField').style.display=show?'block':'none';const lbl=document.querySelector('#newDeptField label');if(lbl)lbl.textContent='Location / Branch *';});
   document.querySelectorAll('.tab-btn').forEach(btn=>{btn.addEventListener('click',function(){const tabId=this.getAttribute('data-tab');document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));this.classList.add('active');document.getElementById(`tab${tabId}`).classList.add('active');});});
 });
 
@@ -3933,6 +3978,7 @@ function removeEmpPhoto(event) {
 function openPhotoEditForEmp(id) {
   const emp = DB.employees.find(e => e.id == id);
   if (!emp) return;
+  if (!canAccessEmployee(emp.id)) { showToast('No access to this employee', 'error'); return; }
   // Create a quick photo edit popup
   const existing = document.getElementById('quickPhotoPopup');
   if (existing) existing.remove();
@@ -3959,6 +4005,7 @@ function openPhotoEditForEmp(id) {
 function applyPhotoToEmp(event, id) {
   const file = event.target.files[0];
   if (!file) return;
+  if (!canAccessEmployee(id)) { showToast('No access to this employee', 'error'); return; }
   if (file.size > 2 * 1024 * 1024) { showToast('Image too large (max 2MB)', 'error'); return; }
   const reader = new FileReader();
   reader.onload = e => {
@@ -3978,6 +4025,7 @@ function applyPhotoToEmp(event, id) {
 function clearEmpPhoto(id) {
   const emp = DB.employees.find(x => x.id == id);
   if (emp) {
+    if (!canAccessEmployee(emp.id)) { showToast('No access to this employee', 'error'); return; }
     delete emp.photo;
     saveDB();
     document.getElementById('quickPhotoPopup')?.remove();
