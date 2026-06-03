@@ -39,6 +39,152 @@ document.documentElement.classList.add('low-memory-mode');
   --glass-border-strong: rgba(255, 255, 255, 0.15);
 }
 
+/* ===== LIGHT MODE ===== */
+html.light-mode {
+  --bg: #F0F4FF;
+  --bg2: #E8EEFB;
+  --surface: rgba(255, 255, 255, 0.85);
+  --surface-solid: #FFFFFF;
+  --card: rgba(255, 255, 255, 0.75);
+  --card2: rgba(240, 244, 255, 0.9);
+  --card-solid: #FFFFFF;
+  --accent: #3A7EF0;
+  --accent2: #7C55E8;
+  --accent3: #20B08A;
+  --success: #0FA86A;
+  --danger: #D93025;
+  --warning: #D97706;
+  --text: #0F1828;
+  --text2: #3A5070;
+  --muted: #7A90B0;
+  --border: rgba(58, 126, 240, 0.15);
+  --border2: rgba(58, 126, 240, 0.28);
+  --glow: rgba(58, 126, 240, 0.18);
+  --glow2: rgba(124, 85, 232, 0.14);
+  --glass: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(58, 126, 240, 0.15);
+  --glass-border-strong: rgba(58, 126, 240, 0.25);
+}
+
+html.light-mode body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+html.light-mode body::before {
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(58, 126, 240, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 80%, rgba(124, 85, 232, 0.06) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(32, 176, 138, 0.05) 0%, transparent 60%);
+}
+
+html.light-mode .topbar {
+  background: rgba(240, 244, 255, 0.9);
+  border-bottom: 1px solid rgba(58, 126, 240, 0.15);
+  box-shadow: 0 1px 0 rgba(58, 126, 240, 0.1);
+}
+
+html.light-mode .sidebar {
+  background: rgba(240, 244, 255, 0.8);
+  border-right: 1px solid rgba(58, 126, 240, 0.12);
+}
+
+html.light-mode .auth-card {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(58, 126, 240, 0.2);
+  box-shadow: 0 0 0 1px rgba(58,126,240,0.08), 0 32px 64px -16px rgba(58,126,240,0.15), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+
+html.light-mode .auth-card h2 {
+  background: linear-gradient(135deg, #0F1828, #3A5070);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+html.light-mode .brand h1 {
+  background: linear-gradient(135deg, #0F1828, #3A5070);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+html.light-mode .input-group input,
+html.light-mode .input-group select {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(58, 126, 240, 0.2);
+  color: var(--text);
+}
+
+html.light-mode .input-group input:focus {
+  border-color: rgba(58, 126, 240, 0.5);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(58, 126, 240, 0.12);
+}
+
+html.light-mode .search-box input {
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(58,126,240,0.15);
+  color: var(--text);
+}
+
+html.light-mode .hc-textarea {
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(58,126,240,0.2);
+  color: var(--text);
+}
+
+html.light-mode #hrChatBox {
+  background: rgba(240,244,255,0.97);
+  border: 1px solid rgba(58,126,240,0.2);
+}
+
+html.light-mode .hc-top {
+  background: rgba(240,244,255,0.95);
+  border-bottom: 1px solid rgba(58,126,240,0.12);
+}
+
+html.light-mode .hc-msg.hc-bot .hc-bubble {
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(58,126,240,0.15);
+  color: var(--text);
+}
+
+html.light-mode .hc-sugg {
+  background: rgba(58,126,240,0.07);
+  border: 1px solid rgba(58,126,240,0.2);
+  color: var(--text2);
+}
+
+html.light-mode .modal-card {
+  background: rgba(255,255,255,0.95);
+  border: 1px solid rgba(58,126,240,0.2);
+}
+
+html.light-mode .bottom-nav {
+  background: rgba(240,244,255,0.95);
+  border-top: 1px solid rgba(58,126,240,0.15);
+}
+
+/* Dark/Light toggle button */
+#themeToggleBtn {
+  width: 34px; height: 34px;
+  border-radius: 10px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border-strong);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  color: var(--text2);
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+#themeToggleBtn:hover {
+  background: var(--card);
+  color: var(--text);
+  border-color: var(--border2);
+}
+
 body {
   font-family: 'DM Sans', sans-serif;
   background: var(--bg);
@@ -532,11 +678,13 @@ body > * { position: relative; z-index: 1; }
 .topbar {
   background: rgba(8, 14, 26, 0.8);
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-  padding: 0 1.5rem;
-  height: 60px;
+  padding: 0.45rem 1.25rem;
+  min-height: 64px;
+  height: auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
   flex-shrink: 0;
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
@@ -545,7 +693,13 @@ body > * { position: relative; z-index: 1; }
   z-index: 10;
 }
 
-.brand { display: flex; align-items: center; gap: 12px; }
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 0 0 auto;
+  min-width: 245px;
+}
 
 .brand-icon {
   width: 36px; height: 36px;
@@ -560,13 +714,57 @@ body > * { position: relative; z-index: 1; }
   font-family: 'Syne', sans-serif;
   font-size: 1.15rem;
   font-weight: 700;
+  line-height: 1.15;
+  white-space: nowrap;
   background: linear-gradient(135deg, #EEF2FF, #A5B4FC);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.top-actions { display: flex; gap: 5px; align-items: center; flex-wrap: wrap; }
+.top-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  align-content: center;
+  gap: 6px;
+  row-gap: 6px;
+  flex: 1 1 auto;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.top-actions .btn-sm,
+.top-actions .badge-status,
+.top-actions .trial-badge,
+.top-actions #themeToggleBtn {
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+.top-actions .btn-sm {
+  padding: 6px 10px;
+}
+
+#logoutBtn { min-width: 82px; }
+
+@media (max-width: 1180px) and (min-width: 769px) {
+  .topbar { padding-inline: 0.9rem; gap: 10px; }
+  .brand { min-width: 218px; gap: 10px; }
+  .brand h1 { font-size: 0.98rem; }
+  .brand-icon { width: 32px; height: 32px; font-size: 1rem; }
+  .top-actions { gap: 4px; row-gap: 5px; }
+  .top-actions .btn-sm { padding: 5px 8px; font-size: 0.68rem; }
+  .top-actions .badge-status,
+  .top-actions .trial-badge { font-size: 0.68rem !important; padding-inline: 9px !important; }
+  .top-actions #themeToggleBtn { width: 32px; height: 32px; }
+  #logoutBtn { min-width: 74px; }
+}
 
 /* ===== SIDEBAR ===== */
 .body-layout { display: flex; flex: 1; overflow: hidden; }
@@ -1477,7 +1675,10 @@ select option { background: #0F1628; color: var(--text); }
   .top-actions #logoutBtn { display: none !important; }
   .top-actions #userRoleBadge { display: none !important; }
   .top-actions #trialBadge { display: none !important; }
-  .top-actions { display: none; }
+  .top-actions { display: flex !important; }
+  .top-actions > *:not(#themeToggleBtn) { display: none !important; }
+  #themeToggleBtn { display: flex !important; }
+  #exportDataBtn, #importDataBtn { display: none !important; }
 
   /* --- Show bottom nav --- */
   .bottom-nav { display: flex; }
@@ -1743,6 +1944,8 @@ select option { background: #0F1628; color: var(--text); }
     <div id="drawerLocationItem" class="drawer-item" style="display:none;" onclick="document.getElementById('locationBtn').click();closeMobileDrawer()">📍 <span>Locations</span></div>
   </nav>
   <div style="padding:0.8rem 0.6rem;border-top:1px solid rgba(255,255,255,0.07);">
+    <div class="drawer-item" onclick="exportHRData();closeMobileDrawer()">💾 <span>Export Backup</span></div>
+    <div class="drawer-item" onclick="document.getElementById('importFileInput').click();closeMobileDrawer()">📂 <span>Import Backup</span></div>
     <div class="drawer-item drawer-logout" onclick="document.getElementById('logoutBtn').click();closeMobileDrawer()">⏻ <span>Logout</span></div>
   </div>
 </div>
@@ -1769,6 +1972,10 @@ select option { background: #0F1628; color: var(--text); }
       <button id="payrollBtn" class="btn btn-sm" style="display:none;">💰 Payroll</button>
       <button id="userMgmtBtn" class="btn btn-sm" style="display:none;">👥 Users</button>
       <button id="locationBtn" class="btn btn-sm" style="display:none;">📍 Locations</button>
+      <button id="exportDataBtn" class="btn btn-sm" onclick="exportHRData()" title="Export all data as backup file" style="display:none;">💾 Export</button>
+      <button id="importDataBtn" class="btn btn-sm" onclick="document.getElementById('importFileInput').click()" title="Import data from backup file" style="display:none;">📂 Import</button>
+      <input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="importHRData(event)">
+      <button id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">🌙</button>
       <button id="logoutBtn" class="btn btn-sm">➡️🚪Logout</button>
     </div>
   </div>
@@ -2789,6 +2996,8 @@ function setupApp() {
   document.getElementById('payrollBtn').style.display=canUseHrTools?'inline-flex':'none';
   document.getElementById('userMgmtBtn').style.display=currentUser.role==='ADMIN'?'inline-flex':'none';
   document.getElementById('locationBtn').style.display=(isHeadViewer||isDeptViewer||isSelfViewer)?'none':'inline-flex';
+  document.getElementById('exportDataBtn').style.display=currentUser.role==='ADMIN'?'inline-flex':'none';
+  document.getElementById('importDataBtn').style.display=currentUser.role==='ADMIN'?'inline-flex':'none';
   const branchWrap=document.getElementById('branchFilterWrap');
   if(canUseHrTools){
     branchWrap.style.display='block';
@@ -4511,7 +4720,80 @@ function closeMobileDrawer() {
 window.openMobileDrawer = openMobileDrawer;
 window.closeMobileDrawer = closeMobileDrawer;
 
-// ===== BOTTOM NAV =====
+// ===== EXPORT / IMPORT BACKUP =====
+window.exportHRData = function() {
+  try {
+    const raw = localStorage.getItem(LOCAL_DB_KEY);
+    if (!raw) { alert('No data found to export.'); return; }
+    const exportPayload = {
+      _hr_nexus_backup: true,
+      _version: 1,
+      _exportedAt: new Date().toISOString(),
+      db: JSON.parse(raw)
+    };
+    const blob = new Blob([JSON.stringify(exportPayload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const dateStr = new Date().toISOString().slice(0,10);
+    a.href = url;
+    a.download = `hr_nexus_backup_${dateStr}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  } catch(e) {
+    alert('Export failed: ' + e.message);
+  }
+};
+
+window.importHRData = function(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      // Validate it's a genuine HR Nexus backup
+      if (!parsed._hr_nexus_backup || !parsed.db) {
+        alert('❌ Invalid backup file. Please use a valid HR Nexus backup.');
+        return;
+      }
+      const confirmed = confirm(
+        `Import backup from ${parsed._exportedAt ? new Date(parsed._exportedAt).toLocaleString() : 'unknown date'}?\n\n⚠️ This will replace ALL current data on this PC.\n\nAre you sure?`
+      );
+      if (!confirmed) return;
+      localStorage.setItem(LOCAL_DB_KEY, JSON.stringify(parsed.db));
+      alert('✅ Data imported successfully! The page will now reload.');
+      location.reload();
+    } catch(err) {
+      alert('❌ Import failed: ' + err.message);
+    }
+    event.target.value = '';
+  };
+  reader.readAsText(file);
+};
+
+// ===== DARK / LIGHT MODE TOGGLE =====
+(function() {
+  const saved = localStorage.getItem('hr_theme');
+  if (saved === 'light') {
+    document.documentElement.classList.add('light-mode');
+  }
+  function updateIcon() {
+    const btn = document.getElementById('themeToggleBtn');
+    if (!btn) return;
+    btn.textContent = document.documentElement.classList.contains('light-mode') ? '☀️' : '🌙';
+    btn.title = document.documentElement.classList.contains('light-mode') ? 'Switch to Dark Mode' : 'Switch to Light Mode';
+  }
+  window.toggleTheme = function() {
+    document.documentElement.classList.toggle('light-mode');
+    const isLight = document.documentElement.classList.contains('light-mode');
+    localStorage.setItem('hr_theme', isLight ? 'light' : 'dark');
+    updateIcon();
+  };
+  document.addEventListener('DOMContentLoaded', updateIcon);
+})();
+
+
+
 function bnavSelect(section) {
   document.querySelectorAll('.bnav-item').forEach(b => b.classList.remove('active'));
   const map = {
