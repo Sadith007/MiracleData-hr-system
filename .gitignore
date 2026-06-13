@@ -1,0 +1,9 @@
+node_modules
+.DS_Store
+dist
+.wrangler
+verification/
+*.png
+apply_ux_step*.py
+verify_ux*.py
+server.log

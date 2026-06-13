@@ -1,0 +1,3 @@
+## 2026-06-13 - Accessibility for Icon-Only Buttons
+**Learning:** Icon-only buttons (e.g., '✕', '↺', '✓', '🗑') are completely inaccessible to screen reader users and lack visual context (tooltips) unless explicitly labeled. In monolithic HTML applications with dynamic JavaScript rendering, these icons must be labeled both in the static HTML and within the template strings used for dynamic rendering.
+**Action:** Always audit both static HTML and JavaScript `innerHTML` template strings for icon-only buttons, ensuring they include descriptive `aria-label` and `title` attributes. Use semantic `type="search"` for search inputs with an explicit `aria-label`.
