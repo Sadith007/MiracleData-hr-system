@@ -1,0 +1,3 @@
+## 2026-06-14 - [A11y Audit: Icon Buttons and Dynamic State]
+**Learning:** Accessibility audits in monolithic single-file applications must examine both static HTML and JavaScript template strings (e.g., inside `renderLeaveList` or `renderDocList`) to ensure consistent 'aria-label' coverage for icon-only buttons. Additionally, dynamic interactive elements (like the theme toggle) require state-aware ARIA updates within their JavaScript handlers to ensure the label accurately reflects the current or next state.
+**Action:** Always search for button creation in both HTML and JS rendering logic. For toggle-like buttons, programmatically update `aria-label` alongside `title` or `textContent` changes.
