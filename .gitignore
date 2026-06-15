@@ -1,0 +1,14 @@
+# Agent & Workflow Artifacts
+verification/
+*.png
+server.log
+apply_ux_*.py
+verify_ux_*.py
+index.html.*.bak
+
+# Cloudflare Workers
+.wrangler/
+
+# System Files
+.DS_Store
+Thumbs.db
