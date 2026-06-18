@@ -1776,6 +1776,9 @@ select option { background: #0F1628; color: var(--text); }
   /* --- TOAST --- */
   .toast { right: 12px; left: 12px; font-size: 0.78rem; bottom: 74px; }
 
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .btn-spin { display: inline-block; animation: spin 1s linear infinite; }
+
   /* --- TRIAL WARNING POPUP --- */
   .trial-warning-popup { top: auto; bottom: 140px; right: 12px; left: 12px; max-width: 100%; }
 
@@ -1930,7 +1933,7 @@ select option { background: #0F1628; color: var(--text); }
       <div style="font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:700;background:linear-gradient(135deg,#EEF2FF,#A5B4FC);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">HR Nexus</div>
       <div id="drawerUserBadge" style="font-size:0.65rem;color:var(--muted);margin-top:1px;"></div>
     </div>
-    <button onclick="closeMobileDrawer()" style="margin-left:auto;background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;padding:4px;">✕</button>
+    <button onclick="closeMobileDrawer()" style="margin-left:auto;background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;padding:4px;" aria-label="Close drawer" title="Close drawer">✕</button>
   </div>
   <div id="drawerTrialBadgeWrap" style="padding:0.6rem 1rem 0;"></div>
   <nav style="flex:1;overflow-y:auto;padding:0.6rem 0.6rem;">
@@ -2015,7 +2018,7 @@ select option { background: #0F1628; color: var(--text); }
       </div>
       <div class="sidebar-actions">
         <button id="addEmployeeBtn" class="btn btn-primary btn-sm" style="flex:1;">+ New Employee</button>
-        <button id="refreshListBtn" class="btn btn-sm">↺</button>
+        <button id="refreshListBtn" class="btn btn-sm" aria-label="Refresh data" title="Refresh data"><span id="refreshIcon">↺</span></button>
       </div>
       <div id="employeeListContainer" class="employee-list"></div>
     </div>
@@ -3852,7 +3855,7 @@ function renderLeaveList() {
     const emp=DB.employees.find(e=>e.id===l.employeeId);
     const sc=l.status==='Approved'?'leave-approved':l.status==='Rejected'?'leave-rejected':'leave-pending';
     const canApproveLv=currentUser?.role==='ADMIN'||currentUser?.role==='HR'||(isBranchHeadRole()&&(()=>{const lEmp=DB.employees.find(e=>e.id===l.employeeId);return employeeInBranch(lEmp);})());
-    return`<div class="leave-card"><div style="font-size:1.6rem;">${l.type==='Sick'?'🤒':l.type==='Annual'?'🌴':l.type==='Casual'?'😊':l.type==='Maternity'?'👶':l.type==='Nopay'?'⛔':'📋'}</div><div class="leave-card-info"><strong>${emp?.fullName||'Unknown'} <span class="doc-type-badge">${l.type}</span></strong><small>${l.from} → ${l.to} · ${l.days} day${l.days!==1?'s':''} · ${l.reason||'No reason'}</small></div><span class="leave-status-pill ${sc}">${l.status}</span>${canApproveLv?`<div style="display:flex;gap:4px;"><button class="btn btn-sm btn-success" style="padding:3px 8px;" onclick="updateLeaveStatus(${l.id},'Approved')">✓</button><button class="btn btn-sm btn-danger" style="padding:3px 8px;" onclick="updateLeaveStatus(${l.id},'Rejected')">✗</button><button class="btn btn-sm btn-danger" style="padding:3px 8px;" onclick="deleteLeave(${l.id})">🗑</button></div>`:''}</div>`;
+    return`<div class="leave-card"><div style="font-size:1.6rem;">${l.type==='Sick'?'🤒':l.type==='Annual'?'🌴':l.type==='Casual'?'😊':l.type==='Maternity'?'👶':l.type==='Nopay'?'⛔':'📋'}</div><div class="leave-card-info"><strong>${emp?.fullName||'Unknown'} <span class="doc-type-badge">${l.type}</span></strong><small>${l.from} → ${l.to} · ${l.days} day${l.days!==1?'s':''} · ${l.reason||'No reason'}</small></div><span class="leave-status-pill ${sc}">${l.status}</span>${canApproveLv?`<div style="display:flex;gap:4px;"><button class="btn btn-sm btn-success" style="padding:3px 8px;" onclick="updateLeaveStatus(${l.id},'Approved')" aria-label="Approve" title="Approve">✓</button><button class="btn btn-sm btn-danger" style="padding:3px 8px;" onclick="updateLeaveStatus(${l.id},'Rejected')" aria-label="Reject" title="Reject">✗</button><button class="btn btn-sm btn-danger" style="padding:3px 8px;" onclick="deleteLeave(${l.id})" aria-label="Delete" title="Delete">🗑</button></div>`:''}</div>`;
   }).join('');
 }
 function updateLeaveStatus(id,status) { const l=DB.leaves.find(x=>x.id===id);if(l){l.status=status;saveDB();renderLeaveList();showToast(`Leave ${status.toLowerCase()}`,'success');} }
@@ -3932,7 +3935,7 @@ function renderDocList() {
   const c=document.getElementById('docListContainer');
   if(!canAccessEmployee(empId)){c.innerHTML='<div style="text-align:center;color:var(--muted);padding:1.5rem;">No access to this employee</div>';return;}
   if(!docs.length){c.innerHTML='<div style="text-align:center;color:var(--muted);padding:1.5rem;">No documents uploaded for this employee</div>';return;}
-  c.innerHTML=docs.map(d=>{const icon=d.type?.includes('pdf')?'📄':d.type?.includes('image')?'🖼️':d.type?.includes('word')||d.name.endsWith('.doc')?'📝':'📎';const size=d.size>1024*1024?(d.size/1024/1024).toFixed(1)+'MB':Math.round(d.size/1024)+'KB';return`<div class="doc-item"><div class="doc-icon">${icon}</div><div class="doc-info"><strong>${d.name}<span class="doc-type-badge">${d.category}</span></strong><small>${size} · Uploaded ${new Date(d.uploadedAt).toLocaleDateString()} by ${d.uploadedBy}</small></div><button class="btn btn-sm" onclick="downloadDoc(${d.id})">⬇ Download</button><button class="btn btn-sm btn-danger" onclick="deleteDoc(${d.id})" style="padding:5px 8px;">🗑</button></div>`;}).join('');
+  c.innerHTML=docs.map(d=>{const icon=d.type?.includes('pdf')?'📄':d.type?.includes('image')?'🖼️':d.type?.includes('word')||d.name.endsWith('.doc')?'📝':'📎';const size=d.size>1024*1024?(d.size/1024/1024).toFixed(1)+'MB':Math.round(d.size/1024)+'KB';return`<div class="doc-item"><div class="doc-icon">${icon}</div><div class="doc-info"><strong>${d.name}<span class="doc-type-badge">${d.category}</span></strong><small>${size} · Uploaded ${new Date(d.uploadedAt).toLocaleDateString()} by ${d.uploadedBy}</small></div><button class="btn btn-sm" onclick="downloadDoc(${d.id})">⬇ Download</button><button class="btn btn-sm btn-danger" onclick="deleteDoc(${d.id})" style="padding:5px 8px;" aria-label="Delete document" title="Delete document">🗑</button></div>`;}).join('');
 }
 function downloadDoc(id) { const doc=DB.documents?.find(d=>d.id===id);if(!doc){showToast('Not found','error');return;}if(!canAccessEmployee(doc.employeeId)){showToast('No access to this document','error');return;}const a=document.createElement('a');a.href=doc.data;a.download=doc.name;a.click();showToast('Downloading...','success'); }
 function deleteDoc(id) { const doc=DB.documents?.find(d=>d.id===id);if(!doc){showToast('Not found','error');return;}if(!canAccessEmployee(doc.employeeId)){showToast('No access to this document','error');return;}if(!confirm('Delete this document?'))return;DB.documents=DB.documents.filter(d=>d.id!==id);saveDB();renderDocList();showToast('Deleted','success'); }
@@ -4147,7 +4150,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   const awd=document.getElementById('attWorkingDays');if(awd)awd.addEventListener('input',()=>{if(attendanceMapped.length)renderAttendancePreview();});
   document.getElementById('addEmployeeBtn').addEventListener('click',()=>{editingEmployeeId=null;document.getElementById('modalTitle').textContent='New Employee';document.querySelectorAll('#empModal input,#empModal select,#empModal textarea').forEach(el=>el.value='');document.getElementById('empGender').value='Male';document.getElementById('empMarital').value='Single';document.getElementById('empType').value='Permanent';document.getElementById('empStatus').value='Active';document.getElementById('empPayMethod').value='Bank Transfer'; currentEmpPhotoData=null; refreshEmpLocationDropdown(); const pzr=document.getElementById('photoUploadZone'); if(pzr){pzr.innerHTML='<span class="upload-icon">📷</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;">✕</button>';} const eiq2=document.getElementById('empIdQuick'); if(eiq2)eiq2.value=''; document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));document.querySelector('.tab-btn[data-tab="0"]').classList.add('active');document.getElementById('tab0').classList.add('active');openModal('empModal');});
   document.getElementById('saveEmpBtn').addEventListener('click',saveEmployee);
-  document.getElementById('refreshListBtn').addEventListener('click',async()=>{showLoading();await loadDB(true);hideLoading();renderEmployeeList();if(selectedEmployeeId)renderDetail(selectedEmployeeId);showToast('Cloud data refreshed','success');});
+  document.getElementById('refreshListBtn').addEventListener('click',async()=>{const btn=document.getElementById('refreshListBtn'),icon=document.getElementById('refreshIcon');btn.disabled=true;icon.classList.add('btn-spin');try{await loadDB(true);renderEmployeeList();if(selectedEmployeeId)renderDetail(selectedEmployeeId);showToast('Cloud data refreshed','success');}finally{btn.disabled=false;icon.classList.remove('btn-spin');}});
   let searchRenderTimer;
   document.getElementById('searchInput').addEventListener('input',()=>{clearTimeout(searchRenderTimer);searchRenderTimer=setTimeout(renderEmployeeList,120);});
   document.getElementById('attendanceBtn').addEventListener('click',openAttendance);
@@ -4791,6 +4794,7 @@ window.importHRData = function(event) {
     if (!btn) return;
     btn.textContent = document.documentElement.classList.contains('light-mode') ? '☀️' : '🌙';
     btn.title = document.documentElement.classList.contains('light-mode') ? 'Switch to Dark Mode' : 'Switch to Light Mode';
+    btn.ariaLabel = btn.title;
   }
   window.toggleTheme = function() {
     document.documentElement.classList.toggle('light-mode');
