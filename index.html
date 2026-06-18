@@ -1664,6 +1664,8 @@ select option { background: #0F1628; color: var(--text); }
   white-space: nowrap;
 }
 
+.btn-spin { display: inline-block; animation: spin 1s linear infinite; }
+
 /* ===== MOBILE RESPONSIVE ===== */
 @media (max-width: 768px) {
 
@@ -1776,8 +1778,7 @@ select option { background: #0F1628; color: var(--text); }
   /* --- TOAST --- */
   .toast { right: 12px; left: 12px; font-size: 0.78rem; bottom: 74px; }
 
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .btn-spin { display: inline-block; animation: spin 1s linear infinite; }
+
 
   /* --- TRIAL WARNING POPUP --- */
   .trial-warning-popup { top: auto; bottom: 140px; right: 12px; left: 12px; max-width: 100%; }
