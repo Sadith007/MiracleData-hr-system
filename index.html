@@ -1171,6 +1171,7 @@ body > * { position: relative; z-index: 1; }
   animation: spin 0.8s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+.btn-spin { animation: spin 1s linear infinite; display: inline-block; }
 
 /* ===== PAYROLL SUMMARY ===== */
 .payroll-summary {
@@ -2015,7 +2016,7 @@ select option { background: #0F1628; color: var(--text); }
       </div>
       <div class="sidebar-actions">
         <button id="addEmployeeBtn" class="btn btn-primary btn-sm" style="flex:1;">+ New Employee</button>
-        <button id="refreshListBtn" class="btn btn-sm">↺</button>
+        <button id="refreshListBtn" class="btn btn-sm" title="Refresh Employee List" aria-label="Refresh Employee List"><span id="refreshIcon">↺</span></button>
       </div>
       <div id="employeeListContainer" class="employee-list"></div>
     </div>
@@ -4147,7 +4148,21 @@ document.addEventListener('DOMContentLoaded', async function() {
   const awd=document.getElementById('attWorkingDays');if(awd)awd.addEventListener('input',()=>{if(attendanceMapped.length)renderAttendancePreview();});
   document.getElementById('addEmployeeBtn').addEventListener('click',()=>{editingEmployeeId=null;document.getElementById('modalTitle').textContent='New Employee';document.querySelectorAll('#empModal input,#empModal select,#empModal textarea').forEach(el=>el.value='');document.getElementById('empGender').value='Male';document.getElementById('empMarital').value='Single';document.getElementById('empType').value='Permanent';document.getElementById('empStatus').value='Active';document.getElementById('empPayMethod').value='Bank Transfer'; currentEmpPhotoData=null; refreshEmpLocationDropdown(); const pzr=document.getElementById('photoUploadZone'); if(pzr){pzr.innerHTML='<span class="upload-icon">📷</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;">✕</button>';} const eiq2=document.getElementById('empIdQuick'); if(eiq2)eiq2.value=''; document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));document.querySelector('.tab-btn[data-tab="0"]').classList.add('active');document.getElementById('tab0').classList.add('active');openModal('empModal');});
   document.getElementById('saveEmpBtn').addEventListener('click',saveEmployee);
-  document.getElementById('refreshListBtn').addEventListener('click',async()=>{showLoading();await loadDB(true);hideLoading();renderEmployeeList();if(selectedEmployeeId)renderDetail(selectedEmployeeId);showToast('Cloud data refreshed','success');});
+  document.getElementById('refreshListBtn').addEventListener('click',async()=>{
+    const btn = document.getElementById('refreshListBtn');
+    const icon = document.getElementById('refreshIcon');
+    btn.disabled = true;
+    icon.classList.add('btn-spin');
+    try {
+      await loadDB(true);
+      renderEmployeeList();
+      if(selectedEmployeeId) renderDetail(selectedEmployeeId);
+      showToast('Cloud data refreshed','success');
+    } finally {
+      btn.disabled = false;
+      icon.classList.remove('btn-spin');
+    }
+  });
   let searchRenderTimer;
   document.getElementById('searchInput').addEventListener('input',()=>{clearTimeout(searchRenderTimer);searchRenderTimer=setTimeout(renderEmployeeList,120);});
   document.getElementById('attendanceBtn').addEventListener('click',openAttendance);
