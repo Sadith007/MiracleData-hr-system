@@ -1976,6 +1976,7 @@ select option { background: #0F1628; color: var(--text); }
       <button id="exportDataBtn" class="btn btn-sm" onclick="exportHRData()" title="Export all data as backup file" style="display:none;">💾 Export</button>
       <button id="importDataBtn" class="btn btn-sm" onclick="document.getElementById('importFileInput').click()" title="Import data from backup file" style="display:none;">📂 Import</button>
       <input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="importHRData(event)">
+      <button id="openNewWindowBtn" onclick="window.open(window.location.href,'_blank','width=1280,height=800,scrollbars=yes,resizable=yes')" title="Open in New Window" style="width:34px;height:34px;border-radius:10px;background:var(--glass);border:1px solid var(--glass-border-strong);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--text2);transition:all 0.2s;flex-shrink:0;">⧉</button>
       <button id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">🌙</button>
       <button id="logoutBtn" class="btn btn-sm">➡️🚪Logout</button>
     </div>
