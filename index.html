@@ -1986,7 +1986,7 @@ select option { background: #0F1628; color: var(--text); }
       <div style="font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:700;background:linear-gradient(135deg,#EEF2FF,#A5B4FC);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">HR Nexus</div>
       <div id="drawerUserBadge" style="font-size:0.65rem;color:var(--muted);margin-top:1px;"></div>
     </div>
-    <button onclick="closeMobileDrawer()" style="margin-left:auto;background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;padding:4px;">✕</button>
+    <button onclick="closeMobileDrawer()" style="margin-left:auto;background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;padding:4px;" title="Close" aria-label="Close drawer">✕</button>
   </div>
   <div id="drawerTrialBadgeWrap" style="padding:0.6rem 1rem 0;"></div>
   <nav style="flex:1;overflow-y:auto;padding:0.6rem 0.6rem;">
@@ -2032,7 +2032,7 @@ select option { background: #0F1628; color: var(--text); }
       <button id="exportDataBtn" class="btn btn-sm" onclick="exportHRData()" title="Export all data as backup file" style="display:none;">💾 Export</button>
       <button id="importDataBtn" class="btn btn-sm" onclick="document.getElementById('importFileInput').click()" title="Import data from backup file" style="display:none;">📂 Import</button>
       <input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="importHRData(event)">
-      <button id="openNewWindowBtn" onclick="window.open(window.location.href,'_blank','width=1280,height=800,scrollbars=yes,resizable=yes')" title="Open in New Window" style="width:34px;height:34px;border-radius:10px;background:var(--glass);border:1px solid var(--glass-border-strong);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--text2);transition:all 0.2s;flex-shrink:0;">⧉</button>
+      <button id="openNewWindowBtn" onclick="window.open(window.location.href,'_blank','width=1280,height=800,scrollbars=yes,resizable=yes')" title="Open in New Window" aria-label="Open in new window" style="width:34px;height:34px;border-radius:10px;background:var(--glass);border:1px solid var(--glass-border-strong);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--text2);transition:all 0.2s;flex-shrink:0;">⧉</button>
       <button id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">🌙</button>
       <button id="logoutBtn" class="btn btn-sm">➡️🚪Logout</button>
     </div>
@@ -2072,7 +2072,7 @@ select option { background: #0F1628; color: var(--text); }
       </div>
       <div class="sidebar-actions">
         <button id="addEmployeeBtn" class="btn btn-primary btn-sm" style="flex:1;">+ New Employee</button>
-        <button id="refreshListBtn" class="btn btn-sm">↺</button>
+        <button id="refreshListBtn" class="btn btn-sm" title="Refresh data" aria-label="Refresh data">↺</button>
       </div>
       <div id="employeeListContainer" class="employee-list"></div>
     </div>
@@ -2085,7 +2085,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- EMPLOYEE MODAL -->
 <div id="empModal" class="modal">
   <div class="modal-card">
-    <div class="modal-header"><h3 id="modalTitle">Employee</h3><button class="btn btn-sm" onclick="closeModal('empModal')">✕</button></div>
+    <div class="modal-header"><h3 id="modalTitle">Employee</h3><button class="btn btn-sm" onclick="closeModal('empModal')" title="Close" aria-label="Close modal">✕</button></div>
     <div class="modal-body">
       <div class="tabs">
         <button class="tab-btn active" data-tab="0">Personal</button>
@@ -2099,7 +2099,7 @@ select option { background: #0F1628; color: var(--text); }
             <div class="photo-upload-zone" id="photoUploadZone" onclick="document.getElementById('empPhotoInput').click()">
               <span class="upload-icon">📷</span>
               <span class="upload-hint">Click to<br>upload</span>
-              <button class="photo-remove" id="photoRemoveBtn" onclick="removeEmpPhoto(event)" style="display:none;">✕</button>
+              <button class="photo-remove" id="photoRemoveBtn" onclick="removeEmpPhoto(event)" style="display:none;" title="Remove Photo" aria-label="Remove photo">✕</button>
             </div>
             <input type="file" id="empPhotoInput" accept="image/*" style="display:none;" onchange="handleEmpPhotoUpload(event)">
           </div>
@@ -2160,7 +2160,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- PAYROLL MODAL -->
 <div id="payrollModal" class="modal">
   <div class="modal-card" style="max-width:700px;">
-    <div class="modal-header"><h3>💰 Payroll Management</h3><button class="btn btn-sm" onclick="closeModal('payrollModal')">✕</button></div>
+    <div class="modal-header"><h3>💰 Payroll Management</h3><button class="btn btn-sm" onclick="closeModal('payrollModal')" title="Close" aria-label="Close modal">✕</button></div>
     <div class="modal-body">
       <div class="form-row">
         <div class="form-field"><label>Select Employee</label><select id="payrollEmpSelect"></select></div>
@@ -2199,7 +2199,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- ATTENDANCE UPLOAD MODAL -->
 <div id="attendanceModal" class="modal">
   <div class="modal-card" style="max-width:860px;">
-    <div class="modal-header"><h3>📋 Attendance Upload & Payroll Generator</h3><button class="btn btn-sm" onclick="closeModal('attendanceModal')">✕</button></div>
+    <div class="modal-header"><h3>📋 Attendance Upload & Payroll Generator</h3><button class="btn btn-sm" onclick="closeModal('attendanceModal')" title="Close" aria-label="Close modal">✕</button></div>
     <div class="modal-body">
       <div id="attStep1">
         <div style="font-size:0.7rem;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Step 1 — Upload Attendance File</div>
@@ -2253,7 +2253,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- REPORTS MODAL -->
 <div id="reportsModal" class="modal">
   <div class="modal-card" style="max-width:900px;">
-    <div class="modal-header"><h3>📊 Payroll Reports & Analytics</h3><button class="btn btn-sm" onclick="closeModal('reportsModal')">✕</button></div>
+    <div class="modal-header"><h3>📊 Payroll Reports & Analytics</h3><button class="btn btn-sm" onclick="closeModal('reportsModal')" title="Close" aria-label="Close modal">✕</button></div>
     <div class="modal-body">
       <div class="report-tabs">
         <button class="report-tab active" onclick="switchReport('overview',this)">📈 Overview</button>
@@ -2292,7 +2292,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- LEAVE MODAL -->
 <div id="leaveModal" class="modal">
   <div class="modal-card" style="max-width:820px;">
-    <div class="modal-header"><h3>🏖️ Leave Management</h3><button class="btn btn-sm" onclick="closeModal('leaveModal')">✕</button></div>
+    <div class="modal-header"><h3>🏖️ Leave Management</h3><button class="btn btn-sm" onclick="closeModal('leaveModal')" title="Close" aria-label="Close modal">✕</button></div>
     <div class="modal-body">
       <div class="report-tabs">
         <button class="report-tab active" onclick="switchLeaveTab('apply',this)">➕ Apply Leave</button>
@@ -2348,7 +2348,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- ATTENDANCE HISTORY MODAL -->
 <div id="attHistModal" class="modal">
   <div class="modal-card" style="max-width:860px;">
-    <div class="modal-header"><h3>📅 Attendance History & Reports</h3><button class="btn btn-sm" onclick="closeModal('attHistModal')">✕</button></div>
+    <div class="modal-header"><h3>📅 Attendance History & Reports</h3><button class="btn btn-sm" onclick="closeModal('attHistModal')" title="Close" aria-label="Close modal">✕</button></div>
     <div class="modal-body">
       <div class="att-hist-filter">
         <select id="ahEmpSel" onchange="renderAttHistory()" style="flex:1;min-width:160px;"></select>
@@ -2366,7 +2366,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- EMPLOYEE DOCUMENTS MODAL -->
 <div id="docsModal" class="modal">
   <div class="modal-card" style="max-width:780px;">
-    <div class="modal-header"><h3>📁 Employee Documents</h3><button class="btn btn-sm" onclick="closeModal('docsModal')">✕</button></div>
+    <div class="modal-header"><h3>📁 Employee Documents</h3><button class="btn btn-sm" onclick="closeModal('docsModal')" title="Close" aria-label="Close modal">✕</button></div>
     <div class="modal-body">
       <div style="display:flex;gap:10px;margin-bottom:1rem;align-items:center;flex-wrap:wrap;">
         <select id="docEmpSel" onchange="renderDocList()" style="flex:1;min-width:160px;"></select>
@@ -2391,7 +2391,7 @@ select option { background: #0F1628; color: var(--text); }
 <!-- USER MANAGEMENT MODAL -->
 <div id="userModal" class="modal">
   <div class="modal-card" style="max-width:800px;">
-    <div class="modal-header"><h3>👥 User Management</h3><button class="btn btn-sm" onclick="closeModal('userModal')">✕</button></div>
+    <div class="modal-header"><h3>👥 User Management</h3><button class="btn btn-sm" onclick="closeModal('userModal')" title="Close" aria-label="Close modal">✕</button></div>
     <div class="modal-body">
       <div id="userListContainer"></div>
       <hr style="margin:20px 0;border:none;border-top:1px solid rgba(255,255,255,0.07);">
@@ -2442,7 +2442,7 @@ select option { background: #0F1628; color: var(--text); }
       <h3>📍 Company Locations</h3>
       <div style="display:flex;gap:8px;align-items:center;">
         <span id="locTotalBadge" style="font-size:0.72rem;color:var(--text2);background:rgba(255,255,255,0.06);padding:3px 10px;border-radius:20px;border:1px solid rgba(255,255,255,0.09);"></span>
-        <button class="btn btn-sm" onclick="closeModal('locationModal')">✕</button>
+        <button class="btn btn-sm" onclick="closeModal('locationModal')" title="Close" aria-label="Close modal">✕</button>
       </div>
     </div>
     <div class="modal-body loc-modal-body">
@@ -3212,9 +3212,9 @@ function editEmployee(id) {
   const pz = document.getElementById('photoUploadZone');
   if (pz) {
     if (emp.photo) {
-      pz.innerHTML = `<img src="${emp.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:16px;"><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:flex;">✕</button>`;
+      pz.innerHTML = `<img src="${emp.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:16px;"><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:flex;" title="Remove Photo" aria-label="Remove photo">✕</button>`;
     } else {
-      pz.innerHTML = '<span class="upload-icon">📷</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;">✕</button>';
+      pz.innerHTML = '<span class="upload-icon">📷</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;" title="Remove Photo" aria-label="Remove photo">✕</button>';
     }
   }
   // Sync empIdQuick
@@ -3674,7 +3674,8 @@ function renderOTPRequests() {
           <span style="font-size:0.7rem;color:var(--muted);display:block;">Expires: ${new Date(r.expires).toLocaleTimeString()}</span>
         </div>
         <div style="font-size:1.3rem;font-weight:800;font-family:monospace;letter-spacing:4px;color:#F59E0B;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);border-radius:8px;padding:6px 14px;">${r.otp}</div>
-        <button class="btn btn-sm btn-danger" onclick="dismissOTPRequest('${r.username}')">✓ Done</button>
+        <button class="btn btn-sm" onclick="copyToClipboard('${r.otp}', 'OTP copied! 📋')" style="padding:6px 10px;" title="Copy OTP" aria-label="Copy OTP">📋</button>
+        <button class="btn btn-sm btn-danger" onclick="dismissOTPRequest('${r.username}')" title="Dismiss" aria-label="Dismiss request">✓ Done</button>
       </div>
     `).join('')}
     <div style="font-size:0.68rem;color:var(--muted);margin-top:6px;">📱 Share the OTP code with the user via WhatsApp/SMS. OTPs expire in 10 minutes.</div>
@@ -3928,7 +3929,7 @@ function renderLeaveList() {
     const emp=DB.employees.find(e=>e.id===l.employeeId);
     const sc=l.status==='Approved'?'leave-approved':l.status==='Rejected'?'leave-rejected':'leave-pending';
     const canApproveLv=currentUser?.role==='ADMIN'||currentUser?.role==='HR'||(isBranchHeadRole()&&(()=>{const lEmp=DB.employees.find(e=>e.id===l.employeeId);return employeeInBranch(lEmp);})());
-    return`<div class="leave-card"><div style="font-size:1.6rem;">${l.type==='Sick'?'🤒':l.type==='Annual'?'🌴':l.type==='Casual'?'😊':l.type==='Maternity'?'👶':l.type==='Nopay'?'⛔':'📋'}</div><div class="leave-card-info"><strong>${emp?.fullName||'Unknown'} <span class="doc-type-badge">${l.type}</span></strong><small>${l.from} → ${l.to} · ${l.days} day${l.days!==1?'s':''} · ${l.reason||'No reason'}</small></div><span class="leave-status-pill ${sc}">${l.status}</span>${canApproveLv?`<div style="display:flex;gap:4px;"><button class="btn btn-sm btn-success" style="padding:3px 8px;" onclick="updateLeaveStatus(${l.id},'Approved')">✓</button><button class="btn btn-sm btn-danger" style="padding:3px 8px;" onclick="updateLeaveStatus(${l.id},'Rejected')">✗</button><button class="btn btn-sm btn-danger" style="padding:3px 8px;" onclick="deleteLeave(${l.id})">🗑</button></div>`:''}</div>`;
+    return`<div class="leave-card"><div style="font-size:1.6rem;">${l.type==='Sick'?'🤒':l.type==='Annual'?'🌴':l.type==='Casual'?'😊':l.type==='Maternity'?'👶':l.type==='Nopay'?'⛔':'📋'}</div><div class="leave-card-info"><strong>${emp?.fullName||'Unknown'} <span class="doc-type-badge">${l.type}</span></strong><small>${l.from} → ${l.to} · ${l.days} day${l.days!==1?'s':''} · ${l.reason||'No reason'}</small></div><span class="leave-status-pill ${sc}">${l.status}</span>${canApproveLv?`<div style="display:flex;gap:4px;"><button class="btn btn-sm btn-success" style="padding:3px 8px;" onclick="updateLeaveStatus(${l.id},'Approved')" title="Approve" aria-label="Approve leave request">✓</button><button class="btn btn-sm btn-danger" style="padding:3px 8px;" onclick="updateLeaveStatus(${l.id},'Rejected')" title="Reject" aria-label="Reject leave request">✗</button><button class="btn btn-sm btn-danger" style="padding:3px 8px;" onclick="deleteLeave(${l.id})" title="Delete" aria-label="Delete leave request">🗑</button></div>`:''}</div>`;
   }).join('');
 }
 function updateLeaveStatus(id,status) { const l=DB.leaves.find(x=>x.id===id);if(l){l.status=status;saveDB();renderLeaveList();showToast(`Leave ${status.toLowerCase()}`,'success');} }
@@ -4008,7 +4009,7 @@ function renderDocList() {
   const c=document.getElementById('docListContainer');
   if(!canAccessEmployee(empId)){c.innerHTML='<div style="text-align:center;color:var(--muted);padding:1.5rem;">No access to this employee</div>';return;}
   if(!docs.length){c.innerHTML='<div style="text-align:center;color:var(--muted);padding:1.5rem;">No documents uploaded for this employee</div>';return;}
-  c.innerHTML=docs.map(d=>{const icon=d.type?.includes('pdf')?'📄':d.type?.includes('image')?'🖼️':d.type?.includes('word')||d.name.endsWith('.doc')?'📝':'📎';const size=d.size>1024*1024?(d.size/1024/1024).toFixed(1)+'MB':Math.round(d.size/1024)+'KB';return`<div class="doc-item"><div class="doc-icon">${icon}</div><div class="doc-info"><strong>${d.name}<span class="doc-type-badge">${d.category}</span></strong><small>${size} · Uploaded ${new Date(d.uploadedAt).toLocaleDateString()} by ${d.uploadedBy}</small></div><button class="btn btn-sm" onclick="downloadDoc(${d.id})">⬇ Download</button><button class="btn btn-sm btn-danger" onclick="deleteDoc(${d.id})" style="padding:5px 8px;">🗑</button></div>`;}).join('');
+  c.innerHTML=docs.map(d=>{const icon=d.type?.includes('pdf')?'📄':d.type?.includes('image')?'🖼️':d.type?.includes('word')||d.name.endsWith('.doc')?'📝':'📎';const size=d.size>1024*1024?(d.size/1024/1024).toFixed(1)+'MB':Math.round(d.size/1024)+'KB';return`<div class="doc-item"><div class="doc-icon">${icon}</div><div class="doc-info"><strong>${d.name}<span class="doc-type-badge">${d.category}</span></strong><small>${size} · Uploaded ${new Date(d.uploadedAt).toLocaleDateString()} by ${d.uploadedBy}</small></div><button class="btn btn-sm" onclick="downloadDoc(${d.id})">⬇ Download</button><button class="btn btn-sm btn-danger" onclick="deleteDoc(${d.id})" style="padding:5px 8px;" title="Delete" aria-label="Delete document">🗑</button></div>`;}).join('');
 }
 function downloadDoc(id) { const doc=DB.documents?.find(d=>d.id===id);if(!doc){showToast('Not found','error');return;}if(!canAccessEmployee(doc.employeeId)){showToast('No access to this document','error');return;}const a=document.createElement('a');a.href=doc.data;a.download=doc.name;a.click();showToast('Downloading...','success'); }
 function deleteDoc(id) { const doc=DB.documents?.find(d=>d.id===id);if(!doc){showToast('Not found','error');return;}if(!canAccessEmployee(doc.employeeId)){showToast('No access to this document','error');return;}if(!confirm('Delete this document?'))return;DB.documents=DB.documents.filter(d=>d.id!==id);saveDB();renderDocList();showToast('Deleted','success'); }
@@ -4134,7 +4135,7 @@ function updateTrialBadge(type,text) { const b=document.getElementById('trialBad
 function showLockScreen() { document.getElementById('lockContactInfo').textContent=ADMIN_CONTACT;document.getElementById('lockScreen').style.display='flex'; }
 function hideLockScreen() { document.getElementById('lockScreen').style.display='none'; }
 let warningShown=false;
-function showTrialWarningPopup(daysLeft) { if(warningShown)return;warningShown=true;const p=document.createElement('div');p.className='trial-warning-popup';p.style.position='fixed';p.innerHTML=`<button class="popup-close" onclick="this.parentElement.remove()">✕</button><h4>⚠️ Trial Ending Soon</h4><p>Expires in <strong>${daysLeft} day${daysLeft!==1?'s':''}</strong>. Contact admin to activate a license.</p><p style="margin-top:6px;font-size:0.72rem;color:var(--muted)">${ADMIN_CONTACT}</p>`;document.body.appendChild(p);setTimeout(()=>{if(p.parentElement)p.remove();},10000); }
+function showTrialWarningPopup(daysLeft) { if(warningShown)return;warningShown=true;const p=document.createElement('div');p.className='trial-warning-popup';p.style.position='fixed';p.innerHTML=`<button class="popup-close" onclick="this.parentElement.remove()" title="Close" aria-label="Close warning">✕</button><h4>⚠️ Trial Ending Soon</h4><p>Expires in <strong>${daysLeft} day${daysLeft!==1?'s':''}</strong>. Contact admin to activate a license.</p><p style="margin-top:6px;font-size:0.72rem;color:var(--muted)">${ADMIN_CONTACT}</p>`;document.body.appendChild(p);setTimeout(()=>{if(p.parentElement)p.remove();},10000); }
 async function activateLicense() {
   const raw=document.getElementById('licenseKeyInput').value.trim().toUpperCase();const errDiv=document.getElementById('licenseError');errDiv.textContent='';
   if(!raw){errDiv.textContent='Please enter a license key';return;}
@@ -4145,7 +4146,7 @@ function formatLicenseInput(input) { let val=input.value.replace(/[^A-Z0-9]/gi,'
 function renderLicenseSection() {
   if(currentUser?.role!=='ADMIN')return'';
   const trial=DB.trial;const license=DB.license;const trialStart=trial?new Date(trial.startDate).toLocaleDateString():'Not started';const trialEnd=trial?new Date(trial.endDate).toLocaleDateString():'-';const daysLeft=trial?Math.max(0,Math.ceil((new Date(trial.endDate)-new Date())/86400000)):0;const keys=DB.licenseKeys||[];
-  return`<hr style="margin:20px 0;border:none;border-top:1px solid rgba(255,255,255,0.07);"><div class="license-section"><h4>🔑 License & Trial Management</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;"><div class="info-card"><label>Trial Started</label><span>${trialStart}</span></div><div class="info-card"><label>Trial Ends</label><span>${trialEnd} (${daysLeft}d left)</span></div><div class="info-card"><label>License Status</label><span style="color:${license?.status==='active'?'var(--success)':'var(--warning)'}">${license?.status==='active'?'✅ Licensed':'⏳ Trial'}</span></div><div class="info-card"><label>License Key</label><span style="font-family:'DM Mono',monospace;font-size:0.75rem;">${license?.key||'None'}</span></div></div><div style="margin-bottom:1rem;"><div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Extend Trial</div><div style="display:flex;gap:8px;flex-wrap:wrap;"><select id="extendDays" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:6px 10px;color:var(--text);font-size:0.8rem;"><option value="7">+7 days</option><option value="14">+14 days</option><option value="30" selected>+30 days</option><option value="60">+60 days</option><option value="90">+90 days</option><option value="365">+1 Year</option></select><button class="btn btn-primary btn-sm" onclick="extendTrial()">Extend Trial</button><button class="btn btn-sm" style="background:rgba(20,196,126,0.15);border-color:rgba(20,196,126,0.3);color:var(--success);" onclick="generateNewLicenseKey()">🔑 Generate Key</button></div></div><div style="margin-bottom:1rem;"><div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Set Exact Trial End Date</div><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;"><input type="date" id="trialEndDateInput" value="${trial?new Date(trial.endDate).toISOString().slice(0,10):''}" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:6px 10px;color:var(--text);font-size:0.8rem;outline:none;"><button class="btn btn-sm" style="background:rgba(248,184,78,0.12);border-color:rgba(248,184,78,0.3);color:var(--warning);" onclick="setTrialEndDate()">📅 Set Date</button></div></div><div><div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Generated Keys (${keys.length})</div>${keys.length>0?keys.map(k=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><div class="license-key-display" style="flex:1;font-size:0.85rem;">${k.key}</div><span style="font-size:0.7rem;padding:3px 8px;border-radius:20px;background:${k.status==='active'?'rgba(20,196,126,0.12)':'rgba(100,100,100,0.12)'};color:${k.status==='active'?'var(--success)':'var(--muted)'};">${k.status}</span><button class="btn btn-sm" onclick="copyToClipboard('${k.key}')" style="padding:4px 8px;">📋</button></div>`).join(''):'<div style="color:var(--muted);font-size:0.8rem;">No keys generated yet</div>'}</div><div id="licenseAdminMsg" style="margin-top:8px;font-size:0.75rem;min-height:1rem;"></div></div>`;
+  return`<hr style="margin:20px 0;border:none;border-top:1px solid rgba(255,255,255,0.07);"><div class="license-section"><h4>🔑 License & Trial Management</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;"><div class="info-card"><label>Trial Started</label><span>${trialStart}</span></div><div class="info-card"><label>Trial Ends</label><span>${trialEnd} (${daysLeft}d left)</span></div><div class="info-card"><label>License Status</label><span style="color:${license?.status==='active'?'var(--success)':'var(--warning)'}">${license?.status==='active'?'✅ Licensed':'⏳ Trial'}</span></div><div class="info-card"><label>License Key</label><span style="font-family:'DM Mono',monospace;font-size:0.75rem;">${license?.key||'None'}</span></div></div><div style="margin-bottom:1rem;"><div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Extend Trial</div><div style="display:flex;gap:8px;flex-wrap:wrap;"><select id="extendDays" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:6px 10px;color:var(--text);font-size:0.8rem;"><option value="7">+7 days</option><option value="14">+14 days</option><option value="30" selected>+30 days</option><option value="60">+60 days</option><option value="90">+90 days</option><option value="365">+1 Year</option></select><button class="btn btn-primary btn-sm" onclick="extendTrial()">Extend Trial</button><button class="btn btn-sm" style="background:rgba(20,196,126,0.15);border-color:rgba(20,196,126,0.3);color:var(--success);" onclick="generateNewLicenseKey()">🔑 Generate Key</button></div></div><div style="margin-bottom:1rem;"><div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Set Exact Trial End Date</div><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;"><input type="date" id="trialEndDateInput" value="${trial?new Date(trial.endDate).toISOString().slice(0,10):''}" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:6px 10px;color:var(--text);font-size:0.8rem;outline:none;"><button class="btn btn-sm" style="background:rgba(248,184,78,0.12);border-color:rgba(248,184,78,0.3);color:var(--warning);" onclick="setTrialEndDate()">📅 Set Date</button></div></div><div><div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Generated Keys (${keys.length})</div>${keys.length>0?keys.map(k=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><div class="license-key-display" style="flex:1;font-size:0.85rem;">${k.key}</div><span style="font-size:0.7rem;padding:3px 8px;border-radius:20px;background:${k.status==='active'?'rgba(20,196,126,0.12)':'rgba(100,100,100,0.12)'};color:${k.status==='active'?'var(--success)':'var(--muted)'};">${k.status}</span><button class="btn btn-sm" onclick="copyToClipboard('${k.key}', 'License key copied! 📋')" style="padding:4px 8px;" title="Copy License Key" aria-label="Copy License Key">📋</button></div>`).join(''):'<div style="color:var(--muted);font-size:0.8rem;">No keys generated yet</div>'}</div><div id="licenseAdminMsg" style="margin-top:8px;font-size:0.75rem;min-height:1rem;"></div></div>`;
 }
 async function extendTrial() {
   const days=parseInt(document.getElementById('extendDays').value);const now=new Date();
@@ -4166,7 +4167,7 @@ async function setTrialEndDate() {
 async function generateNewLicenseKey() {
   if(!DB.licenseKeys)DB.licenseKeys=[];const newKey=generateLicenseKey(Date.now()+Math.random()*1e9);DB.licenseKeys.push({key:newKey,status:'active',createdAt:new Date().toISOString()});await saveDB();openUserManagement();showToast('License key generated!','success');
 }
-function copyToClipboard(text) { navigator.clipboard.writeText(text).then(()=>showToast('License key copied! 📋','success')); }
+function copyToClipboard(text, msg = 'Copied! 📋') { navigator.clipboard.writeText(text).then(()=>showToast(msg,'success')); }
 
 document.addEventListener('DOMContentLoaded', async function() {
   // EmailJS — lazy load only when OTP/email is actually needed
@@ -4221,7 +4222,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   const dz=document.getElementById('attDropZone');if(dz){dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag-over');});dz.addEventListener('dragleave',()=>dz.classList.remove('drag-over'));dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag-over');if(e.dataTransfer.files[0])handleAttFile(e.dataTransfer.files[0]);});}
   const afi=document.getElementById('attFileInput');if(afi)afi.addEventListener('change',function(){if(this.files[0])handleAttFile(this.files[0]);});
   const awd=document.getElementById('attWorkingDays');if(awd)awd.addEventListener('input',()=>{if(attendanceMapped.length)renderAttendancePreview();});
-  document.getElementById('addEmployeeBtn').addEventListener('click',()=>{editingEmployeeId=null;document.getElementById('modalTitle').textContent='New Employee';document.querySelectorAll('#empModal input,#empModal select,#empModal textarea').forEach(el=>el.value='');document.getElementById('empGender').value='Male';document.getElementById('empMarital').value='Single';document.getElementById('empType').value='Permanent';document.getElementById('empStatus').value='Active';document.getElementById('empPayMethod').value='Bank Transfer'; currentEmpPhotoData=null; refreshEmpLocationDropdown(); const pzr=document.getElementById('photoUploadZone'); if(pzr){pzr.innerHTML='<span class="upload-icon">📷</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;">✕</button>';} const eiq2=document.getElementById('empIdQuick'); if(eiq2)eiq2.value=''; document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));document.querySelector('.tab-btn[data-tab="0"]').classList.add('active');document.getElementById('tab0').classList.add('active');openModal('empModal');});
+  document.getElementById('addEmployeeBtn').addEventListener('click',()=>{editingEmployeeId=null;document.getElementById('modalTitle').textContent='New Employee';document.querySelectorAll('#empModal input,#empModal select,#empModal textarea').forEach(el=>el.value='');document.getElementById('empGender').value='Male';document.getElementById('empMarital').value='Single';document.getElementById('empType').value='Permanent';document.getElementById('empStatus').value='Active';document.getElementById('empPayMethod').value='Bank Transfer'; currentEmpPhotoData=null; refreshEmpLocationDropdown(); const pzr=document.getElementById('photoUploadZone'); if(pzr){pzr.innerHTML='<span class="upload-icon">📷</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;" title="Remove Photo" aria-label="Remove photo">✕</button>';} const eiq2=document.getElementById('empIdQuick'); if(eiq2)eiq2.value=''; document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));document.querySelector('.tab-btn[data-tab="0"]').classList.add('active');document.getElementById('tab0').classList.add('active');openModal('empModal');});
   document.getElementById('saveEmpBtn').addEventListener('click',saveEmployee);
   document.getElementById('refreshListBtn').addEventListener('click',async()=>{showLoading();await loadDB(true);hideLoading();renderEmployeeList();if(selectedEmployeeId)renderDetail(selectedEmployeeId);showToast('Cloud data refreshed','success');});
   let searchRenderTimer;
@@ -4252,7 +4253,7 @@ function handleEmpPhotoUpload(event) {
   reader.onload = e => {
     currentEmpPhotoData = e.target.result;
     const zone = document.getElementById('photoUploadZone');
-    zone.innerHTML = `<img src="${currentEmpPhotoData}" style="width:100%;height:100%;object-fit:cover;border-radius:16px;"><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:flex;">✕</button>`;
+    zone.innerHTML = `<img src="${currentEmpPhotoData}" style="width:100%;height:100%;object-fit:cover;border-radius:16px;"><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:flex;" title="Remove Photo" aria-label="Remove photo">✕</button>`;
   };
   reader.readAsDataURL(file);
 }
@@ -4262,7 +4263,7 @@ function removeEmpPhoto(event) {
   currentEmpPhotoData = null;
   const zone = document.getElementById('photoUploadZone');
   if (zone) {
-    zone.innerHTML = `<span class="upload-icon">📷</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;">✕</button>`;
+    zone.innerHTML = `<span class="upload-icon">📷</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;" title="Remove Photo" aria-label="Remove photo">✕</button>`;
   }
   document.getElementById('empPhotoInput').value = '';
 }
@@ -5010,14 +5011,14 @@ function openCompanyManager() {
           <div style="font-size:0.65rem;color:var(--muted);">Created: ${new Date(c.createdAt).toLocaleDateString()}</div>
         </div>
         ${c.id===activeId ? '<span style="font-size:0.65rem;color:var(--accent);font-weight:700;padding:2px 8px;background:rgba(79,142,247,0.1);border-radius:10px;border:1px solid rgba(79,142,247,0.2);">ACTIVE</span>' : `<button onclick="switchToCompany('${c.id}')" style="background:rgba(79,142,247,0.1);border:1px solid rgba(79,142,247,0.25);border-radius:8px;padding:4px 10px;color:var(--accent);cursor:pointer;font-size:0.75rem;font-family:'DM Sans',sans-serif;">Switch</button>`}
-        <button onclick="deleteCoEntry('${c.id}')" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.8rem;padding:2px 6px;border-radius:6px;" title="Remove">🗑</button>
+        <button onclick="deleteCoEntry('${c.id}')" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.8rem;padding:2px 6px;border-radius:6px;" title="Remove" aria-label="Remove company workspace">🗑</button>
       </div>`).join('');
 
   modal.innerHTML = `
     <div style="background:var(--surface-solid);border:1px solid rgba(79,142,247,0.2);border-radius:20px;width:100%;max-width:420px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.6);">
       <div style="padding:1.2rem 1.4rem;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:space-between;">
         <div style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--text);">🏢 Manage Companies</div>
-        <button onclick="document.getElementById('companyMgrModal').remove()" style="background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;">✕</button>
+        <button onclick="document.getElementById('companyMgrModal').remove()" style="background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;" title="Close" aria-label="Close manager">✕</button>
       </div>
       <div style="padding:1.2rem 1.4rem;">
         <div style="font-size:0.68rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Company Workspaces</div>
