@@ -640,6 +640,32 @@ body > * { position: relative; z-index: 1; }
 
 .input-group input::placeholder { color: var(--muted); }
 
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.password-wrapper input {
+  padding-right: 2.5rem !important;
+}
+.password-toggle {
+  position: absolute;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+  z-index: 2;
+}
+.password-toggle:hover {
+  color: var(--text);
+}
+
 .auth-btn {
   width: 100%;
   background: linear-gradient(135deg, var(--accent), var(--accent2));
@@ -1880,7 +1906,7 @@ select option { background: #0F1628; color: var(--text); }
     </div>
     <div class="input-group">
       <label>Password</label>
-      <input type="password" id="loginPassword" placeholder="••••••••">
+      <div class="password-wrapper"><input type="password" id="loginPassword" placeholder="••••••••"><button type="button" class="password-toggle" onclick="togglePasswordVisibility('loginPassword', this)" title="Show password" aria-label="Show password">👁️</button></div>
     </div>
     <button class="auth-btn" id="loginBtn">Sign In →</button>
     <div class="link-text">
@@ -1902,8 +1928,8 @@ select option { background: #0F1628; color: var(--text); }
     <div class="warning-badge">⚠️ Admin approval required</div>
     <div id="regMessage" class="error-message"></div>
     <div class="input-group"><label>Username</label><input type="text" id="regUser" placeholder="Choose username"></div>
-    <div class="input-group"><label>Password (min 4)</label><input type="password" id="regPass" placeholder="••••••••"></div>
-    <div class="input-group"><label>Confirm Password</label><input type="password" id="regPass2" placeholder="••••••••"></div>
+    <div class="input-group"><label>Password (min 4)</label><div class="password-wrapper"><input type="password" id="regPass" placeholder="••••••••"><button type="button" class="password-toggle" onclick="togglePasswordVisibility('regPass', this)" title="Show password" aria-label="Show password">👁️</button></div></div>
+    <div class="input-group"><label>Confirm Password</label><div class="password-wrapper"><input type="password" id="regPass2" placeholder="••••••••"><button type="button" class="password-toggle" onclick="togglePasswordVisibility('regPass2', this)" title="Show password" aria-label="Show password">👁️</button></div></div>
     <div class="input-group"><label>Role Request</label>
       <select id="regRole"><option>HR</option><option value="BRANCH_HEAD">BRANCH_HEAD</option><option>SELF_VIEWER</option></select>
     </div>
@@ -1959,11 +1985,11 @@ select option { background: #0F1628; color: var(--text); }
       </div>
       <div class="input-group">
         <label>New Password</label>
-        <input type="password" id="forgotNewPass" placeholder="Min 4 characters">
+        <div class="password-wrapper"><input type="password" id="forgotNewPass" placeholder="Min 4 characters"><button type="button" class="password-toggle" onclick="togglePasswordVisibility('forgotNewPass', this)" title="Show password" aria-label="Show password">👁️</button></div>
       </div>
       <div class="input-group">
         <label>Confirm Password</label>
-        <input type="password" id="forgotConfirmPass" placeholder="Re-enter password">
+        <div class="password-wrapper"><input type="password" id="forgotConfirmPass" placeholder="Re-enter password"><button type="button" class="password-toggle" onclick="togglePasswordVisibility('forgotConfirmPass', this)" title="Show password" aria-label="Show password">👁️</button></div>
       </div>
       <button class="auth-btn" onclick="verifyOTPAndReset()">Reset Password →</button>
       <div style="text-align:center;margin-top:0.5rem;">
@@ -2398,7 +2424,7 @@ select option { background: #0F1628; color: var(--text); }
       <h4 style="margin-bottom:15px;font-family:'Syne',sans-serif;font-size:0.95rem;">Add New User</h4>
       <div class="form-row">
         <div class="form-field"><label>Username</label><input id="newUsername" placeholder="Username"></div>
-        <div class="form-field"><label>Password</label><input id="newPassword" type="password" placeholder="Password"></div>
+        <div class="form-field"><label>Password</label><div class="password-wrapper"><input id="newPassword" type="password" placeholder="Password"><button type="button" class="password-toggle" onclick="togglePasswordVisibility('newPassword', this)" title="Show password" aria-label="Show password">👁️</button></div></div>
         <div class="form-field"><label>Role</label>
           <select id="newRole"><option>HR</option><option>ADMIN</option><option value="BRANCH_HEAD">BRANCH_HEAD</option><option>SELF_VIEWER</option></select>
         </div>
@@ -2847,6 +2873,21 @@ function showLoginLoading(text){
 function hideLoginLoading(){
   const ov=document.getElementById('loginLoadingOverlay');
   if(ov) ov.classList.add('hidden');
+}
+
+function togglePasswordVisibility(inputId, btn) {
+  const input = document.getElementById(inputId);
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.textContent = '🙈'; // 🙈
+    btn.title = 'Hide password';
+    btn.setAttribute('aria-label', 'Hide password');
+  } else {
+    input.type = 'password';
+    btn.textContent = '👁️'; // 👁️
+    btn.title = 'Show password';
+    btn.setAttribute('aria-label', 'Show password');
+  }
 }
 
 async function handleLogin() {
