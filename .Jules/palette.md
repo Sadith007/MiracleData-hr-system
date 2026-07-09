@@ -1,3 +1,0 @@
-## 2025-05-15 - Localized Loading Feedback for Icon-only Buttons
-**Learning:** Prioritize localized loading feedback (e.g., `.spin-icon` animation on the specific icon and disabling the button) over global page-blocking overlays for background data refreshes to improve perceived performance and keep the user in context. When implementing this, apply the rotation animation specifically to a wrapper around the icon (e.g., `<span id=\"refreshIcon\">`) rather than the button element itself to avoid jarring container movement.
-**Action:** Use a wrapper span for icon animations and `try...finally` blocks in JS to ensure UI state recovery.
