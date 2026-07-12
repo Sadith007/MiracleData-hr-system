@@ -826,14 +826,14 @@ body > * { position: relative; z-index: 1; }
   -webkit-backdrop-filter: blur(20px);
 }
 
-.search-box { padding: 1rem; }
+.search-box { padding: 1rem; position: relative; }
 
 .search-box input {
   width: 100%;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
-  padding: 0.6rem 0.8rem 0.6rem 2.2rem;
+  padding: 0.6rem 2.2rem 0.6rem 2.2rem;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%234A6080'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'%3E%3C/path%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: 10px center;
@@ -851,6 +851,25 @@ body > * { position: relative; z-index: 1; }
   box-shadow: 0 0 0 3px rgba(79, 142, 247, 0.1);
 }
 .search-box input::placeholder { color: var(--muted); }
+.search-clear-btn {
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+  z-index: 2;
+}
+.search-clear-btn:hover { color: var(--text); }
+
 
 .sidebar-actions { padding: 0 1rem 0.8rem 1rem; display: flex; gap: 8px; }
 
@@ -2064,7 +2083,7 @@ select option { background: #0F1628; color: var(--text); }
 
   <div class="body-layout">
     <div class="sidebar">
-      <div class="search-box"><input type="text" id="searchInput" placeholder="Search name, ID, dept..."></div>
+      <div class="search-box"><input type="text" id="searchInput" placeholder="Search name, ID, dept..."><button id="clearSearchBtn" class="search-clear-btn" style="display:none;" aria-label="Clear search" title="Clear search">✕</button></div>
       <div id="branchFilterWrap" style="display:none;padding:0 1rem 0.5rem;">
         <select id="branchFilterSel" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:7px 10px;color:var(--text);font-size:0.8rem;outline:none;font-family:'DM Sans',sans-serif;" onchange="renderEmployeeList()">
           <option value="">🏢 All Branches</option>
@@ -4225,7 +4244,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   document.getElementById('saveEmpBtn').addEventListener('click',saveEmployee);
   document.getElementById('refreshListBtn').addEventListener('click',async()=>{showLoading();await loadDB(true);hideLoading();renderEmployeeList();if(selectedEmployeeId)renderDetail(selectedEmployeeId);showToast('Cloud data refreshed','success');});
   let searchRenderTimer;
-  document.getElementById('searchInput').addEventListener('input',()=>{clearTimeout(searchRenderTimer);searchRenderTimer=setTimeout(renderEmployeeList,120);});
+  const searchInput=document.getElementById('searchInput');const clearBtn=document.getElementById('clearSearchBtn');searchInput.addEventListener('input',()=>{clearTimeout(searchRenderTimer);searchRenderTimer=setTimeout(renderEmployeeList,120);if(clearBtn)clearBtn.style.display=searchInput.value?'flex':'none';});if(clearBtn)clearBtn.addEventListener('click',()=>{searchInput.value='';clearBtn.style.display='none';renderEmployeeList();searchInput.focus();});
   document.getElementById('attendanceBtn').addEventListener('click',openAttendance);
   document.getElementById('attHistBtn').addEventListener('click',openAttHistory);
   document.getElementById('leaveBtn').addEventListener('click',openLeave);
