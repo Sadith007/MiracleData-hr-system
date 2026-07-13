@@ -1875,11 +1875,11 @@ select option { background: #0F1628; color: var(--text); }
     <p>Complete HR & Payroll Management</p>
     <div id="loginError" class="error-message"></div>
     <div class="input-group">
-      <label>Username</label>
+      <label for="loginUsername">Username</label>
       <input type="text" id="loginUsername" placeholder="Enter username">
     </div>
     <div class="input-group">
-      <label>Password</label>
+      <label for="loginPassword">Password</label>
       <input type="password" id="loginPassword" placeholder="••••••••">
     </div>
     <button class="auth-btn" id="loginBtn">Sign In →</button>
@@ -1942,7 +1942,7 @@ select option { background: #0F1628; color: var(--text); }
     <!-- Step 1: Enter username -->
     <div id="forgotStep1">
       <div class="input-group">
-        <label>Username</label>
+        <label for="forgotUsername">Username</label>
         <input type="text" id="forgotUsername" placeholder="Enter your username">
       </div>
       <button class="auth-btn" onclick="requestOTP()">Request OTP →</button>
@@ -1954,15 +1954,15 @@ select option { background: #0F1628; color: var(--text); }
         ✅ OTP generated! Contact admin to get your OTP code.
       </div>
       <div class="input-group">
-        <label>OTP Code</label>
+        <label for="forgotOTP">OTP Code</label>
         <input type="text" id="forgotOTP" placeholder="Enter 6-digit OTP" maxlength="6" style="letter-spacing:4px;text-align:center;font-size:1.1rem;font-weight:700;">
       </div>
       <div class="input-group">
-        <label>New Password</label>
+        <label for="forgotNewPass">New Password</label>
         <input type="password" id="forgotNewPass" placeholder="Min 4 characters">
       </div>
       <div class="input-group">
-        <label>Confirm Password</label>
+        <label for="forgotConfirmPass">Confirm Password</label>
         <input type="password" id="forgotConfirmPass" placeholder="Re-enter password">
       </div>
       <button class="auth-btn" onclick="verifyOTPAndReset()">Reset Password →</button>
