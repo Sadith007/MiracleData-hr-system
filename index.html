@@ -2077,7 +2077,7 @@ select option { background: #0F1628; color: var(--text); }
       <div id="employeeListContainer" class="employee-list"></div>
     </div>
     <div id="detailContainer" class="detail-panel">
-      <div class="empty-state"><span>👤</span><p>Select an employee to view profile</p></div>
+      <div class="empty-state"><span aria-hidden="true">👤</span><p>Select an employee to view profile</p></div>
     </div>
   </div>
 </div>
@@ -3124,7 +3124,7 @@ function renderEmployeeList() {
   const filtered=emps.filter(e=>(e.fullName?.toLowerCase().includes(search)||e.empId?.toLowerCase().includes(search)||e.department?.toLowerCase().includes(search)));
   const container=document.getElementById('employeeListContainer');
   if(!container)return;
-  if(!filtered.length){container.innerHTML='<div style="padding:1rem;text-align:center;color:var(--muted);">No employees found</div>';return;}
+  if(!filtered.length){container.innerHTML='<div class="empty-state" style="padding:2rem 1rem;"><span aria-hidden="true">🔍</span><p>No employees found</p></div>';return;}
   const visible=filtered.slice(0,150);
   const more=filtered.length>visible.length?`<div style="padding:0.75rem 1rem;text-align:center;color:var(--muted);font-size:0.78rem;">Showing ${visible.length} of ${filtered.length}. Use search to narrow results.</div>`:'';
   container.innerHTML=visible.map(emp=>`<div class="emp-card ${selectedEmployeeId===emp.id?'active':''}" data-emp-id="${emp.id}" onclick="selectEmployee(${emp.id})"><div class="avatar" style="overflow:hidden;padding:0;">${emp.photo?`<img class='avatar-img' loading='lazy' src='${emp.photo}'>`:`<span>${emp.fullName?.charAt(0)||'?'}</span>`}</div><div class="emp-info"><div class="emp-name">${emp.fullName||'Unnamed'}</div><div class="emp-meta">${emp.empId||''} · ${emp.department||'-'}${emp.location?` · ${emp.location}`:''}</div></div><div class="status-dot" style="background:${emp.status==='Active'?'#14C47E':'#F05252'}"></div></div>`).join('')+more;
@@ -3140,8 +3140,8 @@ function selectEmployee(id) {
 function renderDetail(id) {
   const emp=DB.employees.find(e=>e.id==id);
   const container=document.getElementById('detailContainer');
-  if(!emp){container.innerHTML='<div class="empty-state"><span>👤</span><p>Select an employee to view profile</p></div>';return;}
-  if(!canAccessEmployee(emp.id)){container.innerHTML='<div class="empty-state"><span>🔒</span><p>No access to this employee</p></div>';return;}
+  if(!emp){container.innerHTML='<div class="empty-state"><span aria-hidden="true">👤</span><p>Select an employee to view profile</p></div>';return;}
+  if(!canAccessEmployee(emp.id)){container.innerHTML='<div class="empty-state"><span aria-hidden="true">🔒</span><p>No access to this employee</p></div>';return;}
   const canEdit=currentUser?.role!=='SELF_VIEWER'&&(currentUser?.role==='ADMIN'||currentUser?.role==='HR'||(isBranchHeadRole()&&employeeInBranch(emp)));
   const empPayrolls=DB.payrolls.filter(p=>p.employeeId==id).sort((a,b)=>b.month.localeCompare(a.month));
   container.innerHTML=`
@@ -3923,7 +3923,7 @@ function renderLeaveList() {
   }
   list=list.sort((a,b)=>b.createdAt.localeCompare(a.createdAt));
   const c=document.getElementById('lvListContainer');
-  if(!list.length){c.innerHTML='<div style="color:var(--muted);text-align:center;padding:2rem;">No leave requests found</div>';return;}
+  if(!list.length){c.innerHTML='<div class="empty-state"><span aria-hidden="true">📅</span><p>No leave requests found</p></div>';return;}
   c.innerHTML=list.map(l=>{
     const emp=DB.employees.find(e=>e.id===l.employeeId);
     const sc=l.status==='Approved'?'leave-approved':l.status==='Rejected'?'leave-rejected':'leave-pending';
@@ -4453,7 +4453,7 @@ function renderLocList() {
   const container = document.getElementById('locListContainer');
   if (!container) return;
   if (!locs.length) {
-    container.innerHTML = `<div style="padding:1.2rem;text-align:center;color:var(--muted);font-size:0.8rem;">${search ? 'No results found' : 'No locations yet.<br>Add your first one below!'}</div>`;
+    container.innerHTML = `<div class="empty-state"><span aria-hidden="true">📍</span><p>${search ? 'No results found' : 'No locations yet.<br>Add your first one below!'}</p></div>`;
     return;
   }
   container.innerHTML = locs.map(loc => {
