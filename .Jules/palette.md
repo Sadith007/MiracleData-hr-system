@@ -1,0 +1,3 @@
+## 2025-02-14 - Systematic Form Label Pairings for Accessibility
+**Learning:** In a monolithic application with rich form views (Login, Registration, Password Reset), form labels often lack the explicit semantic association (`for` attribute matching `id`) required by assistive technologies. This oversight also disables native browser behavior, such as click-to-focus on labels, which significantly hurts usability, especially on mobile and touch devices.
+**Action:** Always systematically verify that every form field's `<label>` has a `for` attribute strictly corresponding to its companion input or select element's `id` to enable click-to-focus and correct screen reader context announcement.
