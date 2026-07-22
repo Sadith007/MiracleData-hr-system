@@ -1,0 +1,3 @@
+## 2026-07-22 - Form Label and Close Button Accessibility Gaps
+**Learning:** Monolithic web applications with complex interactive forms and modal dialogs often omit semantic relationships like `<label for="...">` associations and accessible names (`aria-label`) on icon-only buttons (e.g., '✕'). This severely compromises assistive technology usability and breaks click-to-focus mouse behavior.
+**Action:** Always map each form label to its corresponding input using a precise `for` attribute and ensure all icon-only buttons (like modal close elements) carry clear `aria-label` and `title` attributes.
