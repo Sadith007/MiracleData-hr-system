@@ -1875,11 +1875,11 @@ select option { background: #0F1628; color: var(--text); }
     <p>Complete HR & Payroll Management</p>
     <div id="loginError" class="error-message"></div>
     <div class="input-group">
-      <label>Username</label>
+      <label for="loginUsername">Username</label>
       <input type="text" id="loginUsername" placeholder="Enter username">
     </div>
     <div class="input-group">
-      <label>Password</label>
+      <label for="loginPassword">Password</label>
       <input type="password" id="loginPassword" placeholder="••••••••">
     </div>
     <button class="auth-btn" id="loginBtn">Sign In →</button>
@@ -1901,31 +1901,31 @@ select option { background: #0F1628; color: var(--text); }
     <p>Submit for admin approval</p>
     <div class="warning-badge">⚠️ Admin approval required</div>
     <div id="regMessage" class="error-message"></div>
-    <div class="input-group"><label>Username</label><input type="text" id="regUser" placeholder="Choose username"></div>
-    <div class="input-group"><label>Password (min 4)</label><input type="password" id="regPass" placeholder="••••••••"></div>
-    <div class="input-group"><label>Confirm Password</label><input type="password" id="regPass2" placeholder="••••••••"></div>
-    <div class="input-group"><label>Role Request</label>
+    <div class="input-group"><label for="regUser">Username</label><input type="text" id="regUser" placeholder="Choose username"></div>
+    <div class="input-group"><label for="regPass">Password (min 4)</label><input type="password" id="regPass" placeholder="••••••••"></div>
+    <div class="input-group"><label for="regPass2">Confirm Password</label><input type="password" id="regPass2" placeholder="••••••••"></div>
+    <div class="input-group"><label for="regRole">Role Request</label>
       <select id="regRole"><option>HR</option><option value="BRANCH_HEAD">BRANCH_HEAD</option><option>SELF_VIEWER</option></select>
     </div>
     <div id="svRegNote" style="display:none;background:rgba(56,201,168,0.08);border:1px solid rgba(56,201,168,0.2);border-radius:10px;padding:0.6rem 0.9rem;font-size:0.75rem;color:#38C9A8;margin-bottom:0.8rem;">
       📋 SELF_VIEWER — Please enter your data and submit it, admin will approve the request, Then you can view your profile.
     </div>
     <div id="svRegFields" style="display:none;">
-      <div class="input-group"><label>Full Name *</label><input id="sv_fullName" placeholder="John Doe"></div>
-      <div class="input-group"><label>Mobile *</label><input id="sv_mobile" placeholder="+94 XX XXX XXXX"></div>
-      <div class="input-group"><label>NIC *</label><input id="sv_nic" placeholder="123456789V"></div>
-      <div class="input-group"><label>Email</label><input id="sv_email" placeholder="john@example.com"></div>
-      <div class="input-group"><label>Date of Birth</label><input id="sv_dob" placeholder="YYYY-MM-DD"></div>
-      <div class="input-group"><label>Address</label><input id="sv_address" placeholder="Permanent address"></div>
-      <div class="input-group"><label>Department</label><input id="sv_dept" placeholder="IT, HR, Sales..."></div>
-      <div class="input-group"><label>Designation</label><input id="sv_designation" placeholder="Software Engineer"></div>
-      <div class="input-group"><label>Employee ID (if known)</label><input id="sv_empId" placeholder="EMP001"></div>
-      <div class="input-group"><label>Date of Joining</label><input id="sv_doj" placeholder="YYYY-MM-DD"></div>
-      <div class="input-group"><label>Bank Name</label><input id="sv_bankName" placeholder="Commercial Bank"></div>
-      <div class="input-group"><label>Account Number</label><input id="sv_bankAcc" placeholder="Account number"></div>
+      <div class="input-group"><label for="sv_fullName">Full Name *</label><input id="sv_fullName" placeholder="John Doe"></div>
+      <div class="input-group"><label for="sv_mobile">Mobile *</label><input id="sv_mobile" placeholder="+94 XX XXX XXXX"></div>
+      <div class="input-group"><label for="sv_nic">NIC *</label><input id="sv_nic" placeholder="123456789V"></div>
+      <div class="input-group"><label for="sv_email">Email</label><input id="sv_email" placeholder="john@example.com"></div>
+      <div class="input-group"><label for="sv_dob">Date of Birth</label><input id="sv_dob" placeholder="YYYY-MM-DD"></div>
+      <div class="input-group"><label for="sv_address">Address</label><input id="sv_address" placeholder="Permanent address"></div>
+      <div class="input-group"><label for="sv_dept">Department</label><input id="sv_dept" placeholder="IT, HR, Sales..."></div>
+      <div class="input-group"><label for="sv_designation">Designation</label><input id="sv_designation" placeholder="Software Engineer"></div>
+      <div class="input-group"><label for="sv_empId">Employee ID (if known)</label><input id="sv_empId" placeholder="EMP001"></div>
+      <div class="input-group"><label for="sv_doj">Date of Joining</label><input id="sv_doj" placeholder="YYYY-MM-DD"></div>
+      <div class="input-group"><label for="sv_bankName">Bank Name</label><input id="sv_bankName" placeholder="Commercial Bank"></div>
+      <div class="input-group"><label for="sv_bankAcc">Account Number</label><input id="sv_bankAcc" placeholder="Account number"></div>
     </div>
-    <div class="input-group" id="regEmailField"><label>Email <span style="font-size:0.7rem;color:var(--muted);">(for OTP password reset)</span></label><input type="email" id="regEmail" placeholder="your@email.com"></div>
-    <div class="input-group" id="deptFieldReg" style="display:none;"><label>Location / Branch *</label><input type="text" id="regDept" placeholder="e.g., Kandy, Galle Branch"></div>
+    <div class="input-group" id="regEmailField"><label for="regEmail">Email <span style="font-size:0.7rem;color:var(--muted);">(for OTP password reset)</span></label><input type="email" id="regEmail" placeholder="your@email.com"></div>
+    <div class="input-group" id="deptFieldReg" style="display:none;"><label for="regDept">Location / Branch *</label><input type="text" id="regDept" placeholder="e.g., Kandy, Galle Branch"></div>
     <button class="auth-btn" id="registerSubmitBtn">Submit Request</button>
     <div class="link-text"><button id="backToLoginBtn">← Back to Sign In</button></div>
   </div>
@@ -1942,7 +1942,7 @@ select option { background: #0F1628; color: var(--text); }
     <!-- Step 1: Enter username -->
     <div id="forgotStep1">
       <div class="input-group">
-        <label>Username</label>
+        <label for="forgotUsername">Username</label>
         <input type="text" id="forgotUsername" placeholder="Enter your username">
       </div>
       <button class="auth-btn" onclick="requestOTP()">Request OTP →</button>
@@ -1954,15 +1954,15 @@ select option { background: #0F1628; color: var(--text); }
         ✅ OTP generated! Contact admin to get your OTP code.
       </div>
       <div class="input-group">
-        <label>OTP Code</label>
+        <label for="forgotOTP">OTP Code</label>
         <input type="text" id="forgotOTP" placeholder="Enter 6-digit OTP" maxlength="6" style="letter-spacing:4px;text-align:center;font-size:1.1rem;font-weight:700;">
       </div>
       <div class="input-group">
-        <label>New Password</label>
+        <label for="forgotNewPass">New Password</label>
         <input type="password" id="forgotNewPass" placeholder="Min 4 characters">
       </div>
       <div class="input-group">
-        <label>Confirm Password</label>
+        <label for="forgotConfirmPass">Confirm Password</label>
         <input type="password" id="forgotConfirmPass" placeholder="Re-enter password">
       </div>
       <button class="auth-btn" onclick="verifyOTPAndReset()">Reset Password →</button>
