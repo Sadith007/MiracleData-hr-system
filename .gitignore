@@ -1,0 +1,6 @@
+# Verification and logs
+server.log
+verification/
+*.png
+*.pyc
+.DS_Store
