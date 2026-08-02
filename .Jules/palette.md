@@ -1,0 +1,3 @@
+## 2026-07-04 - Form Label Association and Click-to-Focus Accessibility
+**Learning:** A common accessibility and UX issue in web applications is the lack of explicit association between `<label>` elements and their corresponding input fields. This prevents screen readers from announcing field labels automatically and breaks touch/click-to-focus behavior, which makes forms harder to navigate on mobile devices and for users with motor impairments.
+**Action:** Systematically add the `for` attribute to all static `<label>` elements, matching the `id` of their next corresponding interactive input, select, or textarea element. Ensure this is maintained during code updates.

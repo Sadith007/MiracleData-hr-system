@@ -401,7 +401,7 @@ body::before {
 .hc-bubble li { margin: 2px 0; }
 .hc-bubble p { margin: 3px 0; }
 .hc-bubble strong { font-weight: 600; }
-  
+
 body > * { position: relative; z-index: 1; }
 /* ===== PERFORMANCE: Reduce heavy visual effects on low-end devices ===== */
 @media (max-width: 1400px) and (max-height: 900px) {
@@ -1875,11 +1875,11 @@ select option { background: #0F1628; color: var(--text); }
     <p>Complete HR & Payroll Management</p>
     <div id="loginError" class="error-message"></div>
     <div class="input-group">
-      <label>Username</label>
+      <label for="loginUsername">Username</label>
       <input type="text" id="loginUsername" placeholder="Enter username">
     </div>
     <div class="input-group">
-      <label>Password</label>
+      <label for="loginPassword">Password</label>
       <input type="password" id="loginPassword" placeholder="••••••••">
     </div>
     <button class="auth-btn" id="loginBtn">Sign In →</button>
@@ -1901,31 +1901,31 @@ select option { background: #0F1628; color: var(--text); }
     <p>Submit for admin approval</p>
     <div class="warning-badge">⚠️ Admin approval required</div>
     <div id="regMessage" class="error-message"></div>
-    <div class="input-group"><label>Username</label><input type="text" id="regUser" placeholder="Choose username"></div>
-    <div class="input-group"><label>Password (min 4)</label><input type="password" id="regPass" placeholder="••••••••"></div>
-    <div class="input-group"><label>Confirm Password</label><input type="password" id="regPass2" placeholder="••••••••"></div>
-    <div class="input-group"><label>Role Request</label>
+    <div class="input-group"><label for="regUser">Username</label><input type="text" id="regUser" placeholder="Choose username"></div>
+    <div class="input-group"><label for="regPass">Password (min 4)</label><input type="password" id="regPass" placeholder="••••••••"></div>
+    <div class="input-group"><label for="regPass2">Confirm Password</label><input type="password" id="regPass2" placeholder="••••••••"></div>
+    <div class="input-group"><label for="regRole">Role Request</label>
       <select id="regRole"><option>HR</option><option value="BRANCH_HEAD">BRANCH_HEAD</option><option>SELF_VIEWER</option></select>
     </div>
     <div id="svRegNote" style="display:none;background:rgba(56,201,168,0.08);border:1px solid rgba(56,201,168,0.2);border-radius:10px;padding:0.6rem 0.9rem;font-size:0.75rem;color:#38C9A8;margin-bottom:0.8rem;">
       📋 SELF_VIEWER — Please enter your data and submit it, admin will approve the request, Then you can view your profile.
     </div>
     <div id="svRegFields" style="display:none;">
-      <div class="input-group"><label>Full Name *</label><input id="sv_fullName" placeholder="John Doe"></div>
-      <div class="input-group"><label>Mobile *</label><input id="sv_mobile" placeholder="+94 XX XXX XXXX"></div>
-      <div class="input-group"><label>NIC *</label><input id="sv_nic" placeholder="123456789V"></div>
-      <div class="input-group"><label>Email</label><input id="sv_email" placeholder="john@example.com"></div>
-      <div class="input-group"><label>Date of Birth</label><input id="sv_dob" placeholder="YYYY-MM-DD"></div>
-      <div class="input-group"><label>Address</label><input id="sv_address" placeholder="Permanent address"></div>
-      <div class="input-group"><label>Department</label><input id="sv_dept" placeholder="IT, HR, Sales..."></div>
-      <div class="input-group"><label>Designation</label><input id="sv_designation" placeholder="Software Engineer"></div>
-      <div class="input-group"><label>Employee ID (if known)</label><input id="sv_empId" placeholder="EMP001"></div>
-      <div class="input-group"><label>Date of Joining</label><input id="sv_doj" placeholder="YYYY-MM-DD"></div>
-      <div class="input-group"><label>Bank Name</label><input id="sv_bankName" placeholder="Commercial Bank"></div>
-      <div class="input-group"><label>Account Number</label><input id="sv_bankAcc" placeholder="Account number"></div>
+      <div class="input-group"><label for="sv_fullName">Full Name *</label><input id="sv_fullName" placeholder="John Doe"></div>
+      <div class="input-group"><label for="sv_mobile">Mobile *</label><input id="sv_mobile" placeholder="+94 XX XXX XXXX"></div>
+      <div class="input-group"><label for="sv_nic">NIC *</label><input id="sv_nic" placeholder="123456789V"></div>
+      <div class="input-group"><label for="sv_email">Email</label><input id="sv_email" placeholder="john@example.com"></div>
+      <div class="input-group"><label for="sv_dob">Date of Birth</label><input id="sv_dob" placeholder="YYYY-MM-DD"></div>
+      <div class="input-group"><label for="sv_address">Address</label><input id="sv_address" placeholder="Permanent address"></div>
+      <div class="input-group"><label for="sv_dept">Department</label><input id="sv_dept" placeholder="IT, HR, Sales..."></div>
+      <div class="input-group"><label for="sv_designation">Designation</label><input id="sv_designation" placeholder="Software Engineer"></div>
+      <div class="input-group"><label for="sv_empId">Employee ID (if known)</label><input id="sv_empId" placeholder="EMP001"></div>
+      <div class="input-group"><label for="sv_doj">Date of Joining</label><input id="sv_doj" placeholder="YYYY-MM-DD"></div>
+      <div class="input-group"><label for="sv_bankName">Bank Name</label><input id="sv_bankName" placeholder="Commercial Bank"></div>
+      <div class="input-group"><label for="sv_bankAcc">Account Number</label><input id="sv_bankAcc" placeholder="Account number"></div>
     </div>
-    <div class="input-group" id="regEmailField"><label>Email <span style="font-size:0.7rem;color:var(--muted);">(for OTP password reset)</span></label><input type="email" id="regEmail" placeholder="your@email.com"></div>
-    <div class="input-group" id="deptFieldReg" style="display:none;"><label>Location / Branch *</label><input type="text" id="regDept" placeholder="e.g., Kandy, Galle Branch"></div>
+    <div class="input-group" id="regEmailField"><label for="regEmail">Email <span style="font-size:0.7rem;color:var(--muted);">(for OTP password reset)</span></label><input type="email" id="regEmail" placeholder="your@email.com"></div>
+    <div class="input-group" id="deptFieldReg" style="display:none;"><label for="regDept">Location / Branch *</label><input type="text" id="regDept" placeholder="e.g., Kandy, Galle Branch"></div>
     <button class="auth-btn" id="registerSubmitBtn">Submit Request</button>
     <div class="link-text"><button id="backToLoginBtn">← Back to Sign In</button></div>
   </div>
@@ -1942,7 +1942,7 @@ select option { background: #0F1628; color: var(--text); }
     <!-- Step 1: Enter username -->
     <div id="forgotStep1">
       <div class="input-group">
-        <label>Username</label>
+        <label for="forgotUsername">Username</label>
         <input type="text" id="forgotUsername" placeholder="Enter your username">
       </div>
       <button class="auth-btn" onclick="requestOTP()">Request OTP →</button>
@@ -1954,15 +1954,15 @@ select option { background: #0F1628; color: var(--text); }
         ✅ OTP generated! Contact admin to get your OTP code.
       </div>
       <div class="input-group">
-        <label>OTP Code</label>
+        <label for="forgotOTP">OTP Code</label>
         <input type="text" id="forgotOTP" placeholder="Enter 6-digit OTP" maxlength="6" style="letter-spacing:4px;text-align:center;font-size:1.1rem;font-weight:700;">
       </div>
       <div class="input-group">
-        <label>New Password</label>
+        <label for="forgotNewPass">New Password</label>
         <input type="password" id="forgotNewPass" placeholder="Min 4 characters">
       </div>
       <div class="input-group">
-        <label>Confirm Password</label>
+        <label for="forgotConfirmPass">Confirm Password</label>
         <input type="password" id="forgotConfirmPass" placeholder="Re-enter password">
       </div>
       <button class="auth-btn" onclick="verifyOTPAndReset()">Reset Password →</button>
@@ -2104,53 +2104,53 @@ select option { background: #0F1628; color: var(--text); }
             <input type="file" id="empPhotoInput" accept="image/*" style="display:none;" onchange="handleEmpPhotoUpload(event)">
           </div>
           <div style="flex:1;">
-            <div class="form-field" style="margin-bottom:12px;"><label>Full Name *</label><input id="empFullName" placeholder="John Doe"></div>
-            <div class="form-field"><label>Employee ID Quick Set</label><input id="empIdQuick" placeholder="EMP001" oninput="document.getElementById('empId').value=this.value"></div>
+            <div class="form-field" style="margin-bottom:12px;"><label for="empFullName">Full Name *</label><input id="empFullName" placeholder="John Doe"></div>
+            <div class="form-field"><label for="empIdQuick">Employee ID Quick Set</label><input id="empIdQuick" placeholder="EMP001" oninput="document.getElementById('empId').value=this.value"></div>
           </div>
         </div>
         <div class="form-row">
-          <div class="form-field"><label>Email</label><input id="empEmail" placeholder="john@company.com"></div>
-          <div class="form-field"><label>Mobile *</label><input id="empMobile" placeholder="+94 XX XXX XXXX"></div>
+          <div class="form-field"><label for="empEmail">Email</label><input id="empEmail" placeholder="john@company.com"></div>
+          <div class="form-field"><label for="empMobile">Mobile *</label><input id="empMobile" placeholder="+94 XX XXX XXXX"></div>
         </div>
         <div class="form-row">
-          <div class="form-field"><label>NIC</label><input id="empNic" placeholder="123456789V"></div>
-          <div class="form-field"><label>Date of Birth</label><input id="empDob" placeholder="YYYY-MM-DD"></div>
+          <div class="form-field"><label for="empNic">NIC</label><input id="empNic" placeholder="123456789V"></div>
+          <div class="form-field"><label for="empDob">Date of Birth</label><input id="empDob" placeholder="YYYY-MM-DD"></div>
         </div>
         <div class="form-row">
-          <div class="form-field"><label>Gender</label><select id="empGender"><option>Male</option><option>Female</option></select></div>
-          <div class="form-field"><label>Marital Status</label><select id="empMarital"><option>Single</option><option>Married</option></select></div>
+          <div class="form-field"><label for="empGender">Gender</label><select id="empGender"><option>Male</option><option>Female</option></select></div>
+          <div class="form-field"><label for="empMarital">Marital Status</label><select id="empMarital"><option>Single</option><option>Married</option></select></div>
         </div>
-        <div class="form-field"><label>Permanent Address</label><textarea id="empAddress" rows="2" placeholder="Full address" style="width:100%;resize:vertical;"></textarea></div>
+        <div class="form-field"><label for="empAddress">Permanent Address</label><textarea id="empAddress" rows="2" placeholder="Full address" style="width:100%;resize:vertical;"></textarea></div>
         <div class="form-row">
-          <div class="form-field"><label>Emergency Name</label><input id="empEmergeName" placeholder="Emergency contact"></div>
-          <div class="form-field"><label>Emergency Phone</label><input id="empEmergePhone" placeholder="Emergency number"></div>
+          <div class="form-field"><label for="empEmergeName">Emergency Name</label><input id="empEmergeName" placeholder="Emergency contact"></div>
+          <div class="form-field"><label for="empEmergePhone">Emergency Phone</label><input id="empEmergePhone" placeholder="Emergency number"></div>
         </div>
       </div>
       <div id="tab1" class="tab-pane">
         <div class="form-row">
-          <div class="form-field"><label>Employee ID *</label><input id="empId" placeholder="EMP001"></div>
-          <div class="form-field"><label>Department</label><input id="empDept" placeholder="IT, HR, Sales"></div>
+          <div class="form-field"><label for="empId">Employee ID *</label><input id="empId" placeholder="EMP001"></div>
+          <div class="form-field"><label for="empDept">Department</label><input id="empDept" placeholder="IT, HR, Sales"></div>
         </div>
         <div class="form-row">
-          <div class="form-field"><label>Designation</label><input id="empDesignation" placeholder="Software Engineer"></div>
-          <div class="form-field"><label>Date of Joining</label><input id="empDoj" placeholder="YYYY-MM-DD"></div>
+          <div class="form-field"><label for="empDesignation">Designation</label><input id="empDesignation" placeholder="Software Engineer"></div>
+          <div class="form-field"><label for="empDoj">Date of Joining</label><input id="empDoj" placeholder="YYYY-MM-DD"></div>
         </div>
         <div class="form-row">
-          <div class="form-field"><label>Employment Type</label><select id="empType"><option>Permanent</option><option>Contract</option></select></div>
-          <div class="form-field"><label>Current Status</label><select id="empStatus"><option>Active</option><option>Resigned</option><option>Terminated</option></select></div>
+          <div class="form-field"><label for="empType">Employment Type</label><select id="empType"><option>Permanent</option><option>Contract</option></select></div>
+          <div class="form-field"><label for="empStatus">Current Status</label><select id="empStatus"><option>Active</option><option>Resigned</option><option>Terminated</option></select></div>
         </div>
-       <div class="form-field"><label>Work Location</label><select id="empLocation" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.82rem;outline:none;font-family:'DM Sans',sans-serif;"><option value="">— Select Location —</option></select></div>
+       <div class="form-field"><label for="empLocation">Work Location</label><select id="empLocation" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.82rem;outline:none;font-family:'DM Sans',sans-serif;"><option value="">— Select Location —</option></select></div>
       </div>
       <div id="tab2" class="tab-pane">
         <div class="form-row">
-          <div class="form-field"><label>Basic Salary (LKR)</label><input type="number" id="empSalary" placeholder="0.00"></div>
-          <div class="form-field"><label>Bank Account</label><input id="empBankAccount" placeholder="Account number"></div>
+          <div class="form-field"><label for="empSalary">Basic Salary (LKR)</label><input type="number" id="empSalary" placeholder="0.00"></div>
+          <div class="form-field"><label for="empBankAccount">Bank Account</label><input id="empBankAccount" placeholder="Account number"></div>
         </div>
         <div class="form-row">
-          <div class="form-field"><label>Bank Name</label><input id="empBankName" placeholder="Bank name"></div>
-          <div class="form-field"><label>Payment Method</label><select id="empPayMethod"><option>Bank Transfer</option><option>Cash</option></select></div>
+          <div class="form-field"><label for="empBankName">Bank Name</label><input id="empBankName" placeholder="Bank name"></div>
+          <div class="form-field"><label for="empPayMethod">Payment Method</label><select id="empPayMethod"><option>Bank Transfer</option><option>Cash</option></select></div>
         </div>
-        <div class="form-field"><label>HR Remarks</label><textarea id="empRemarks" rows="2" placeholder="Notes..." style="width:100%;resize:vertical;"></textarea></div>
+        <div class="form-field"><label for="empRemarks">HR Remarks</label><textarea id="empRemarks" rows="2" placeholder="Notes..." style="width:100%;resize:vertical;"></textarea></div>
       </div>
     </div>
     <div class="modal-footer"><button class="btn" onclick="closeModal('empModal')">Cancel</button><button id="saveEmpBtn" class="btn btn-primary">Save Employee</button></div>
@@ -2163,27 +2163,27 @@ select option { background: #0F1628; color: var(--text); }
     <div class="modal-header"><h3>💰 Payroll Management</h3><button class="btn btn-sm" onclick="closeModal('payrollModal')">✕</button></div>
     <div class="modal-body">
       <div class="form-row">
-        <div class="form-field"><label>Select Employee</label><select id="payrollEmpSelect"></select></div>
-        <div class="form-field"><label>Month (YYYY-MM)</label><input id="payMonth" placeholder="2025-03"></div>
+        <div class="form-field"><label for="payrollEmpSelect">Select Employee</label><select id="payrollEmpSelect"></select></div>
+        <div class="form-field"><label for="payMonth">Month (YYYY-MM)</label><input id="payMonth" placeholder="2025-03"></div>
       </div>
       <div class="form-row">
-        <div class="form-field"><label>Basic Salary</label><input type="number" id="payBasic" readonly></div>
-        <div class="form-field"><label>Transport Allowance</label><input type="number" id="payTransport" value="0" oninput="calculatePayroll()"></div>
+        <div class="form-field"><label for="payBasic">Basic Salary</label><input type="number" id="payBasic" readonly></div>
+        <div class="form-field"><label for="payTransport">Transport Allowance</label><input type="number" id="payTransport" value="0" oninput="calculatePayroll()"></div>
       </div>
       <div class="form-row">
-        <div class="form-field"><label>Meal Allowance</label><input type="number" id="payMeal" value="0" oninput="calculatePayroll()"></div>
-        <div class="form-field"><label>Other Allowance</label><input type="number" id="payOtherAllow" value="0" oninput="calculatePayroll()"></div>
+        <div class="form-field"><label for="payMeal">Meal Allowance</label><input type="number" id="payMeal" value="0" oninput="calculatePayroll()"></div>
+        <div class="form-field"><label for="payOtherAllow">Other Allowance</label><input type="number" id="payOtherAllow" value="0" oninput="calculatePayroll()"></div>
       </div>
       <div class="form-row">
-        <div class="form-field"><label>EPF - Employee Deduction (8%)</label><input type="number" id="payEpf" value="0" oninput="calculatePayroll()"></div>
+        <div class="form-field"><label for="payEpf">EPF - Employee Deduction (8%)</label><input type="number" id="payEpf" value="0" oninput="calculatePayroll()"></div>
 
       </div>
       <div class="form-row">
-        <div class="form-field"><label>Salary Advance</label><input type="number" id="payAdvance" value="0" oninput="calculatePayroll()"></div>
-        <div class="form-field"><label>Tax (PAYE)</label><input type="number" id="payTax" value="0" oninput="calculatePayroll()"></div>
+        <div class="form-field"><label for="payAdvance">Salary Advance</label><input type="number" id="payAdvance" value="0" oninput="calculatePayroll()"></div>
+        <div class="form-field"><label for="payTax">Tax (PAYE)</label><input type="number" id="payTax" value="0" oninput="calculatePayroll()"></div>
       </div>
       <div class="form-row">
-        <div class="form-field"><label>Other Deductions</label><input type="number" id="payOtherDed" value="0" oninput="calculatePayroll()"></div>
+        <div class="form-field"><label for="payOtherDed">Other Deductions</label><input type="number" id="payOtherDed" value="0" oninput="calculatePayroll()"></div>
       </div>
       <div id="payrollSummary" class="payroll-summary"></div>
       <div id="payrollHistory" style="margin-top:20px;"></div>
@@ -2229,11 +2229,11 @@ select option { background: #0F1628; color: var(--text); }
           <div class="att-table-wrap"><table class="att-table" id="attPreviewTable"></table></div>
           <div class="form-row" style="margin-bottom:1rem;">
             <div class="form-field">
-              <label>Payroll Month</label>
+              <label for="attPayMonth">Payroll Month</label>
               <input id="attPayMonth" type="month" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.8rem;outline:none;">
             </div>
             <div class="form-field">
-              <label>Working Days in Month</label>
+              <label for="attWorkingDays">Working Days in Month</label>
               <input id="attWorkingDays" type="number" value="26" min="1" max="31" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.8rem;outline:none;">
             </div>
           </div>
@@ -2301,8 +2301,8 @@ select option { background: #0F1628; color: var(--text); }
       </div>
       <div id="lvApply" class="report-pane active">
         <div class="form-row">
-          <div class="form-field"><label>Employee</label><select id="lvEmpSel" style="width:100%;"></select></div>
-          <div class="form-field"><label>Leave Type</label>
+          <div class="form-field"><label for="lvEmpSel">Employee</label><select id="lvEmpSel" style="width:100%;"></select></div>
+          <div class="form-field"><label for="lvType">Leave Type</label>
             <select id="lvType" style="width:100%;">
               <option value="Annual">Annual Leave</option><option value="Casual">Casual Leave</option>
               <option value="Sick">Sick Leave</option><option value="Maternity">Maternity Leave</option>
@@ -2311,18 +2311,18 @@ select option { background: #0F1628; color: var(--text); }
           </div>
         </div>
         <div class="form-row">
-          <div class="form-field"><label>From Date</label><input type="date" id="lvFrom" onchange="calcLeaveDays()" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.8rem;outline:none;"></div>
-          <div class="form-field"><label>To Date</label><input type="date" id="lvTo" onchange="calcLeaveDays()" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.8rem;outline:none;"></div>
+          <div class="form-field"><label for="lvFrom">From Date</label><input type="date" id="lvFrom" onchange="calcLeaveDays()" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.8rem;outline:none;"></div>
+          <div class="form-field"><label for="lvTo">To Date</label><input type="date" id="lvTo" onchange="calcLeaveDays()" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.8rem;outline:none;"></div>
         </div>
         <div class="form-row">
-          <div class="form-field"><label>Days Calculated</label><input type="number" id="lvDays" readonly style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--success);font-size:0.8rem;outline:none;font-weight:700;"></div>
-          <div class="form-field" id="lvStatusField"><label>Status</label>
+          <div class="form-field"><label for="lvDays">Days Calculated</label><input type="number" id="lvDays" readonly style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--success);font-size:0.8rem;outline:none;font-weight:700;"></div>
+          <div class="form-field" id="lvStatusField"><label for="lvStatus">Status</label>
             <select id="lvStatus" style="width:100%;">
               <option value="Pending">Pending</option><option value="Approved">Approved</option><option value="Rejected">Rejected</option>
             </select>
           </div>
         </div>
-        <div class="form-field" style="margin-bottom:1rem;"><label>Reason</label><textarea id="lvReason" rows="2" placeholder="Reason for leave..." style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.8rem;outline:none;resize:vertical;"></textarea></div>
+        <div class="form-field" style="margin-bottom:1rem;"><label for="lvReason">Reason</label><textarea id="lvReason" rows="2" placeholder="Reason for leave..." style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.8rem;outline:none;resize:vertical;"></textarea></div>
         <button class="btn btn-primary btn-sm" onclick="submitLeave()">💾 Submit Leave Request</button>
         <div id="lvMsg" style="margin-top:8px;font-size:0.78rem;min-height:1rem;"></div>
       </div>
@@ -2397,14 +2397,14 @@ select option { background: #0F1628; color: var(--text); }
       <hr style="margin:20px 0;border:none;border-top:1px solid rgba(255,255,255,0.07);">
       <h4 style="margin-bottom:15px;font-family:'Syne',sans-serif;font-size:0.95rem;">Add New User</h4>
       <div class="form-row">
-        <div class="form-field"><label>Username</label><input id="newUsername" placeholder="Username"></div>
-        <div class="form-field"><label>Password</label><input id="newPassword" type="password" placeholder="Password"></div>
-        <div class="form-field"><label>Role</label>
+        <div class="form-field"><label for="newUsername">Username</label><input id="newUsername" placeholder="Username"></div>
+        <div class="form-field"><label for="newPassword">Password</label><input id="newPassword" type="password" placeholder="Password"></div>
+        <div class="form-field"><label for="newRole">Role</label>
           <select id="newRole"><option>HR</option><option>ADMIN</option><option value="BRANCH_HEAD">BRANCH_HEAD</option><option>SELF_VIEWER</option></select>
         </div>
       </div>
-      <div class="form-field" id="newDeptField" style="display:none;"><label>Location / Branch *</label><input id="newDept" placeholder="e.g. Kandy, Galle Branch"></div>
-      <div class="form-field"><label>Email (for OTP reset)</label><input id="newEmail" type="email" placeholder="user@example.com"></div>
+      <div class="form-field" id="newDeptField" style="display:none;"><label for="newDept">Location / Branch *</label><input id="newDept" placeholder="e.g. Kandy, Galle Branch"></div>
+      <div class="form-field"><label for="newEmail">Email (for OTP reset)</label><input id="newEmail" type="email" placeholder="user@example.com"></div>
       <button id="addUserBtn" class="btn btn-primary" style="margin-top:10px;">➕ Add User</button>
       <div id="userMsg" class="error-message" style="margin-top:10px;"></div>
       <hr style="margin:20px 0;border:none;border-top:1px solid rgba(255,255,255,0.07);">
@@ -2416,9 +2416,9 @@ select option { background: #0F1628; color: var(--text); }
         <div style="font-size:0.82rem;font-weight:700;color:var(--accent);margin-bottom:10px;">📧 EmailJS Settings <span style="font-size:0.68rem;color:var(--muted);font-weight:400;">(for OTP email delivery)</span></div>
         <div style="font-size:0.72rem;color:var(--muted);margin-bottom:10px;">Create a free account at <a href="https://emailjs.com" target="_blank" style="color:var(--accent);">emailjs.com</a> → Add Email Service → Create Template → copy credentials below.</div>
         <div class="form-row">
-          <div class="form-field"><label style="font-size:0.7rem;">Service ID</label><input id="ejsServiceId" placeholder="service_xxxxxxx" style="font-size:0.8rem;" value="service_c7srw5i"></div>
-          <div class="form-field"><label style="font-size:0.7rem;">Template ID</label><input id="ejsTemplateId" placeholder="template_xxxxxxx" style="font-size:0.8rem;" value="template_x0b37wu"></div>
-          <div class="form-field"><label style="font-size:0.7rem;">Public Key</label><input id="ejsPublicKey" placeholder="xxxxxxxxxxxxxxxxxxxx" style="font-size:0.8rem;" value="9IeznUbAXpMD2OMsP"></div>
+          <div class="form-field"><label for="ejsServiceId" style="font-size:0.7rem;">Service ID</label><input id="ejsServiceId" placeholder="service_xxxxxxx" style="font-size:0.8rem;" value="service_c7srw5i"></div>
+          <div class="form-field"><label for="ejsTemplateId" style="font-size:0.7rem;">Template ID</label><input id="ejsTemplateId" placeholder="template_xxxxxxx" style="font-size:0.8rem;" value="template_x0b37wu"></div>
+          <div class="form-field"><label for="ejsPublicKey" style="font-size:0.7rem;">Public Key</label><input id="ejsPublicKey" placeholder="xxxxxxxxxxxxxxxxxxxx" style="font-size:0.8rem;" value="9IeznUbAXpMD2OMsP"></div>
         </div>
         <div style="font-size:0.7rem;color:var(--muted);margin-bottom:8px;">Template variables needed: <code style="color:var(--accent);">{{to_email}}</code>, <code style="color:var(--accent);">{{to_name}}</code>, <code style="color:var(--accent);">{{otp_code}}</code>, <code style="color:var(--accent);">{{expiry_minutes}}</code></div>
         <div style="margin-top:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
@@ -2456,11 +2456,11 @@ select option { background: #0F1628; color: var(--text); }
           <div class="loc-list" id="locListContainer"></div>
           <div class="loc-add-form-wrap" id="locAddFormWrap">
             <div style="font-size:0.68rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">＋ Add New Location</div>
-            <label class="form-label-sm">Location Name *</label>
+            <label for="locNameInput" class="form-label-sm">Location Name *</label>
             <input class="loc-input" id="locNameInput" placeholder="e.g. Colombo HQ">
-            <label class="form-label-sm">Address / City *</label>
+            <label for="locAddrInput" class="form-label-sm">Address / City *</label>
             <input class="loc-input" id="locAddrInput" placeholder="e.g. No.42, Galle Rd, Colombo 03">
-            <label class="form-label-sm">Type</label>
+            <label for="locTypeInput" class="form-label-sm">Type</label>
             <select class="loc-type-select" id="locTypeInput">
               <option value="HQ">🏛 Head Quarters</option>
               <option value="Branch">🏢 Branch Office</option>
@@ -2468,9 +2468,9 @@ select option { background: #0F1628; color: var(--text); }
               <option value="Warehouse">🏭 Warehouse</option>
               <option value="Factory">⚙️ Factory</option>
             </select>
-            <label class="form-label-sm">Phone (optional)</label>
+            <label for="locPhoneInput" class="form-label-sm">Phone (optional)</label>
             <input class="loc-input" id="locPhoneInput" placeholder="+94 11 XXX XXXX">
-            <label class="form-label-sm">Manager (optional)</label>
+            <label for="locManagerInput" class="form-label-sm">Manager (optional)</label>
             <input class="loc-input" id="locManagerInput" placeholder="Manager name">
             <button class="btn btn-primary btn-sm" onclick="addLocation()" style="width:100%;justify-content:center;margin-top:2px;">Add Location</button>
           </div>
@@ -2522,7 +2522,7 @@ select option { background: #0F1628; color: var(--text); }
     </div>
   </div>
 </div>
-  
+
 <!-- ===== HR NEXUS CHATBOT WIDGET ===== -->
 <!-- Chatbase Chatbot -->
 <script>
@@ -4591,11 +4591,11 @@ KEY SYSTEM FEATURES:
 
 Sri Lanka labour law context:
 - EPF: Employees Provident Fund — employee contributes 8%, employer contributes 12% of basic salary monthly
-- ETF: Employees Trust Fund — employer contributes 3% of basic salary monthly  
+- ETF: Employees Trust Fund — employer contributes 3% of basic salary monthly
 - PAYE: Pay As You Earn tax — deducted monthly based on taxable income thresholds
 - Annual leave entitlement: 14 working days per year (after 1 year service)
 - Casual leave: 7 days per year
-- Sick leave: 7 days per year  
+- Sick leave: 7 days per year
 - Maternity leave: 84 working days (12 weeks) — paid
 - Gratuity: payable after 5 years continuous service (½ month salary per year)
 
