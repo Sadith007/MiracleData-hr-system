@@ -1,0 +1,15 @@
+# Build artifacts
+dist/
+build/
+node_modules/
+.wrangler/
+
+# Agent artifacts
+verification/
+*.png
+server.log
+.Jules/
+
+# Backups
+*.bak
+index.html.*
