@@ -1,0 +1,3 @@
+## 2026-06-18 - [Accessibility in Dynamic Templates]
+**Learning:** Icon-only buttons embedded in JavaScript template strings (e.g., in `renderLeaveList`) are frequently overlooked during manual accessibility audits compared to static HTML. Localized loading feedback (disabling button + icon animation) provides a much better user experience than global loading overlays for non-blocking background refreshes.
+**Action:** Always search for specific icon characters (✓, ✗, 🗑) within template strings to ensure they have proper 'aria-label' and 'title' attributes. Use a `try...finally` pattern with `.btn-spin` for icon-only refresh buttons.
