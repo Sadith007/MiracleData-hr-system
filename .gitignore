@@ -1,0 +1,7 @@
+node_modules/
+verification/
+*.png
+server.log
+*.bak
+apply_ux_*.py
+verify_ux_*.py

@@ -1,0 +1,3 @@
+## 2025-02-14 - Accessibility and Focus Management in Monolithic Apps
+**Learning:** In monolithic single-file applications with custom modal implementations, accessibility features like ARIA labels and focus management are often overlooked. Automated testing must verify not just existence of elements, but their interactive state (focus) and dynamic accessibility attributes (aria-label).
+**Action:** Always audit `openModal` functions for focus trapping or initial focus setting. Ensure that theme toggles and other icon-only buttons have dynamic `aria-label` updates that sync with their `title` or visual state.
