@@ -828,12 +828,76 @@ body > * { position: relative; z-index: 1; }
 
 .search-box { padding: 1rem; }
 
+.search-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.search-shortcut-badge {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  padding: 1px 6px;
+  font-family: inherit;
+  pointer-events: none;
+  user-select: none;
+  transition: opacity 0.15s ease;
+  line-height: 1.4;
+}
+
+html.light-mode .search-shortcut-badge {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #666;
+}
+
+.clear-search-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  transition: all 0.15s ease;
+}
+
+.clear-search-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+}
+
+html.light-mode .clear-search-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.clear-search-btn:focus-visible {
+  outline: 2px solid var(--accent) !important;
+  outline-offset: 1px !important;
+}
+
 .search-box input {
   width: 100%;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
-  padding: 0.6rem 0.8rem 0.6rem 2.2rem;
+  padding: 0.6rem 2.2rem 0.6rem 2.2rem;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%234A6080'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'%3E%3C/path%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: 10px center;
@@ -2064,7 +2128,13 @@ select option { background: #0F1628; color: var(--text); }
 
   <div class="body-layout">
     <div class="sidebar">
-      <div class="search-box"><input type="text" id="searchInput" placeholder="Search name, ID, dept..."></div>
+      <div class="search-box">
+        <div class="search-wrapper">
+          <input type="text" id="searchInput" placeholder="Search name, ID, dept..." aria-label="Search employees" title="Search name, ID, or department">
+          <span id="searchShortcutBadge" class="search-shortcut-badge">/</span>
+          <button id="clearSearchBtn" class="clear-search-btn" type="button" aria-label="Clear search" title="Clear search">✕</button>
+        </div>
+      </div>
       <div id="branchFilterWrap" style="display:none;padding:0 1rem 0.5rem;">
         <select id="branchFilterSel" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:7px 10px;color:var(--text);font-size:0.8rem;outline:none;font-family:'DM Sans',sans-serif;" onchange="renderEmployeeList()">
           <option value="">🏢 All Branches</option>
@@ -4224,6 +4294,79 @@ document.addEventListener('DOMContentLoaded', async function() {
   document.getElementById('addEmployeeBtn').addEventListener('click',()=>{editingEmployeeId=null;document.getElementById('modalTitle').textContent='New Employee';document.querySelectorAll('#empModal input,#empModal select,#empModal textarea').forEach(el=>el.value='');document.getElementById('empGender').value='Male';document.getElementById('empMarital').value='Single';document.getElementById('empType').value='Permanent';document.getElementById('empStatus').value='Active';document.getElementById('empPayMethod').value='Bank Transfer'; currentEmpPhotoData=null; refreshEmpLocationDropdown(); const pzr=document.getElementById('photoUploadZone'); if(pzr){pzr.innerHTML='<span class="upload-icon">📷</span><span class="upload-hint">Click to<br>upload</span><button class="photo-remove" onclick="removeEmpPhoto(event)" style="display:none;">✕</button>';} const eiq2=document.getElementById('empIdQuick'); if(eiq2)eiq2.value=''; document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));document.querySelector('.tab-btn[data-tab="0"]').classList.add('active');document.getElementById('tab0').classList.add('active');openModal('empModal');});
   document.getElementById('saveEmpBtn').addEventListener('click',saveEmployee);
   document.getElementById('refreshListBtn').addEventListener('click',async()=>{showLoading();await loadDB(true);hideLoading();renderEmployeeList();if(selectedEmployeeId)renderDetail(selectedEmployeeId);showToast('Cloud data refreshed','success');});
+  // ===== SEARCH SHORTCUT & CLEAR BUTTON =====
+  function updateSearchUI() {
+    const searchInput = document.getElementById('searchInput');
+    const shortcutBadge = document.getElementById('searchShortcutBadge');
+    const clearBtn = document.getElementById('clearSearchBtn');
+    if (!searchInput || !shortcutBadge || !clearBtn) return;
+
+    const hasText = searchInput.value.length > 0;
+    const isFocused = document.activeElement === searchInput;
+
+    if (hasText) {
+      shortcutBadge.style.display = 'none';
+      clearBtn.style.display = 'flex';
+    } else {
+      clearBtn.style.display = 'none';
+      if (isFocused) {
+        shortcutBadge.style.display = 'none';
+      } else {
+        shortcutBadge.style.display = 'inline-block';
+      }
+    }
+  }
+
+  const searchInputEl = document.getElementById('searchInput');
+  if (searchInputEl) {
+    searchInputEl.addEventListener('input', updateSearchUI);
+    searchInputEl.addEventListener('focus', updateSearchUI);
+    searchInputEl.addEventListener('blur', () => {
+      setTimeout(updateSearchUI, 150);
+    });
+  }
+
+  const clearSearchBtnEl = document.getElementById('clearSearchBtn');
+  if (clearSearchBtnEl) {
+    clearSearchBtnEl.addEventListener('click', () => {
+      const sInput = document.getElementById('searchInput');
+      if (sInput) {
+        sInput.value = '';
+        sInput.focus();
+        sInput.dispatchEvent(new Event('input'));
+        updateSearchUI();
+      }
+    });
+  }
+
+  document.addEventListener('keydown', e => {
+    const active = document.activeElement;
+    if (active && (
+      active.tagName === 'INPUT' ||
+      active.tagName === 'TEXTAREA' ||
+      active.tagName === 'SELECT' ||
+      active.isContentEditable
+    )) {
+      return;
+    }
+
+    const isK = e.key.toLowerCase() === 'k' && (e.ctrlKey || e.metaKey);
+    const isSlash = e.key === '/';
+
+    if (isK || isSlash) {
+      const sInput = document.getElementById('searchInput');
+      if (sInput) {
+        e.preventDefault();
+        sInput.focus();
+        sInput.select();
+        updateSearchUI();
+      }
+    }
+  });
+
+  // Initial call to set correct state
+  updateSearchUI();
+
   let searchRenderTimer;
   document.getElementById('searchInput').addEventListener('input',()=>{clearTimeout(searchRenderTimer);searchRenderTimer=setTimeout(renderEmployeeList,120);});
   document.getElementById('attendanceBtn').addEventListener('click',openAttendance);
