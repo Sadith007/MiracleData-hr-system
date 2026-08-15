@@ -1,0 +1,8 @@
+node_modules/
+verification/
+*.png
+*.webm
+server.log
+*.bak
+*.pyc
+.DS_Store
