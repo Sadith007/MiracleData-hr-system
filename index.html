@@ -1986,7 +1986,7 @@ select option { background: #0F1628; color: var(--text); }
       <div style="font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:700;background:linear-gradient(135deg,#EEF2FF,#A5B4FC);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">HR Nexus</div>
       <div id="drawerUserBadge" style="font-size:0.65rem;color:var(--muted);margin-top:1px;"></div>
     </div>
-    <button onclick="closeMobileDrawer()" style="margin-left:auto;background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;padding:4px;">✕</button>
+    <button onclick="closeMobileDrawer()" style="margin-left:auto;background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;padding:4px;" aria-label="Close navigation drawer" title="Close navigation drawer">✕</button>
   </div>
   <div id="drawerTrialBadgeWrap" style="padding:0.6rem 1rem 0;"></div>
   <nav style="flex:1;overflow-y:auto;padding:0.6rem 0.6rem;">
@@ -2011,7 +2011,7 @@ select option { background: #0F1628; color: var(--text); }
   <div class="topbar">
     <div class="brand">
       <!-- Mobile hamburger -->
-      <button id="mobileMenuBtn" class="hamburger-btn" onclick="openMobileDrawer()" aria-label="Menu">
+      <button id="mobileMenuBtn" class="hamburger-btn" onclick="openMobileDrawer()" aria-label="Open navigation menu" title="Open navigation menu">
         <span></span><span></span><span></span>
       </button>
       <div class="brand-icon">🏢</div>
@@ -2056,7 +2056,7 @@ select option { background: #0F1628; color: var(--text); }
       <span class="bnav-icon">📊</span>
       <span class="bnav-label">Reports</span>
     </button>
-    <button class="bnav-item" id="bnavMore" onclick="openMobileDrawer()">
+    <button class="bnav-item" id="bnavMore" onclick="openMobileDrawer()" aria-label="Open navigation menu" title="Open navigation menu">
       <span class="bnav-icon">☰</span>
       <span class="bnav-label">More</span>
     </button>
