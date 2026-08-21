@@ -1,0 +1,3 @@
+## 2025-05-18 - Toast Notifications and Inline Form Feedback ARIA Live Regions
+**Learning:** Dynamic status and error messages dynamically created via `showToast` or updated via inline container elements (like `#loginError`, `#regMessage`, `#forgotMsg`, etc.) were silent to screen reader users because they lacked ARIA live region attributes (`role="status"` / `role="alert"` and `aria-live="polite"` / `aria-live="assertive"`).
+**Action:** Always ensure dynamic feedback elements and toast notifications include `role="status"`/`role="alert"` and `aria-live` attributes so assistive technologies immediately announce state changes and system notifications.
