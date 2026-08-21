@@ -1873,7 +1873,7 @@ select option { background: #0F1628; color: var(--text); }
     <div class="auth-logo">👥</div>
     <h2>HR Nexus</h2>
     <p>Complete HR & Payroll Management</p>
-    <div id="loginError" class="error-message"></div>
+    <div id="loginError" class="error-message" role="alert" aria-live="assertive"></div>
     <div class="input-group">
       <label>Username</label>
       <input type="text" id="loginUsername" placeholder="Enter username">
@@ -1900,7 +1900,7 @@ select option { background: #0F1628; color: var(--text); }
     <h2>Request Access</h2>
     <p>Submit for admin approval</p>
     <div class="warning-badge">⚠️ Admin approval required</div>
-    <div id="regMessage" class="error-message"></div>
+    <div id="regMessage" class="error-message" role="alert" aria-live="assertive"></div>
     <div class="input-group"><label>Username</label><input type="text" id="regUser" placeholder="Choose username"></div>
     <div class="input-group"><label>Password (min 4)</label><input type="password" id="regPass" placeholder="••••••••"></div>
     <div class="input-group"><label>Confirm Password</label><input type="password" id="regPass2" placeholder="••••••••"></div>
@@ -1937,7 +1937,7 @@ select option { background: #0F1628; color: var(--text); }
     <div class="auth-logo">🔑</div>
     <h2>Reset Password</h2>
     <p>OTP will be shown to Admin</p>
-    <div id="forgotMsg" class="error-message"></div>
+    <div id="forgotMsg" class="error-message" role="alert" aria-live="assertive"></div>
 
     <!-- Step 1: Enter username -->
     <div id="forgotStep1">
@@ -2324,7 +2324,7 @@ select option { background: #0F1628; color: var(--text); }
         </div>
         <div class="form-field" style="margin-bottom:1rem;"><label>Reason</label><textarea id="lvReason" rows="2" placeholder="Reason for leave..." style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.8rem;outline:none;resize:vertical;"></textarea></div>
         <button class="btn btn-primary btn-sm" onclick="submitLeave()">💾 Submit Leave Request</button>
-        <div id="lvMsg" style="margin-top:8px;font-size:0.78rem;min-height:1rem;"></div>
+        <div id="lvMsg" style="margin-top:8px;font-size:0.78rem;min-height:1rem;" role="status" aria-live="polite"></div>
       </div>
       <div id="lvRequests" class="report-pane">
         <div style="display:flex;gap:10px;margin-bottom:1rem;flex-wrap:wrap;">
@@ -2406,7 +2406,7 @@ select option { background: #0F1628; color: var(--text); }
       <div class="form-field" id="newDeptField" style="display:none;"><label>Location / Branch *</label><input id="newDept" placeholder="e.g. Kandy, Galle Branch"></div>
       <div class="form-field"><label>Email (for OTP reset)</label><input id="newEmail" type="email" placeholder="user@example.com"></div>
       <button id="addUserBtn" class="btn btn-primary" style="margin-top:10px;">➕ Add User</button>
-      <div id="userMsg" class="error-message" style="margin-top:10px;"></div>
+      <div id="userMsg" class="error-message" style="margin-top:10px;" role="alert" aria-live="assertive"></div>
       <hr style="margin:20px 0;border:none;border-top:1px solid rgba(255,255,255,0.07);">
       <h4 style="margin-bottom:15px;font-family:'Syne',sans-serif;font-size:0.95rem;">Pending Approvals</h4>
       <div id="otpRequestsContainer" style="margin-bottom:1rem;"></div>
@@ -2518,7 +2518,7 @@ select option { background: #0F1628; color: var(--text); }
         <input type="text" id="licenseKeyInput" placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="19" oninput="formatLicenseInput(this)" style="text-transform:uppercase;">
         <button onclick="activateLicense()">Activate</button>
       </div>
-      <div id="licenseError" class="lock-error"></div>
+      <div id="licenseError" class="lock-error" role="alert" aria-live="assertive"></div>
     </div>
   </div>
 </div>
@@ -2814,7 +2814,7 @@ function canAccessEmployee(empId) {
 
 function showLoading() { if(document.getElementById('loadingOverlay'))return; const el=document.createElement('div'); el.className='loading-overlay'; el.id='loadingOverlay'; el.innerHTML='<div class="spinner"></div>'; document.body.appendChild(el); }
 function hideLoading() { const el=document.getElementById('loadingOverlay'); if(el)el.remove(); }
-function showToast(message,type='success') { const t=document.createElement('div'); t.className=`toast ${type}`; t.textContent=message; document.body.appendChild(t); setTimeout(()=>t.classList.add('show'),10); setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300);},3000); }
+function showToast(message,type='success') { const t=document.createElement('div'); t.className=`toast ${type}`; t.setAttribute('role',type==='error'?'alert':'status'); t.setAttribute('aria-live',type==='error'?'assertive':'polite'); t.textContent=message; document.body.appendChild(t); setTimeout(()=>t.classList.add('show'),10); setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300);},3000); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 document.addEventListener('click',e=>{ if(e.target.classList.contains('modal')&&e.target.classList.contains('open'))e.target.classList.remove('open'); });
@@ -4145,7 +4145,7 @@ function formatLicenseInput(input) { let val=input.value.replace(/[^A-Z0-9]/gi,'
 function renderLicenseSection() {
   if(currentUser?.role!=='ADMIN')return'';
   const trial=DB.trial;const license=DB.license;const trialStart=trial?new Date(trial.startDate).toLocaleDateString():'Not started';const trialEnd=trial?new Date(trial.endDate).toLocaleDateString():'-';const daysLeft=trial?Math.max(0,Math.ceil((new Date(trial.endDate)-new Date())/86400000)):0;const keys=DB.licenseKeys||[];
-  return`<hr style="margin:20px 0;border:none;border-top:1px solid rgba(255,255,255,0.07);"><div class="license-section"><h4>🔑 License & Trial Management</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;"><div class="info-card"><label>Trial Started</label><span>${trialStart}</span></div><div class="info-card"><label>Trial Ends</label><span>${trialEnd} (${daysLeft}d left)</span></div><div class="info-card"><label>License Status</label><span style="color:${license?.status==='active'?'var(--success)':'var(--warning)'}">${license?.status==='active'?'✅ Licensed':'⏳ Trial'}</span></div><div class="info-card"><label>License Key</label><span style="font-family:'DM Mono',monospace;font-size:0.75rem;">${license?.key||'None'}</span></div></div><div style="margin-bottom:1rem;"><div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Extend Trial</div><div style="display:flex;gap:8px;flex-wrap:wrap;"><select id="extendDays" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:6px 10px;color:var(--text);font-size:0.8rem;"><option value="7">+7 days</option><option value="14">+14 days</option><option value="30" selected>+30 days</option><option value="60">+60 days</option><option value="90">+90 days</option><option value="365">+1 Year</option></select><button class="btn btn-primary btn-sm" onclick="extendTrial()">Extend Trial</button><button class="btn btn-sm" style="background:rgba(20,196,126,0.15);border-color:rgba(20,196,126,0.3);color:var(--success);" onclick="generateNewLicenseKey()">🔑 Generate Key</button></div></div><div style="margin-bottom:1rem;"><div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Set Exact Trial End Date</div><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;"><input type="date" id="trialEndDateInput" value="${trial?new Date(trial.endDate).toISOString().slice(0,10):''}" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:6px 10px;color:var(--text);font-size:0.8rem;outline:none;"><button class="btn btn-sm" style="background:rgba(248,184,78,0.12);border-color:rgba(248,184,78,0.3);color:var(--warning);" onclick="setTrialEndDate()">📅 Set Date</button></div></div><div><div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Generated Keys (${keys.length})</div>${keys.length>0?keys.map(k=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><div class="license-key-display" style="flex:1;font-size:0.85rem;">${k.key}</div><span style="font-size:0.7rem;padding:3px 8px;border-radius:20px;background:${k.status==='active'?'rgba(20,196,126,0.12)':'rgba(100,100,100,0.12)'};color:${k.status==='active'?'var(--success)':'var(--muted)'};">${k.status}</span><button class="btn btn-sm" onclick="copyToClipboard('${k.key}')" style="padding:4px 8px;">📋</button></div>`).join(''):'<div style="color:var(--muted);font-size:0.8rem;">No keys generated yet</div>'}</div><div id="licenseAdminMsg" style="margin-top:8px;font-size:0.75rem;min-height:1rem;"></div></div>`;
+  return`<hr style="margin:20px 0;border:none;border-top:1px solid rgba(255,255,255,0.07);"><div class="license-section"><h4>🔑 License & Trial Management</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;"><div class="info-card"><label>Trial Started</label><span>${trialStart}</span></div><div class="info-card"><label>Trial Ends</label><span>${trialEnd} (${daysLeft}d left)</span></div><div class="info-card"><label>License Status</label><span style="color:${license?.status==='active'?'var(--success)':'var(--warning)'}">${license?.status==='active'?'✅ Licensed':'⏳ Trial'}</span></div><div class="info-card"><label>License Key</label><span style="font-family:'DM Mono',monospace;font-size:0.75rem;">${license?.key||'None'}</span></div></div><div style="margin-bottom:1rem;"><div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Extend Trial</div><div style="display:flex;gap:8px;flex-wrap:wrap;"><select id="extendDays" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:6px 10px;color:var(--text);font-size:0.8rem;"><option value="7">+7 days</option><option value="14">+14 days</option><option value="30" selected>+30 days</option><option value="60">+60 days</option><option value="90">+90 days</option><option value="365">+1 Year</option></select><button class="btn btn-primary btn-sm" onclick="extendTrial()">Extend Trial</button><button class="btn btn-sm" style="background:rgba(20,196,126,0.15);border-color:rgba(20,196,126,0.3);color:var(--success);" onclick="generateNewLicenseKey()">🔑 Generate Key</button></div></div><div style="margin-bottom:1rem;"><div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Set Exact Trial End Date</div><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;"><input type="date" id="trialEndDateInput" value="${trial?new Date(trial.endDate).toISOString().slice(0,10):''}" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:6px 10px;color:var(--text);font-size:0.8rem;outline:none;"><button class="btn btn-sm" style="background:rgba(248,184,78,0.12);border-color:rgba(248,184,78,0.3);color:var(--warning);" onclick="setTrialEndDate()">📅 Set Date</button></div></div><div><div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Generated Keys (${keys.length})</div>${keys.length>0?keys.map(k=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><div class="license-key-display" style="flex:1;font-size:0.85rem;">${k.key}</div><span style="font-size:0.7rem;padding:3px 8px;border-radius:20px;background:${k.status==='active'?'rgba(20,196,126,0.12)':'rgba(100,100,100,0.12)'};color:${k.status==='active'?'var(--success)':'var(--muted)'};">${k.status}</span><button class="btn btn-sm" onclick="copyToClipboard('${k.key}')" style="padding:4px 8px;">📋</button></div>`).join(''):'<div style="color:var(--muted);font-size:0.8rem;">No keys generated yet</div>'}</div><div id="licenseAdminMsg" style="margin-top:8px;font-size:0.75rem;min-height:1rem;" role="status" aria-live="polite"></div></div>`;
 }
 async function extendTrial() {
   const days=parseInt(document.getElementById('extendDays').value);const now=new Date();
