@@ -1,0 +1,3 @@
+## 2025-08-22 - Skip to Main Content Link for Keyboard Accessibility
+**Learning:** Single-page web applications with top navigation bars or floating header controls present a keyboard navigation barrier if users cannot bypass header/nav elements directly to main content. Adding a visually hidden skip-link that slides down when focused provides an efficient shortcut for screen reader and keyboard users.
+**Action:** Always include a `.skip-link` pointing to `#mainContent` or `#mainApp` directly after `<body>`, and ensure the target element includes `tabindex="-1"` for reliable programmatic focus movement.

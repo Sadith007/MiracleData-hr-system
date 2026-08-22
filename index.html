@@ -1846,10 +1846,35 @@ select option { background: #0F1628; color: var(--text); }
   .leave-balance-grid { grid-template-columns: repeat(2, 1fr); }
   .brand h1 { display: none; }
 }
+
+/* Skip Link for Accessibility */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 1rem;
+  background: var(--accent);
+  color: #ffffff;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0 0 8px 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  z-index: 9999;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: top 0.2s ease-in-out;
+}
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
 </style>
 
 </head>
 <body>
+<!-- SKIP TO MAIN CONTENT LINK FOR ACCESSIBILITY -->
+<a href="#mainApp" class="skip-link">Skip to main content</a>
 
 <!-- ANIMATED BG ORBS -->
 <div class="auth-bg-orbs">
@@ -2007,7 +2032,7 @@ select option { background: #0F1628; color: var(--text); }
 </div>
 
 <!-- MAIN APP -->
-<div id="mainApp" class="app">
+<div id="mainApp" class="app" tabindex="-1">
   <div class="topbar">
     <div class="brand">
       <!-- Mobile hamburger -->
