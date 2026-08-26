@@ -2032,8 +2032,8 @@ select option { background: #0F1628; color: var(--text); }
       <button id="exportDataBtn" class="btn btn-sm" onclick="exportHRData()" title="Export all data as backup file" style="display:none;">💾 Export</button>
       <button id="importDataBtn" class="btn btn-sm" onclick="document.getElementById('importFileInput').click()" title="Import data from backup file" style="display:none;">📂 Import</button>
       <input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="importHRData(event)">
-      <button id="openNewWindowBtn" onclick="window.open(window.location.href,'_blank','width=1280,height=800,scrollbars=yes,resizable=yes')" title="Open in New Window" style="width:34px;height:34px;border-radius:10px;background:var(--glass);border:1px solid var(--glass-border-strong);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--text2);transition:all 0.2s;flex-shrink:0;">⧉</button>
-      <button id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">🌙</button>
+      <button id="openNewWindowBtn" onclick="window.open(window.location.href,'_blank','width=1280,height=800,scrollbars=yes,resizable=yes')" title="Open in New Window" aria-label="Open in new window" style="width:34px;height:34px;border-radius:10px;background:var(--glass);border:1px solid var(--glass-border-strong);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--text2);transition:all 0.2s;flex-shrink:0;">⧉</button>
+      <button id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Dark/Light Mode" aria-label="Toggle Dark/Light Mode">🌙</button>
       <button id="logoutBtn" class="btn btn-sm">➡️🚪Logout</button>
     </div>
   </div>
@@ -2072,7 +2072,7 @@ select option { background: #0F1628; color: var(--text); }
       </div>
       <div class="sidebar-actions">
         <button id="addEmployeeBtn" class="btn btn-primary btn-sm" style="flex:1;">+ New Employee</button>
-        <button id="refreshListBtn" class="btn btn-sm">↺</button>
+        <button id="refreshListBtn" class="btn btn-sm" aria-label="Refresh employee list" title="Refresh employee list">↺</button>
       </div>
       <div id="employeeListContainer" class="employee-list"></div>
     </div>
@@ -4865,8 +4865,11 @@ window.importHRData = function(event) {
   function updateIcon() {
     const btn = document.getElementById('themeToggleBtn');
     if (!btn) return;
-    btn.textContent = document.documentElement.classList.contains('light-mode') ? '☀️' : '🌙';
-    btn.title = document.documentElement.classList.contains('light-mode') ? 'Switch to Dark Mode' : 'Switch to Light Mode';
+    const isLight = document.documentElement.classList.contains('light-mode');
+    btn.textContent = isLight ? '☀️' : '🌙';
+    const label = isLight ? 'Switch to Dark Mode' : 'Switch to Light Mode';
+    btn.title = label;
+    btn.setAttribute('aria-label', label);
   }
   window.toggleTheme = function() {
     document.documentElement.classList.toggle('light-mode');
