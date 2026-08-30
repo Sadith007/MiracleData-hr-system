@@ -1875,11 +1875,11 @@ select option { background: #0F1628; color: var(--text); }
     <p>Complete HR & Payroll Management</p>
     <div id="loginError" class="error-message"></div>
     <div class="input-group">
-      <label>Username</label>
+      <label for="loginUsername">Username</label>
       <input type="text" id="loginUsername" placeholder="Enter username">
     </div>
     <div class="input-group">
-      <label>Password</label>
+      <label for="loginPassword">Password</label>
       <input type="password" id="loginPassword" placeholder="••••••••">
     </div>
     <button class="auth-btn" id="loginBtn">Sign In →</button>
@@ -1942,7 +1942,7 @@ select option { background: #0F1628; color: var(--text); }
     <!-- Step 1: Enter username -->
     <div id="forgotStep1">
       <div class="input-group">
-        <label>Username</label>
+        <label for="forgotUsername">Username</label>
         <input type="text" id="forgotUsername" placeholder="Enter your username">
       </div>
       <button class="auth-btn" onclick="requestOTP()">Request OTP →</button>
@@ -1954,15 +1954,15 @@ select option { background: #0F1628; color: var(--text); }
         ✅ OTP generated! Contact admin to get your OTP code.
       </div>
       <div class="input-group">
-        <label>OTP Code</label>
+        <label for="forgotOTP">OTP Code</label>
         <input type="text" id="forgotOTP" placeholder="Enter 6-digit OTP" maxlength="6" style="letter-spacing:4px;text-align:center;font-size:1.1rem;font-weight:700;">
       </div>
       <div class="input-group">
-        <label>New Password</label>
+        <label for="forgotNewPass">New Password</label>
         <input type="password" id="forgotNewPass" placeholder="Min 4 characters">
       </div>
       <div class="input-group">
-        <label>Confirm Password</label>
+        <label for="forgotConfirmPass">Confirm Password</label>
         <input type="password" id="forgotConfirmPass" placeholder="Re-enter password">
       </div>
       <button class="auth-btn" onclick="verifyOTPAndReset()">Reset Password →</button>
@@ -2229,11 +2229,11 @@ select option { background: #0F1628; color: var(--text); }
           <div class="att-table-wrap"><table class="att-table" id="attPreviewTable"></table></div>
           <div class="form-row" style="margin-bottom:1rem;">
             <div class="form-field">
-              <label>Payroll Month</label>
+              <label for="attPayMonth">Payroll Month</label>
               <input id="attPayMonth" type="month" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.8rem;outline:none;">
             </div>
             <div class="form-field">
-              <label>Working Days in Month</label>
+              <label for="attWorkingDays">Working Days in Month</label>
               <input id="attWorkingDays" type="number" value="26" min="1" max="31" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.8rem;outline:none;">
             </div>
           </div>
@@ -2397,14 +2397,14 @@ select option { background: #0F1628; color: var(--text); }
       <hr style="margin:20px 0;border:none;border-top:1px solid rgba(255,255,255,0.07);">
       <h4 style="margin-bottom:15px;font-family:'Syne',sans-serif;font-size:0.95rem;">Add New User</h4>
       <div class="form-row">
-        <div class="form-field"><label>Username</label><input id="newUsername" placeholder="Username"></div>
-        <div class="form-field"><label>Password</label><input id="newPassword" type="password" placeholder="Password"></div>
-        <div class="form-field"><label>Role</label>
+        <div class="form-field"><label for="newUsername">Username</label><input id="newUsername" placeholder="Username"></div>
+        <div class="form-field"><label for="newPassword">Password</label><input id="newPassword" type="password" placeholder="Password"></div>
+        <div class="form-field"><label for="newRole">Role</label>
           <select id="newRole"><option>HR</option><option>ADMIN</option><option value="BRANCH_HEAD">BRANCH_HEAD</option><option>SELF_VIEWER</option></select>
         </div>
       </div>
-      <div class="form-field" id="newDeptField" style="display:none;"><label>Location / Branch *</label><input id="newDept" placeholder="e.g. Kandy, Galle Branch"></div>
-      <div class="form-field"><label>Email (for OTP reset)</label><input id="newEmail" type="email" placeholder="user@example.com"></div>
+      <div class="form-field" id="newDeptField" style="display:none;"><label for="newDept">Location / Branch *</label><input id="newDept" placeholder="e.g. Kandy, Galle Branch"></div>
+      <div class="form-field"><label for="newEmail">Email (for OTP reset)</label><input id="newEmail" type="email" placeholder="user@example.com"></div>
       <button id="addUserBtn" class="btn btn-primary" style="margin-top:10px;">➕ Add User</button>
       <div id="userMsg" class="error-message" style="margin-top:10px;"></div>
       <hr style="margin:20px 0;border:none;border-top:1px solid rgba(255,255,255,0.07);">
@@ -2416,9 +2416,9 @@ select option { background: #0F1628; color: var(--text); }
         <div style="font-size:0.82rem;font-weight:700;color:var(--accent);margin-bottom:10px;">📧 EmailJS Settings <span style="font-size:0.68rem;color:var(--muted);font-weight:400;">(for OTP email delivery)</span></div>
         <div style="font-size:0.72rem;color:var(--muted);margin-bottom:10px;">Create a free account at <a href="https://emailjs.com" target="_blank" style="color:var(--accent);">emailjs.com</a> → Add Email Service → Create Template → copy credentials below.</div>
         <div class="form-row">
-          <div class="form-field"><label style="font-size:0.7rem;">Service ID</label><input id="ejsServiceId" placeholder="service_xxxxxxx" style="font-size:0.8rem;" value="service_c7srw5i"></div>
-          <div class="form-field"><label style="font-size:0.7rem;">Template ID</label><input id="ejsTemplateId" placeholder="template_xxxxxxx" style="font-size:0.8rem;" value="template_x0b37wu"></div>
-          <div class="form-field"><label style="font-size:0.7rem;">Public Key</label><input id="ejsPublicKey" placeholder="xxxxxxxxxxxxxxxxxxxx" style="font-size:0.8rem;" value="9IeznUbAXpMD2OMsP"></div>
+          <div class="form-field"><label for="ejsServiceId" style="font-size:0.7rem;">Service ID</label><input id="ejsServiceId" placeholder="service_xxxxxxx" style="font-size:0.8rem;" value="service_c7srw5i"></div>
+          <div class="form-field"><label for="ejsTemplateId" style="font-size:0.7rem;">Template ID</label><input id="ejsTemplateId" placeholder="template_xxxxxxx" style="font-size:0.8rem;" value="template_x0b37wu"></div>
+          <div class="form-field"><label for="ejsPublicKey" style="font-size:0.7rem;">Public Key</label><input id="ejsPublicKey" placeholder="xxxxxxxxxxxxxxxxxxxx" style="font-size:0.8rem;" value="9IeznUbAXpMD2OMsP"></div>
         </div>
         <div style="font-size:0.7rem;color:var(--muted);margin-bottom:8px;">Template variables needed: <code style="color:var(--accent);">{{to_email}}</code>, <code style="color:var(--accent);">{{to_name}}</code>, <code style="color:var(--accent);">{{otp_code}}</code>, <code style="color:var(--accent);">{{expiry_minutes}}</code></div>
         <div style="margin-top:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
@@ -2456,11 +2456,11 @@ select option { background: #0F1628; color: var(--text); }
           <div class="loc-list" id="locListContainer"></div>
           <div class="loc-add-form-wrap" id="locAddFormWrap">
             <div style="font-size:0.68rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">＋ Add New Location</div>
-            <label class="form-label-sm">Location Name *</label>
+            <label for="locNameInput" class="form-label-sm">Location Name *</label>
             <input class="loc-input" id="locNameInput" placeholder="e.g. Colombo HQ">
-            <label class="form-label-sm">Address / City *</label>
+            <label for="locAddrInput" class="form-label-sm">Address / City *</label>
             <input class="loc-input" id="locAddrInput" placeholder="e.g. No.42, Galle Rd, Colombo 03">
-            <label class="form-label-sm">Type</label>
+            <label for="locTypeInput" class="form-label-sm">Type</label>
             <select class="loc-type-select" id="locTypeInput">
               <option value="HQ">🏛 Head Quarters</option>
               <option value="Branch">🏢 Branch Office</option>
@@ -2468,9 +2468,9 @@ select option { background: #0F1628; color: var(--text); }
               <option value="Warehouse">🏭 Warehouse</option>
               <option value="Factory">⚙️ Factory</option>
             </select>
-            <label class="form-label-sm">Phone (optional)</label>
+            <label for="locPhoneInput" class="form-label-sm">Phone (optional)</label>
             <input class="loc-input" id="locPhoneInput" placeholder="+94 11 XXX XXXX">
-            <label class="form-label-sm">Manager (optional)</label>
+            <label for="locManagerInput" class="form-label-sm">Manager (optional)</label>
             <input class="loc-input" id="locManagerInput" placeholder="Manager name">
             <button class="btn btn-primary btn-sm" onclick="addLocation()" style="width:100%;justify-content:center;margin-top:2px;">Add Location</button>
           </div>
