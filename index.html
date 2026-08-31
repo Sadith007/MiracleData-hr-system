@@ -5010,14 +5010,14 @@ function openCompanyManager() {
           <div style="font-size:0.65rem;color:var(--muted);">Created: ${new Date(c.createdAt).toLocaleDateString()}</div>
         </div>
         ${c.id===activeId ? '<span style="font-size:0.65rem;color:var(--accent);font-weight:700;padding:2px 8px;background:rgba(79,142,247,0.1);border-radius:10px;border:1px solid rgba(79,142,247,0.2);">ACTIVE</span>' : `<button onclick="switchToCompany('${c.id}')" style="background:rgba(79,142,247,0.1);border:1px solid rgba(79,142,247,0.25);border-radius:8px;padding:4px 10px;color:var(--accent);cursor:pointer;font-size:0.75rem;font-family:'DM Sans',sans-serif;">Switch</button>`}
-        <button onclick="deleteCoEntry('${c.id}')" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.8rem;padding:2px 6px;border-radius:6px;" title="Remove">🗑</button>
+        <button onclick="deleteCoEntry('${c.id}')" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.8rem;padding:2px 6px;border-radius:6px;" title="Remove" aria-label="Remove company workspace">🗑</button>
       </div>`).join('');
 
   modal.innerHTML = `
     <div style="background:var(--surface-solid);border:1px solid rgba(79,142,247,0.2);border-radius:20px;width:100%;max-width:420px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.6);">
       <div style="padding:1.2rem 1.4rem;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:space-between;">
         <div style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--text);">🏢 Manage Companies</div>
-        <button onclick="document.getElementById('companyMgrModal').remove()" style="background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;">✕</button>
+        <button onclick="document.getElementById('companyMgrModal').remove()" style="background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;" title="Close" aria-label="Close company manager">✕</button>
       </div>
       <div style="padding:1.2rem 1.4rem;">
         <div style="font-size:0.68rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Company Workspaces</div>
@@ -5025,7 +5025,7 @@ function openCompanyManager() {
         <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,0.07);">
           <div style="font-size:0.68rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">+ Add New Company</div>
           <div style="display:flex;gap:8px;">
-            <input id="newCoNameInput" type="text" placeholder="Company name..." maxlength="40" style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.85rem;outline:none;font-family:'DM Sans',sans-serif;" onkeydown="if(event.key==='Enter')addCoEntry()">
+            <input id="newCoNameInput" type="text" aria-label="New company name" placeholder="Company name..." maxlength="40" style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.85rem;outline:none;font-family:'DM Sans',sans-serif;" onkeydown="if(event.key==='Enter')addCoEntry()">
             <button onclick="addCoEntry()" style="background:linear-gradient(135deg,#4F8EF7,#9B72F8);border:none;border-radius:10px;padding:8px 14px;color:white;cursor:pointer;font-size:0.82rem;font-weight:600;font-family:'DM Sans',sans-serif;">Add</button>
           </div>
           <div id="coErr" style="font-size:0.75rem;color:var(--danger);margin-top:6px;min-height:1rem;"></div>
