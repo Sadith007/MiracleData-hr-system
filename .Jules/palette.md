@@ -1,0 +1,3 @@
+## 2026-09-01 - Accessible ARIA Labels on Dynamic Template Icon Buttons
+**Learning:** Icon-only action buttons rendered dynamically via template literals (e.g. approve `✓`, reject `✗`, delete `🗑`, copy `📋`) are easily missed during static HTML accessibility audits. Adding explicit `aria-label` and `title` attributes inside JavaScript template string renders ensures full screen reader support and native tooltips.
+**Action:** Always inspect JavaScript list/item render functions (`renderLeaveList`, `renderDocList`, `renderLicenseSection`) for icon-only action buttons and add descriptive `aria-label` and `title` attributes.
