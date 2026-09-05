@@ -1904,7 +1904,7 @@ select option { background: #0F1628; color: var(--text); }
     <div class="input-group"><label>Username</label><input type="text" id="regUser" placeholder="Choose username"></div>
     <div class="input-group"><label>Password (min 4)</label><input type="password" id="regPass" placeholder="••••••••"></div>
     <div class="input-group"><label>Confirm Password</label><input type="password" id="regPass2" placeholder="••••••••"></div>
-    <div class="input-group"><label>Role Request</label>
+    <div class="input-group"><label for="regRole">Role Request</label>
       <select id="regRole"><option>HR</option><option value="BRANCH_HEAD">BRANCH_HEAD</option><option>SELF_VIEWER</option></select>
     </div>
     <div id="svRegNote" style="display:none;background:rgba(56,201,168,0.08);border:1px solid rgba(56,201,168,0.2);border-radius:10px;padding:0.6rem 0.9rem;font-size:0.75rem;color:#38C9A8;margin-bottom:0.8rem;">
@@ -2117,8 +2117,8 @@ select option { background: #0F1628; color: var(--text); }
           <div class="form-field"><label>Date of Birth</label><input id="empDob" placeholder="YYYY-MM-DD"></div>
         </div>
         <div class="form-row">
-          <div class="form-field"><label>Gender</label><select id="empGender"><option>Male</option><option>Female</option></select></div>
-          <div class="form-field"><label>Marital Status</label><select id="empMarital"><option>Single</option><option>Married</option></select></div>
+          <div class="form-field"><label for="empGender">Gender</label><select id="empGender"><option>Male</option><option>Female</option></select></div>
+          <div class="form-field"><label for="empMarital">Marital Status</label><select id="empMarital"><option>Single</option><option>Married</option></select></div>
         </div>
         <div class="form-field"><label>Permanent Address</label><textarea id="empAddress" rows="2" placeholder="Full address" style="width:100%;resize:vertical;"></textarea></div>
         <div class="form-row">
@@ -2136,10 +2136,10 @@ select option { background: #0F1628; color: var(--text); }
           <div class="form-field"><label>Date of Joining</label><input id="empDoj" placeholder="YYYY-MM-DD"></div>
         </div>
         <div class="form-row">
-          <div class="form-field"><label>Employment Type</label><select id="empType"><option>Permanent</option><option>Contract</option></select></div>
-          <div class="form-field"><label>Current Status</label><select id="empStatus"><option>Active</option><option>Resigned</option><option>Terminated</option></select></div>
+          <div class="form-field"><label for="empType">Employment Type</label><select id="empType"><option>Permanent</option><option>Contract</option></select></div>
+          <div class="form-field"><label for="empStatus">Current Status</label><select id="empStatus"><option>Active</option><option>Resigned</option><option>Terminated</option></select></div>
         </div>
-       <div class="form-field"><label>Work Location</label><select id="empLocation" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.82rem;outline:none;font-family:'DM Sans',sans-serif;"><option value="">— Select Location —</option></select></div>
+       <div class="form-field"><label for="empLocation">Work Location</label><select id="empLocation" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.82rem;outline:none;font-family:'DM Sans',sans-serif;"><option value="">— Select Location —</option></select></div>
       </div>
       <div id="tab2" class="tab-pane">
         <div class="form-row">
@@ -2148,7 +2148,7 @@ select option { background: #0F1628; color: var(--text); }
         </div>
         <div class="form-row">
           <div class="form-field"><label>Bank Name</label><input id="empBankName" placeholder="Bank name"></div>
-          <div class="form-field"><label>Payment Method</label><select id="empPayMethod"><option>Bank Transfer</option><option>Cash</option></select></div>
+          <div class="form-field"><label for="empPayMethod">Payment Method</label><select id="empPayMethod"><option>Bank Transfer</option><option>Cash</option></select></div>
         </div>
         <div class="form-field"><label>HR Remarks</label><textarea id="empRemarks" rows="2" placeholder="Notes..." style="width:100%;resize:vertical;"></textarea></div>
       </div>
@@ -2163,7 +2163,7 @@ select option { background: #0F1628; color: var(--text); }
     <div class="modal-header"><h3>💰 Payroll Management</h3><button class="btn btn-sm" onclick="closeModal('payrollModal')">✕</button></div>
     <div class="modal-body">
       <div class="form-row">
-        <div class="form-field"><label>Select Employee</label><select id="payrollEmpSelect"></select></div>
+        <div class="form-field"><label for="payrollEmpSelect">Select Employee</label><select id="payrollEmpSelect"></select></div>
         <div class="form-field"><label>Month (YYYY-MM)</label><input id="payMonth" placeholder="2025-03"></div>
       </div>
       <div class="form-row">
@@ -2301,8 +2301,8 @@ select option { background: #0F1628; color: var(--text); }
       </div>
       <div id="lvApply" class="report-pane active">
         <div class="form-row">
-          <div class="form-field"><label>Employee</label><select id="lvEmpSel" style="width:100%;"></select></div>
-          <div class="form-field"><label>Leave Type</label>
+          <div class="form-field"><label for="lvEmpSel">Employee</label><select id="lvEmpSel" style="width:100%;"></select></div>
+          <div class="form-field"><label for="lvType">Leave Type</label>
             <select id="lvType" style="width:100%;">
               <option value="Annual">Annual Leave</option><option value="Casual">Casual Leave</option>
               <option value="Sick">Sick Leave</option><option value="Maternity">Maternity Leave</option>
@@ -2316,7 +2316,7 @@ select option { background: #0F1628; color: var(--text); }
         </div>
         <div class="form-row">
           <div class="form-field"><label>Days Calculated</label><input type="number" id="lvDays" readonly style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--success);font-size:0.8rem;outline:none;font-weight:700;"></div>
-          <div class="form-field" id="lvStatusField"><label>Status</label>
+          <div class="form-field" id="lvStatusField"><label for="lvStatus">Status</label>
             <select id="lvStatus" style="width:100%;">
               <option value="Pending">Pending</option><option value="Approved">Approved</option><option value="Rejected">Rejected</option>
             </select>
@@ -2399,7 +2399,7 @@ select option { background: #0F1628; color: var(--text); }
       <div class="form-row">
         <div class="form-field"><label>Username</label><input id="newUsername" placeholder="Username"></div>
         <div class="form-field"><label>Password</label><input id="newPassword" type="password" placeholder="Password"></div>
-        <div class="form-field"><label>Role</label>
+        <div class="form-field"><label for="newRole">Role</label>
           <select id="newRole"><option>HR</option><option>ADMIN</option><option value="BRANCH_HEAD">BRANCH_HEAD</option><option>SELF_VIEWER</option></select>
         </div>
       </div>
@@ -2460,7 +2460,7 @@ select option { background: #0F1628; color: var(--text); }
             <input class="loc-input" id="locNameInput" placeholder="e.g. Colombo HQ">
             <label class="form-label-sm">Address / City *</label>
             <input class="loc-input" id="locAddrInput" placeholder="e.g. No.42, Galle Rd, Colombo 03">
-            <label class="form-label-sm">Type</label>
+            <label class="form-label-sm" for="locTypeInput">Type</label>
             <select class="loc-type-select" id="locTypeInput">
               <option value="HQ">🏛 Head Quarters</option>
               <option value="Branch">🏢 Branch Office</option>
@@ -2815,10 +2815,37 @@ function canAccessEmployee(empId) {
 function showLoading() { if(document.getElementById('loadingOverlay'))return; const el=document.createElement('div'); el.className='loading-overlay'; el.id='loadingOverlay'; el.innerHTML='<div class="spinner"></div>'; document.body.appendChild(el); }
 function hideLoading() { const el=document.getElementById('loadingOverlay'); if(el)el.remove(); }
 function showToast(message,type='success') { const t=document.createElement('div'); t.className=`toast ${type}`; t.textContent=message; document.body.appendChild(t); setTimeout(()=>t.classList.add('show'),10); setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300);},3000); }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-function openModal(id) { document.getElementById(id).classList.add('open'); }
-document.addEventListener('click',e=>{ if(e.target.classList.contains('modal')&&e.target.classList.contains('open'))e.target.classList.remove('open'); });
-document.addEventListener('keydown',e=>{ if(e.key==='Escape')document.querySelectorAll('.modal.open').forEach(m=>m.classList.remove('open')); });
+const modalTriggerMap = {};
+function closeModal(id) {
+  const modal = document.getElementById(id);
+  if (modal) modal.classList.remove('open');
+  const trigger = modalTriggerMap[id];
+  if (trigger && typeof trigger.focus === 'function') {
+    trigger.focus();
+    delete modalTriggerMap[id];
+  }
+}
+function openModal(id) {
+  const modal = document.getElementById(id);
+  if (!modal) return;
+  modalTriggerMap[id] = document.activeElement;
+  modal.classList.add('open');
+  setTimeout(() => {
+    const focusable = modal.querySelectorAll('input:not([type="hidden"]), select, textarea, button:not(.photo-remove)');
+    const firstFocusable = Array.from(focusable).find(el => !el.closest('.modal-header') && el.offsetWidth > 0 && el.offsetHeight > 0);
+    if (firstFocusable) firstFocusable.focus();
+  }, 50);
+}
+document.addEventListener('click', e => {
+  if (e.target.classList.contains('modal') && e.target.classList.contains('open')) {
+    closeModal(e.target.id);
+  }
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal.open').forEach(m => closeModal(m.id));
+  }
+});
 
 function exportProfilePDF(emp) {
   const pdfContent=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Employee Profile - ${emp.fullName}</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:40px;background:white;color:#1e293b}.header{background:linear-gradient(135deg,#3B82F6,#8B5CF6);color:white;padding:30px;border-radius:12px;margin-bottom:30px;text-align:center}.header h1{font-size:28px;margin-bottom:8px}.header p{font-size:14px;opacity:0.9}.section{margin-bottom:25px}.section-title{font-size:16px;font-weight:bold;color:#3B82F6;border-left:4px solid #3B82F6;padding-left:12px;margin-bottom:15px}.info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.info-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:12px}.info-card label{font-size:10px;text-transform:uppercase;color:#64748b;display:block;margin-bottom:5px}.info-card span{font-size:14px;font-weight:500;color:#1e293b}.footer{margin-top:40px;padding-top:20px;border-top:1px solid #e2e8f0;text-align:center;font-size:10px;color:#94a3b8}@media print{.header{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style></head><body><div class="header"><h1>Employee Profile</h1><p>${emp.empId} · ${emp.department}</p></div><div class="section"><div class="section-title">Personal Information</div><div class="info-grid"><div class="info-card"><label>Full Name</label><span>${emp.fullName||'-'}</span></div><div class="info-card"><label>Employee ID</label><span>${emp.empId||'-'}</span></div><div class="info-card"><label>Email</label><span>${emp.email||'-'}</span></div><div class="info-card"><label>Mobile</label><span>${emp.mobile||'-'}</span></div><div class="info-card"><label>NIC</label><span>${emp.nic||'-'}</span></div><div class="info-card"><label>Date of Birth</label><span>${emp.dob||'-'}</span></div><div class="info-card"><label>Gender</label><span>${emp.gender||'-'}</span></div><div class="info-card"><label>Marital Status</label><span>${emp.maritalStatus||'-'}</span></div></div></div><div class="section"><div class="section-title">Employment Details</div><div class="info-grid"><div class="info-card"><label>Department</label><span>${emp.department||'-'}</span></div><div class="info-card"><label>Designation</label><span>${emp.designation||'-'}</span></div><div class="info-card"><label>Date of Joining</label><span>${emp.doj||'-'}</span></div><div class="info-card"><label>Employment Type</label><span>${emp.employmentType||'-'}</span></div><div class="info-card"><label>Work Location</label><span>${emp.location||'-'}</span></div><div class="info-card"><label>Status</label><span>${emp.status||'Active'}</span></div></div></div><div class="section"><div class="section-title">Salary & Bank Details</div><div class="info-grid"><div class="info-card"><label>Basic Salary</label><span>LKR ${(emp.salary||0).toLocaleString()}</span></div><div class="info-card"><label>Bank Name</label><span>${emp.bankName||'-'}</span></div><div class="info-card"><label>Bank Account</label><span>${emp.bankAccount||'-'}</span></div><div class="info-card"><label>Payment Method</label><span>${emp.payMethod||'-'}</span></div></div></div><div class="footer">Generated on ${new Date().toLocaleString()} | HR Management System</div></body></html>`;
