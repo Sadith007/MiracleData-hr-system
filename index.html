@@ -2301,8 +2301,8 @@ select option { background: #0F1628; color: var(--text); }
       </div>
       <div id="lvApply" class="report-pane active">
         <div class="form-row">
-          <div class="form-field"><label>Employee</label><select id="lvEmpSel" style="width:100%;"></select></div>
-          <div class="form-field"><label>Leave Type</label>
+          <div class="form-field"><label for="lvEmpSel">Employee</label><select id="lvEmpSel" style="width:100%;"></select></div>
+          <div class="form-field"><label for="lvType">Leave Type</label>
             <select id="lvType" style="width:100%;">
               <option value="Annual">Annual Leave</option><option value="Casual">Casual Leave</option>
               <option value="Sick">Sick Leave</option><option value="Maternity">Maternity Leave</option>
@@ -2311,18 +2311,18 @@ select option { background: #0F1628; color: var(--text); }
           </div>
         </div>
         <div class="form-row">
-          <div class="form-field"><label>From Date</label><input type="date" id="lvFrom" onchange="calcLeaveDays()" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.8rem;outline:none;"></div>
-          <div class="form-field"><label>To Date</label><input type="date" id="lvTo" onchange="calcLeaveDays()" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.8rem;outline:none;"></div>
+          <div class="form-field"><label for="lvFrom">From Date</label><input type="date" id="lvFrom" onchange="calcLeaveDays()" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.8rem;outline:none;"></div>
+          <div class="form-field"><label for="lvTo">To Date</label><input type="date" id="lvTo" onchange="calcLeaveDays()" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.8rem;outline:none;"></div>
         </div>
         <div class="form-row">
-          <div class="form-field"><label>Days Calculated</label><input type="number" id="lvDays" readonly style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--success);font-size:0.8rem;outline:none;font-weight:700;"></div>
-          <div class="form-field" id="lvStatusField"><label>Status</label>
+          <div class="form-field"><label for="lvDays">Days Calculated</label><input type="number" id="lvDays" readonly style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--success);font-size:0.8rem;outline:none;font-weight:700;"></div>
+          <div class="form-field" id="lvStatusField"><label for="lvStatus">Status</label>
             <select id="lvStatus" style="width:100%;">
               <option value="Pending">Pending</option><option value="Approved">Approved</option><option value="Rejected">Rejected</option>
             </select>
           </div>
         </div>
-        <div class="form-field" style="margin-bottom:1rem;"><label>Reason</label><textarea id="lvReason" rows="2" placeholder="Reason for leave..." style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.8rem;outline:none;resize:vertical;"></textarea></div>
+        <div class="form-field" style="margin-bottom:1rem;"><label for="lvReason">Reason</label><textarea id="lvReason" rows="2" placeholder="Reason for leave..." style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.8rem;outline:none;resize:vertical;"></textarea></div>
         <button class="btn btn-primary btn-sm" onclick="submitLeave()">💾 Submit Leave Request</button>
         <div id="lvMsg" style="margin-top:8px;font-size:0.78rem;min-height:1rem;"></div>
       </div>
