@@ -2451,7 +2451,7 @@ select option { background: #0F1628; color: var(--text); }
         <div class="loc-sidebar">
           <div class="loc-sidebar-top">
             <h4>📍 All Locations</h4>
-            <input class="loc-input" id="locSearchInput" placeholder="Search locations..." oninput="renderLocList()" style="margin-bottom:0;">
+            <input class="loc-input" id="locSearchInput" placeholder="Search locations..." aria-label="Search locations" title="Search locations" oninput="renderLocList()" style="margin-bottom:0;">
           </div>
           <div class="loc-list" id="locListContainer"></div>
           <div class="loc-add-form-wrap" id="locAddFormWrap">
@@ -4453,7 +4453,7 @@ function renderLocList() {
   const container = document.getElementById('locListContainer');
   if (!container) return;
   if (!locs.length) {
-    container.innerHTML = `<div style="padding:1.2rem;text-align:center;color:var(--muted);font-size:0.8rem;">${search ? 'No results found' : 'No locations yet.<br>Add your first one below!'}</div>`;
+    container.innerHTML = `<div class="empty-state" style="padding:1.5rem;font-size:0.85rem;"><span aria-hidden="true">${search ? '🔍' : '📍'}</span><div>${search ? 'No matching locations found' : 'No locations yet.<br>Add your first one below!'}</div></div>`;
     return;
   }
   container.innerHTML = locs.map(loc => {
