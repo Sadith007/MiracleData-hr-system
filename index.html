@@ -2066,7 +2066,7 @@ select option { background: #0F1628; color: var(--text); }
     <div class="sidebar">
       <div class="search-box"><input type="text" id="searchInput" placeholder="Search name, ID, dept..."></div>
       <div id="branchFilterWrap" style="display:none;padding:0 1rem 0.5rem;">
-        <select id="branchFilterSel" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:7px 10px;color:var(--text);font-size:0.8rem;outline:none;font-family:'DM Sans',sans-serif;" onchange="renderEmployeeList()">
+        <select id="branchFilterSel" aria-label="Filter employees by branch" title="Filter employees by branch" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:7px 10px;color:var(--text);font-size:0.8rem;outline:none;font-family:'DM Sans',sans-serif;" onchange="renderEmployeeList()">
           <option value="">🏢 All Branches</option>
         </select>
       </div>
