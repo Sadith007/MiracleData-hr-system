@@ -1,0 +1,8 @@
+node_modules
+.wrangler
+verification/
+*.png
+server.log
+*.bak
+*.pyc
+.DS_Store
