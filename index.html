@@ -1911,18 +1911,18 @@ select option { background: #0F1628; color: var(--text); }
       📋 SELF_VIEWER — Please enter your data and submit it, admin will approve the request, Then you can view your profile.
     </div>
     <div id="svRegFields" style="display:none;">
-      <div class="input-group"><label>Full Name *</label><input id="sv_fullName" placeholder="John Doe"></div>
-      <div class="input-group"><label>Mobile *</label><input id="sv_mobile" placeholder="+94 XX XXX XXXX"></div>
-      <div class="input-group"><label>NIC *</label><input id="sv_nic" placeholder="123456789V"></div>
-      <div class="input-group"><label>Email</label><input id="sv_email" placeholder="john@example.com"></div>
-      <div class="input-group"><label>Date of Birth</label><input id="sv_dob" placeholder="YYYY-MM-DD"></div>
-      <div class="input-group"><label>Address</label><input id="sv_address" placeholder="Permanent address"></div>
-      <div class="input-group"><label>Department</label><input id="sv_dept" placeholder="IT, HR, Sales..."></div>
-      <div class="input-group"><label>Designation</label><input id="sv_designation" placeholder="Software Engineer"></div>
-      <div class="input-group"><label>Employee ID (if known)</label><input id="sv_empId" placeholder="EMP001"></div>
-      <div class="input-group"><label>Date of Joining</label><input id="sv_doj" placeholder="YYYY-MM-DD"></div>
-      <div class="input-group"><label>Bank Name</label><input id="sv_bankName" placeholder="Commercial Bank"></div>
-      <div class="input-group"><label>Account Number</label><input id="sv_bankAcc" placeholder="Account number"></div>
+      <div class="input-group"><label for="sv_fullName">Full Name *</label><input id="sv_fullName" placeholder="John Doe"></div>
+      <div class="input-group"><label for="sv_mobile">Mobile *</label><input id="sv_mobile" placeholder="+94 XX XXX XXXX"></div>
+      <div class="input-group"><label for="sv_nic">NIC *</label><input id="sv_nic" placeholder="123456789V"></div>
+      <div class="input-group"><label for="sv_email">Email</label><input id="sv_email" placeholder="john@example.com"></div>
+      <div class="input-group"><label for="sv_dob">Date of Birth</label><input id="sv_dob" placeholder="YYYY-MM-DD"></div>
+      <div class="input-group"><label for="sv_address">Address</label><input id="sv_address" placeholder="Permanent address"></div>
+      <div class="input-group"><label for="sv_dept">Department</label><input id="sv_dept" placeholder="IT, HR, Sales..."></div>
+      <div class="input-group"><label for="sv_designation">Designation</label><input id="sv_designation" placeholder="Software Engineer"></div>
+      <div class="input-group"><label for="sv_empId">Employee ID (if known)</label><input id="sv_empId" placeholder="EMP001"></div>
+      <div class="input-group"><label for="sv_doj">Date of Joining</label><input id="sv_doj" placeholder="YYYY-MM-DD"></div>
+      <div class="input-group"><label for="sv_bankName">Bank Name</label><input id="sv_bankName" placeholder="Commercial Bank"></div>
+      <div class="input-group"><label for="sv_bankAcc">Account Number</label><input id="sv_bankAcc" placeholder="Account number"></div>
     </div>
     <div class="input-group" id="regEmailField"><label>Email <span style="font-size:0.7rem;color:var(--muted);">(for OTP password reset)</span></label><input type="email" id="regEmail" placeholder="your@email.com"></div>
     <div class="input-group" id="deptFieldReg" style="display:none;"><label>Location / Branch *</label><input type="text" id="regDept" placeholder="e.g., Kandy, Galle Branch"></div>
@@ -4997,6 +4997,9 @@ function openCompanyManager() {
   const list = _getCompanies();
   const modal = document.createElement('div');
   modal.id = 'companyMgrModal';
+  modal.setAttribute('role', 'dialog');
+  modal.setAttribute('aria-modal', 'true');
+  modal.setAttribute('aria-labelledby', 'companyMgrTitle');
   modal.style.cssText = 'position:fixed;inset:0;z-index:9000;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);padding:1rem;';
 
   const activeId = _activeCompany?.id || null;
@@ -5004,20 +5007,20 @@ function openCompanyManager() {
     ? `<div style="text-align:center;color:var(--muted);font-size:0.8rem;padding:14px 0;">No companies yet. Create one below.</div>`
     : list.map(c => `
       <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:${c.id===activeId?'rgba(79,142,247,0.12)':'rgba(255,255,255,0.04)'};border:1px solid ${c.id===activeId?'rgba(79,142,247,0.35)':'rgba(255,255,255,0.07)'};margin-bottom:6px;">
-        <span style="font-size:1.1rem;">🏢</span>
+        <span style="font-size:1.1rem;" aria-hidden="true">🏢</span>
         <div style="flex:1;">
           <div style="font-size:0.88rem;font-weight:600;color:var(--text);">${c.name}</div>
           <div style="font-size:0.65rem;color:var(--muted);">Created: ${new Date(c.createdAt).toLocaleDateString()}</div>
         </div>
         ${c.id===activeId ? '<span style="font-size:0.65rem;color:var(--accent);font-weight:700;padding:2px 8px;background:rgba(79,142,247,0.1);border-radius:10px;border:1px solid rgba(79,142,247,0.2);">ACTIVE</span>' : `<button onclick="switchToCompany('${c.id}')" style="background:rgba(79,142,247,0.1);border:1px solid rgba(79,142,247,0.25);border-radius:8px;padding:4px 10px;color:var(--accent);cursor:pointer;font-size:0.75rem;font-family:'DM Sans',sans-serif;">Switch</button>`}
-        <button onclick="deleteCoEntry('${c.id}')" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.8rem;padding:2px 6px;border-radius:6px;" title="Remove">🗑</button>
+        <button onclick="deleteCoEntry('${c.id}')" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.8rem;padding:2px 6px;border-radius:6px;" aria-label="Remove company workspace" title="Remove company workspace">🗑</button>
       </div>`).join('');
 
   modal.innerHTML = `
     <div style="background:var(--surface-solid);border:1px solid rgba(79,142,247,0.2);border-radius:20px;width:100%;max-width:420px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.6);">
       <div style="padding:1.2rem 1.4rem;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:space-between;">
-        <div style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--text);">🏢 Manage Companies</div>
-        <button onclick="document.getElementById('companyMgrModal').remove()" style="background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;">✕</button>
+        <div id="companyMgrTitle" style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--text);">🏢 Manage Companies</div>
+        <button onclick="document.getElementById('companyMgrModal').remove()" style="background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;" aria-label="Close company manager" title="Close company manager">✕</button>
       </div>
       <div style="padding:1.2rem 1.4rem;">
         <div style="font-size:0.68rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Company Workspaces</div>
@@ -5025,7 +5028,7 @@ function openCompanyManager() {
         <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,0.07);">
           <div style="font-size:0.68rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">+ Add New Company</div>
           <div style="display:flex;gap:8px;">
-            <input id="newCoNameInput" type="text" placeholder="Company name..." maxlength="40" style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.85rem;outline:none;font-family:'DM Sans',sans-serif;" onkeydown="if(event.key==='Enter')addCoEntry()">
+            <input id="newCoNameInput" type="text" placeholder="Company name..." maxlength="40" aria-label="New company name" style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:8px 12px;color:var(--text);font-size:0.85rem;outline:none;font-family:'DM Sans',sans-serif;" onkeydown="if(event.key==='Enter')addCoEntry()">
             <button onclick="addCoEntry()" style="background:linear-gradient(135deg,#4F8EF7,#9B72F8);border:none;border-radius:10px;padding:8px 14px;color:white;cursor:pointer;font-size:0.82rem;font-weight:600;font-family:'DM Sans',sans-serif;">Add</button>
           </div>
           <div id="coErr" style="font-size:0.75rem;color:var(--danger);margin-top:6px;min-height:1rem;"></div>
