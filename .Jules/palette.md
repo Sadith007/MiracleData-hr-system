@@ -1,0 +1,3 @@
+## 2026-09-27 - Dynamically Created Modals and Form Label Associations
+**Learning:** Dynamically created modal dialogs in JS (like `openCompanyManager()`) often miss standard ARIA attributes (`role="dialog"`, `aria-modal="true"`, `aria-labelledby`) and button accessibility attributes, which prevents screen readers from correctly identifying modal boundaries and control functions.
+**Action:** Always ensure dynamic JS modal builder functions attach proper `role`, `aria-modal`, `aria-labelledby`, `aria-label`, and `title` attributes, and ensure form labels explicitly associate with input IDs via `for` attributes.
