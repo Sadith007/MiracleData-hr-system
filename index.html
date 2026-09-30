@@ -2268,7 +2268,7 @@ select option { background: #0F1628; color: var(--text); }
       </div>
       <div id="rpMonthly" class="report-pane">
         <div style="display:flex;gap:10px;margin-bottom:1rem;align-items:center;">
-          <select id="rMonthSel" style="flex:1;" onchange="renderMonthlyReport()"></select>
+          <select id="rMonthSel" style="flex:1;" onchange="renderMonthlyReport()" aria-label="Select month for report" title="Select month for report"></select>
           <button class="btn btn-success btn-sm" onclick="exportReportPDF()">📄 Export PDF</button>
         </div>
         <div id="rMonthlyTable"></div>
@@ -2279,7 +2279,7 @@ select option { background: #0F1628; color: var(--text); }
       </div>
       <div id="rpEmp" class="report-pane">
         <div style="display:flex;gap:10px;margin-bottom:1rem;">
-          <select id="rEmpSel" style="flex:1;" onchange="renderEmpPayrollHistory()"></select>
+          <select id="rEmpSel" style="flex:1;" onchange="renderEmpPayrollHistory()" aria-label="Select employee for history" title="Select employee for history"></select>
         </div>
         <div class="chart-container"><div class="chart-title">Net Salary Trend</div><canvas id="chartEmpTrend"></canvas></div>
         <div id="rEmpTable" style="margin-top:1rem;"></div>
@@ -2328,8 +2328,8 @@ select option { background: #0F1628; color: var(--text); }
       </div>
       <div id="lvRequests" class="report-pane">
         <div style="display:flex;gap:10px;margin-bottom:1rem;flex-wrap:wrap;">
-          <select id="lvFilterEmp" onchange="renderLeaveList()" style="flex:1;min-width:160px;"></select>
-          <select id="lvFilterStatus" onchange="renderLeaveList()">
+          <select id="lvFilterEmp" onchange="renderLeaveList()" style="flex:1;min-width:160px;" aria-label="Filter leaves by employee" title="Filter leaves by employee"></select>
+          <select id="lvFilterStatus" onchange="renderLeaveList()" aria-label="Filter leaves by status" title="Filter leaves by status">
             <option value="">All Status</option><option>Pending</option><option>Approved</option><option>Rejected</option>
           </select>
           <button class="btn btn-success btn-sm" onclick="exportLeavePDF()">📄 Export PDF</button>
@@ -2351,8 +2351,8 @@ select option { background: #0F1628; color: var(--text); }
     <div class="modal-header"><h3>📅 Attendance History & Reports</h3><button class="btn btn-sm" onclick="closeModal('attHistModal')">✕</button></div>
     <div class="modal-body">
       <div class="att-hist-filter">
-        <select id="ahEmpSel" onchange="renderAttHistory()" style="flex:1;min-width:160px;"></select>
-        <input type="month" id="ahMonth" onchange="renderAttHistory()" style="min-width:140px;">
+        <select id="ahEmpSel" onchange="renderAttHistory()" style="flex:1;min-width:160px;" aria-label="Select employee for attendance history" title="Select employee for attendance history"></select>
+        <input type="month" id="ahMonth" onchange="renderAttHistory()" style="min-width:140px;" aria-label="Select month for attendance history" title="Select month for attendance history">
         <button class="btn btn-success btn-sm" onclick="exportAttHistPDF()">📄 Export PDF</button>
       </div>
       <div id="ahSummaryBar" class="att-summary-bar"></div>
@@ -2369,8 +2369,8 @@ select option { background: #0F1628; color: var(--text); }
     <div class="modal-header"><h3>📁 Employee Documents</h3><button class="btn btn-sm" onclick="closeModal('docsModal')">✕</button></div>
     <div class="modal-body">
       <div style="display:flex;gap:10px;margin-bottom:1rem;align-items:center;flex-wrap:wrap;">
-        <select id="docEmpSel" onchange="renderDocList()" style="flex:1;min-width:160px;"></select>
-        <select id="docCatSel">
+        <select id="docEmpSel" onchange="renderDocList()" style="flex:1;min-width:160px;" aria-label="Select employee for documents" title="Select employee for documents"></select>
+        <select id="docCatSel" aria-label="Select document category" title="Select document category">
           <option value="NIC">NIC Copy</option><option value="Resume">Resume/CV</option>
           <option value="Contract">Employment Contract</option><option value="Certificate">Certificates</option>
           <option value="Payslip">Payslip</option><option value="Other">Other</option>
@@ -2451,7 +2451,7 @@ select option { background: #0F1628; color: var(--text); }
         <div class="loc-sidebar">
           <div class="loc-sidebar-top">
             <h4>📍 All Locations</h4>
-            <input class="loc-input" id="locSearchInput" placeholder="Search locations..." oninput="renderLocList()" style="margin-bottom:0;">
+            <input class="loc-input" id="locSearchInput" placeholder="Search locations..." oninput="renderLocList()" style="margin-bottom:0;" aria-label="Search locations" title="Search locations">
           </div>
           <div class="loc-list" id="locListContainer"></div>
           <div class="loc-add-form-wrap" id="locAddFormWrap">
