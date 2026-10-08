@@ -1007,6 +1007,8 @@ body > * { position: relative; z-index: 1; }
   display: block; margin-bottom: 4px;
 }
 .info-card span { font-weight: 500; font-size: 0.85rem; }
+.btn-copy-sm { background: transparent; border: none; cursor: pointer; font-size: 0.75rem; padding: 2px 4px; border-radius: 4px; opacity: 0.6; transition: opacity 0.2s, background 0.2s; line-height: 1; }
+.btn-copy-sm:hover, .btn-copy-sm:focus-visible { opacity: 1; background: rgba(255, 255, 255, 0.1); }
 
 .section-title {
   font-size: 0.68rem; font-weight: 700;
@@ -3161,8 +3163,8 @@ function renderDetail(id) {
     </div>
     <div class="section-title">Personal Details</div>
     <div class="info-grid">
-      <div class="info-card"><label>Email</label><span>${emp.email||'-'}</span></div>
-      <div class="info-card"><label>Mobile</label><span>${emp.mobile||'-'}</span></div>
+      <div class="info-card"><label>Email</label><div style="display:flex;align-items:center;justify-content:space-between;gap:6px;"><span>${emp.email||'-'}</span>${emp.email?`<button type="button" class="btn-copy-sm" onclick="copyToClipboard('${emp.email.replace(/'/g, "\'")}', 'Email copied to clipboard! 📋')" aria-label="Copy email address" title="Copy email address">📋</button>`:''}</div></div>
+      <div class="info-card"><label>Mobile</label><div style="display:flex;align-items:center;justify-content:space-between;gap:6px;"><span>${emp.mobile||'-'}</span>${emp.mobile?`<button type="button" class="btn-copy-sm" onclick="copyToClipboard('${emp.mobile.replace(/'/g, "\'")}', 'Mobile number copied! 📋')" aria-label="Copy mobile number" title="Copy mobile number">📋</button>`:''}</div></div>
       <div class="info-card"><label>NIC</label><span>${emp.nic||'-'}</span></div>
       <div class="info-card"><label>Date of Birth</label><span>${emp.dob||'-'}</span></div>
       <div class="info-card"><label>Address</label><span>${emp.address||'-'}</span></div>
@@ -3170,7 +3172,7 @@ function renderDetail(id) {
     </div>
     <div class="section-title">Employment Details</div>
     <div class="info-grid">
-      <div class="info-card"><label>Employee ID</label><span>${emp.empId||'-'}</span></div>
+      <div class="info-card"><label>Employee ID</label><div style="display:flex;align-items:center;justify-content:space-between;gap:6px;"><span>${emp.empId||'-'}</span>${emp.empId?`<button type="button" class="btn-copy-sm" onclick="copyToClipboard('${emp.empId.replace(/'/g, "\'")}', 'Employee ID copied! 📋')" aria-label="Copy employee ID" title="Copy employee ID">📋</button>`:''}</div></div>
       <div class="info-card"><label>Department</label><span>${emp.department||'-'}</span></div>
       <div class="info-card"><label>Designation</label><span>${emp.designation||'-'}</span></div>
       <div class="info-card"><label>Date of Joining</label><span>${emp.doj||'-'}</span></div>
@@ -4166,7 +4168,7 @@ async function setTrialEndDate() {
 async function generateNewLicenseKey() {
   if(!DB.licenseKeys)DB.licenseKeys=[];const newKey=generateLicenseKey(Date.now()+Math.random()*1e9);DB.licenseKeys.push({key:newKey,status:'active',createdAt:new Date().toISOString()});await saveDB();openUserManagement();showToast('License key generated!','success');
 }
-function copyToClipboard(text) { navigator.clipboard.writeText(text).then(()=>showToast('License key copied! 📋','success')); }
+function copyToClipboard(text, msg = 'Copied to clipboard! 📋') { navigator.clipboard.writeText(text).then(()=>showToast(msg, 'success')); }
 
 document.addEventListener('DOMContentLoaded', async function() {
   // EmailJS — lazy load only when OTP/email is actually needed
