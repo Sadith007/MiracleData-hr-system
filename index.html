@@ -826,14 +826,16 @@ body > * { position: relative; z-index: 1; }
   -webkit-backdrop-filter: blur(20px);
 }
 
-.search-box { padding: 1rem; }
+.search-box { padding: 1rem; position: relative; }
+
+.search-wrapper { position: relative; width: 100%; }
 
 .search-box input {
   width: 100%;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
-  padding: 0.6rem 0.8rem 0.6rem 2.2rem;
+  padding: 0.6rem 2.2rem 0.6rem 2.2rem;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%234A6080'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'%3E%3C/path%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: 10px center;
@@ -843,6 +845,37 @@ body > * { position: relative; z-index: 1; }
   font-family: 'DM Sans', sans-serif;
   font-size: 0.85rem;
   transition: all 0.2s;
+}
+
+.clear-search-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: var(--muted);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 0;
+  line-height: 1;
+}
+
+.clear-search-btn:hover {
+  background: rgba(240, 82, 82, 0.2);
+  color: var(--danger);
+}
+
+.clear-search-btn:focus-visible {
+  outline: 2px solid var(--accent) !important;
+  outline-offset: 1px !important;
 }
 
 .search-box input:focus {
@@ -2064,7 +2097,7 @@ select option { background: #0F1628; color: var(--text); }
 
   <div class="body-layout">
     <div class="sidebar">
-      <div class="search-box"><input type="text" id="searchInput" placeholder="Search name, ID, dept..."></div>
+      <div class="search-box"><div class="search-wrapper"><input type="text" id="searchInput" placeholder="Search name, ID, dept..." aria-label="Search employees" title="Search name, ID, or department" oninput="toggleClearSearchBtn()"><button id="clearSearchBtn" class="clear-search-btn" onclick="clearSidebarSearch()" aria-label="Clear search" title="Clear search">✕</button></div></div>
       <div id="branchFilterWrap" style="display:none;padding:0 1rem 0.5rem;">
         <select id="branchFilterSel" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:7px 10px;color:var(--text);font-size:0.8rem;outline:none;font-family:'DM Sans',sans-serif;" onchange="renderEmployeeList()">
           <option value="">🏢 All Branches</option>
@@ -4225,7 +4258,9 @@ document.addEventListener('DOMContentLoaded', async function() {
   document.getElementById('saveEmpBtn').addEventListener('click',saveEmployee);
   document.getElementById('refreshListBtn').addEventListener('click',async()=>{showLoading();await loadDB(true);hideLoading();renderEmployeeList();if(selectedEmployeeId)renderDetail(selectedEmployeeId);showToast('Cloud data refreshed','success');});
   let searchRenderTimer;
-  document.getElementById('searchInput').addEventListener('input',()=>{clearTimeout(searchRenderTimer);searchRenderTimer=setTimeout(renderEmployeeList,120);});
+  document.getElementById('searchInput').addEventListener('input',()=>{clearTimeout(searchRenderTimer);toggleClearSearchBtn();searchRenderTimer=setTimeout(renderEmployeeList,120);});
+window.toggleClearSearchBtn = function(){const inp=document.getElementById('searchInput');const btn=document.getElementById('clearSearchBtn');if(inp&&btn){btn.style.display=inp.value.trim()?'flex':'none';}};
+window.clearSidebarSearch = function(){const inp=document.getElementById('searchInput');if(inp){inp.value='';toggleClearSearchBtn();renderEmployeeList();inp.focus();}};
   document.getElementById('attendanceBtn').addEventListener('click',openAttendance);
   document.getElementById('attHistBtn').addEventListener('click',openAttHistory);
   document.getElementById('leaveBtn').addEventListener('click',openLeave);
