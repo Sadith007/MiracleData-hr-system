@@ -401,7 +401,7 @@ body::before {
 .hc-bubble li { margin: 2px 0; }
 .hc-bubble p { margin: 3px 0; }
 .hc-bubble strong { font-weight: 600; }
-  
+
 body > * { position: relative; z-index: 1; }
 /* ===== PERFORMANCE: Reduce heavy visual effects on low-end devices ===== */
 @media (max-width: 1400px) and (max-height: 900px) {
@@ -639,6 +639,11 @@ body > * { position: relative; z-index: 1; }
 }
 
 .input-group input::placeholder { color: var(--muted); }
+.password-wrapper { position: relative; width: 100%; display: flex; align-items: center; }
+.password-wrapper input { width: 100%; padding-right: 2.5rem; }
+.toggle-password-btn { position: absolute; right: 0.65rem; background: none; border: none; cursor: pointer; font-size: 0.95rem; padding: 0.2rem; display: flex; align-items: center; justify-content: center; opacity: 0.7; transition: opacity 0.2s; border-radius: 6px; color: var(--text2); }
+.toggle-password-btn:hover { opacity: 1; color: var(--text); }
+.toggle-password-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 
 .auth-btn {
   width: 100%;
@@ -1875,12 +1880,15 @@ select option { background: #0F1628; color: var(--text); }
     <p>Complete HR & Payroll Management</p>
     <div id="loginError" class="error-message"></div>
     <div class="input-group">
-      <label>Username</label>
+      <label for="loginUsername">Username</label>
       <input type="text" id="loginUsername" placeholder="Enter username">
     </div>
     <div class="input-group">
-      <label>Password</label>
-      <input type="password" id="loginPassword" placeholder="••••••••">
+      <label for="loginPassword">Password</label>
+      <div class="password-wrapper">
+        <input type="password" id="loginPassword" placeholder="••••••••">
+        <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility('loginPassword', this)" aria-label="Show password" title="Show password">👁️</button>
+      </div>
     </div>
     <button class="auth-btn" id="loginBtn">Sign In →</button>
     <div class="link-text">
@@ -1902,8 +1910,8 @@ select option { background: #0F1628; color: var(--text); }
     <div class="warning-badge">⚠️ Admin approval required</div>
     <div id="regMessage" class="error-message"></div>
     <div class="input-group"><label>Username</label><input type="text" id="regUser" placeholder="Choose username"></div>
-    <div class="input-group"><label>Password (min 4)</label><input type="password" id="regPass" placeholder="••••••••"></div>
-    <div class="input-group"><label>Confirm Password</label><input type="password" id="regPass2" placeholder="••••••••"></div>
+    <div class="input-group"><label for="regPass">Password (min 4)</label><div class="password-wrapper"><input type="password" id="regPass" placeholder="••••••••"><button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility('regPass', this)" aria-label="Show password" title="Show password">👁️</button></div></div>
+    <div class="input-group"><label for="regPass2">Confirm Password</label><div class="password-wrapper"><input type="password" id="regPass2" placeholder="••••••••"><button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility('regPass2', this)" aria-label="Show password" title="Show password">👁️</button></div></div>
     <div class="input-group"><label>Role Request</label>
       <select id="regRole"><option>HR</option><option value="BRANCH_HEAD">BRANCH_HEAD</option><option>SELF_VIEWER</option></select>
     </div>
@@ -1958,12 +1966,18 @@ select option { background: #0F1628; color: var(--text); }
         <input type="text" id="forgotOTP" placeholder="Enter 6-digit OTP" maxlength="6" style="letter-spacing:4px;text-align:center;font-size:1.1rem;font-weight:700;">
       </div>
       <div class="input-group">
-        <label>New Password</label>
-        <input type="password" id="forgotNewPass" placeholder="Min 4 characters">
+        <label for="forgotNewPass">New Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="forgotNewPass" placeholder="Min 4 characters">
+          <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility('forgotNewPass', this)" aria-label="Show password" title="Show password">👁️</button>
+        </div>
       </div>
       <div class="input-group">
-        <label>Confirm Password</label>
-        <input type="password" id="forgotConfirmPass" placeholder="Re-enter password">
+        <label for="forgotConfirmPass">Confirm Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="forgotConfirmPass" placeholder="Re-enter password">
+          <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility('forgotConfirmPass', this)" aria-label="Show password" title="Show password">👁️</button>
+        </div>
       </div>
       <button class="auth-btn" onclick="verifyOTPAndReset()">Reset Password →</button>
       <div style="text-align:center;margin-top:0.5rem;">
@@ -2398,7 +2412,7 @@ select option { background: #0F1628; color: var(--text); }
       <h4 style="margin-bottom:15px;font-family:'Syne',sans-serif;font-size:0.95rem;">Add New User</h4>
       <div class="form-row">
         <div class="form-field"><label>Username</label><input id="newUsername" placeholder="Username"></div>
-        <div class="form-field"><label>Password</label><input id="newPassword" type="password" placeholder="Password"></div>
+        <div class="form-field"><label for="newPassword">Password</label><div class="password-wrapper"><input id="newPassword" type="password" placeholder="Password"><button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility('newPassword', this)" aria-label="Show password" title="Show password">👁️</button></div></div>
         <div class="form-field"><label>Role</label>
           <select id="newRole"><option>HR</option><option>ADMIN</option><option value="BRANCH_HEAD">BRANCH_HEAD</option><option>SELF_VIEWER</option></select>
         </div>
@@ -2522,7 +2536,7 @@ select option { background: #0F1628; color: var(--text); }
     </div>
   </div>
 </div>
-  
+
 <!-- ===== HR NEXUS CHATBOT WIDGET ===== -->
 <!-- Chatbase Chatbot -->
 <script>
@@ -4591,11 +4605,11 @@ KEY SYSTEM FEATURES:
 
 Sri Lanka labour law context:
 - EPF: Employees Provident Fund — employee contributes 8%, employer contributes 12% of basic salary monthly
-- ETF: Employees Trust Fund — employer contributes 3% of basic salary monthly  
+- ETF: Employees Trust Fund — employer contributes 3% of basic salary monthly
 - PAYE: Pay As You Earn tax — deducted monthly based on taxable income thresholds
 - Annual leave entitlement: 14 working days per year (after 1 year service)
 - Casual leave: 7 days per year
-- Sick leave: 7 days per year  
+- Sick leave: 7 days per year
 - Maternity leave: 84 working days (12 weeks) — paid
 - Gratuity: payable after 5 years continuous service (½ month salary per year)
 
@@ -4868,6 +4882,16 @@ window.importHRData = function(event) {
     btn.textContent = document.documentElement.classList.contains('light-mode') ? '☀️' : '🌙';
     btn.title = document.documentElement.classList.contains('light-mode') ? 'Switch to Dark Mode' : 'Switch to Light Mode';
   }
+  window.togglePasswordVisibility = function(inputId, btn) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+    const isPass = input.type === 'password';
+    input.type = isPass ? 'text' : 'password';
+    btn.textContent = isPass ? '🙈' : '👁️';
+    const label = isPass ? 'Hide password' : 'Show password';
+    btn.setAttribute('aria-label', label);
+    btn.setAttribute('title', label);
+  };
   window.toggleTheme = function() {
     document.documentElement.classList.toggle('light-mode');
     const isLight = document.documentElement.classList.contains('light-mode');
