@@ -1,0 +1,3 @@
+## 2025-02-18 - Static and Dynamic Icon Buttons Accessibility in Single Page Apps
+**Learning:** In monolithic single-page applications with modals, drawers, and quick-action toolbars, static icon-only buttons (e.g., '✕' close, '↺' refresh, '⧉' popup window, '🌙' theme toggle) are frequently rendered without `aria-label` or descriptive `title` attributes. This renders them invisible or uninformative to screen reader users and impairs tooltip usability.
+**Action:** Always verify that every static and dynamically rendered icon-only button contains explicit `aria-label` and `title` attributes matching its intended user action.
