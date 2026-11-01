@@ -1,0 +1,3 @@
+## 2025-02-28 - Dual ARIA and Title Attributes on Icon-Only Buttons
+**Learning:** Icon-only buttons (such as '✕', '↺', '✓', '✗', '🗑', '📋', '🌙') lack visible text labels and present accessibility barriers for screen readers if missing `aria-label`, as well as confusion for mouse users if missing hover `title` tooltips. Providing both attributes simultaneously ensures screen readers explicitly announce the control's purpose while sighted users receive immediate visual tooltip feedback.
+**Action:** Always include both `aria-label="[Action description]"` and `title="[Action description]"` on every icon-only button across static HTML markup and dynamic JavaScript template literals, while avoiding redundant labels on buttons with visible text.
