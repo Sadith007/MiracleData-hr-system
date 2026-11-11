@@ -1,0 +1,16 @@
+# Dependencies & cache
+node_modules/
+.wrangler/
+dist/
+build/
+
+# Testing & verification
+verification/
+*.png
+*.webm
+server.log
+
+# Backups
+*.bak
+*.pyc
+.DS_Store
